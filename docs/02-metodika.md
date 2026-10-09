@@ -44,7 +44,7 @@ Scraping je povolen, ale v pilotu se neimplementuje. Pro budoucí automatizaci p
 
 ## 2.3 Postup
 
-1. **Hledání kandidátů.** Systematicky se projdou seznamy (regulátor, asociace, média). Každý průchod je jeden řádek v `search_log.csv`: zdroj, datum, dotaz či filtr, počet nalezených subjektů.
+1. **Hledání kandidátů.** Systematicky se projdou seznamy (regulátor, asociace, média). Každý průchod je jeden řádek v `search_log.csv`: zdroj, datum, dotaz či filtr, počet nalezených subjektů a čas. Kandidátem se stane každý subjekt, který otevřená stránka popisuje jako investiční fond či VC investora, nebo jako investora v pre-seed či seed kole. Investoři zmínění jen jako účastníci pozdějších kol (série B a výše) a subjekty, které stránka sama označuje za zahraniční investory v kolech, kandidáty nejsou; uvádějí se v poznámce průchodu. Typ a země kandidáta se vyplní jen tehdy, uvádí-li je zdroj, jinak zůstávají prázdné až do ověření.
 2. **Deduplikace.** Kandidáti se porovnají podle IČO, domény webu a normalizovaného názvu (bez diakritiky, velikosti písmen a právní formy). Totéž kontroluje validační skript.
 3. **Triáž.** Podle kritérií v [01-plan-a-kriteria.md](01-plan-a-kriteria.md) dostane subjekt status `kandidat`, nebo `vyloucen` s důvodem.
 4. **Ověření faktů.** Pro každý údaj se zapíše fakt: hodnota, zdroj, datum přístupu, k jakému datu hodnota platí a stručný popis důkazu (kde přesně ve zdroji je a co říká). Primární zdroj má přednost.
@@ -67,8 +67,8 @@ Všechny soubory jsou v `data/`, kódování UTF-8, oddělovač čárka, konce �
 |---|---|---|
 | `investor_id` | vždy | `inv-0001` |
 | `name` | vždy | Název VC značky |
-| `investor_type` | vždy | `vc`, `pe`, `cvc`, `fond_fondu`, `statni_fond`, `business_angel`, `family_office`, `akcelerator`, `crowdfunding`, `jiny` |
-| `country` | vždy | ISO 3166-1 alpha-2 země české právnické osoby, resp. sídla (`CZ`) |
+| `investor_type` | `overeny`, `vyloucen` | `vc`, `pe`, `cvc`, `fond_fondu`, `statni_fond`, `business_angel`, `family_office`, `akcelerator`, `crowdfunding`, `jiny` |
+| `country` | `overeny`, `vyloucen` | ISO 3166-1 alpha-2 země české právnické osoby, resp. sídla (`CZ`) |
 | `registry_id` | `overeny` | IČO vlastní české právnické osoby značky – správcovské či poradenské společnosti nebo fondu (8 číslic, kontrolní součet). **Nikdy IČO licencovaného třetího správce**, ten se ukládá jako fakt `pravni_spravce`; jinak by se různé značky jednoho správce jevily jako duplicity. |
 | `website` | ne | URL webu značky |
 | `investment_sectors` | ne | Řízený slovník, viz níže |

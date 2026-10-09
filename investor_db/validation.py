@@ -126,7 +126,7 @@ def check_investors(investors: list[Row], today: date) -> Iterator[Issue]:
 
 def check_investor_row(row: Row, today: date) -> Iterator[Issue]:
     row_id = row["investor_id"]
-    yield from required_issues("investors", row_id, row, ("name", "investor_type", "country", "verification_status"))
+    yield from required_issues("investors", row_id, row, ("name", "verification_status"))
     yield from vocabulary_issues("investors", row_id, "investor_type", row["investor_type"], INVESTOR_TYPES)
     yield from vocabulary_issues("investors", row_id, "verification_status", row["verification_status"], STATUSES)
     yield from format_issues(row)
@@ -169,6 +169,8 @@ def investor_money_issues(row: Row) -> Iterator[Issue]:
 def exclusion_issues(row: Row) -> Iterator[Issue]:
     row_id = row["investor_id"]
     reason = row["exclusion_reason"]
+    if row["verification_status"] == STATUS_EXCLUDED:
+        yield from required_issues("investors", row_id, row, ("investor_type", "country"))
     if row["verification_status"] == STATUS_EXCLUDED and not reason:
         yield Issue("investors", row_id, "vyloučený subjekt nemá exclusion_reason")
     if row["verification_status"] != STATUS_EXCLUDED and reason:

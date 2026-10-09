@@ -23,6 +23,8 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
     [
         ("investors", 0, "investor_id", "inv-1", "neplatný formát investor_id"),
         ("investors", 0, "name", "", "chybí povinné pole name"),
+        ("investors", 2, "investor_type", "", "chybí povinné pole investor_type"),
+        ("investors", 2, "country", "", "chybí povinné pole country"),
         ("investors", 0, "investor_type", "andel", "investor_type má neplatnou hodnotu"),
         ("investors", 0, "investor_type", "pe", "musí mít investor_type"),
         ("investors", 0, "country", "cz", "ISO 3166-1"),
@@ -106,6 +108,12 @@ def test_invalid_value_is_reported(
     getattr(dataset, table)[index][column] = value
 
     assert_reported(dataset, fragment)
+
+
+def test_candidate_with_unknown_type_and_country_is_allowed(dataset: Dataset) -> None:
+    dataset.investors[1].update(investor_type="", country="")
+
+    assert validate_dataset(dataset, TODAY) == []
 
 
 def test_duplicate_investor_id_is_reported(dataset: Dataset) -> None:
