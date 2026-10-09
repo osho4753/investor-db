@@ -108,7 +108,7 @@ def test_money_patterns_do_not_match_other_amounts(amount: Decimal, text: str) -
 
 @pytest.mark.parametrize(
     "text",
-    ["dne 5. 11. 2025 oznámil", "November 5, 2025", "5 Nov 2025", "5. listopadu 2025", "2025-11-05", "5/11/2025"],
+    ["dne 5. 11. 2025 oznámil", "November 5, 2025", "5 Nov 2025", "5. November 2025", "5. listopadu 2025", "2025-11-05", "5/11/2025", "05/11/25"],
 )
 def test_date_patterns_find_common_notations(text: str) -> None:
     assert find_first(text, date_patterns(date(2025, 11, 5))) is not None

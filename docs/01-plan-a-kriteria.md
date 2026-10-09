@@ -26,7 +26,7 @@ Právní správce či administrátor fondu se proto ukládá jako **fakt** (`pra
 
 Výběr země je zdůvodněn dostupností bezplatných veřejných zdrojů a možností ruční kontroly:
 
-- **Obchodní rejstřík a Sbírka listin** jsou veřejně a bezplatně dostupné online; sbírka listin obsahuje mimo jiné výroční zprávy a účetní závěrky, ze kterých lze doložit údaje o fondech.
+- **Obchodní rejstřík a Sbírka listin** jsou veřejně a bezplatně dostupné online; sbírka listin obsahuje mimo jiné výroční zprávy a účetní závěrky, ze kterých lze doložit údaje o fondech. Webové rozhraní or.justice.cz však podle svého `robots.txt` automatizovaný přístup k cestě `/ias/` zakazuje; údaje rejstříku se proto čerpají z ARES.
 - **ARES** poskytuje bezplatný přístup k identifikačním údajům právnických osob podle IČO.
 - **Česká národní banka** zveřejňuje seznamy regulovaných subjektů včetně správců investičních fondů.
 - Existuje národní asociace soukromého a rizikového kapitálu se seznamem členů.

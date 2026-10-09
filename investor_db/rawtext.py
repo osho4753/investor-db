@@ -178,7 +178,8 @@ def date_patterns(day: date, month_precision: bool = False) -> list[re.Pattern[s
             rf"\b0?{day.day}/0?{day.month}/{day.year}",
             rf"\b0?{day.month}/0?{day.day}/{day.year}",
             rf"{english[:3]}\w*\.?\s+0?{day.day},?\s+{day.year}",
-            rf"\b0?{day.day}(?:st|nd|rd|th)?\s+{english[:3]}\w*\.?,?\s+{day.year}",
+            rf"\b0?{day.day}(?:st|nd|rd|th)?\.?\s+{english[:3]}\w*\.?,?\s+{day.year}",
+            rf"\b0?{day.day}/0?{day.month}/{day.year % 100:02d}\b",
             rf"\b0?{day.day}\.\s*{czech}\s+{day.year}",
         ]
     return [re.compile(source, re.IGNORECASE) for source in sources]

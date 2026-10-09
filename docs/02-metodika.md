@@ -19,7 +19,7 @@ Používají se pouze bezplatné veřejné zdroje. Placené databáze (Dealroom,
 | Typ zdroje (`source_type`) | Primární | Příklady pro ČR | Co dokládá |
 |---|---|---|---|
 | `regulator` | ano | Seznamy regulovaných subjektů ČNB, registr ESMA | Registrace správce či fondu, právní správce |
-| `rejstrik` | ano | Obchodní rejstřík, ARES | IČO, existence a forma právnické osoby |
+| `rejstrik` | ano | ARES – REST API (základní údaje, veřejný rejstřík včetně statutárních orgánů, vyhledávání podle jména) | IČO, existence, forma a statutární orgán právnické osoby |
 | `vyrocni_zprava` | ano | Výroční zprávy a účetní závěrky ve Sbírce listin | Velikost fondu, investovaný kapitál, AUM, portfolio |
 | `web_investora` | ano | Web VC značky, její tiskové zprávy | Sektory, fáze, ticket, portfolio, fondy |
 | `asociace` | ne | Seznam členů národní VC asociace, Invest Europe | Hledání kandidátů, potvrzení typu investora |
@@ -29,6 +29,8 @@ Používají se pouze bezplatné veřejné zdroje. Placené databáze (Dealroom,
 **Primární zdroj** pochází přímo od investora nebo od úřadu, který údaj eviduje. Sekundární zdroje slouží k hledání kandidátů a potvrzení, ale nesmí být jediným důkazem kritéria Z1.
 
 Konkrétní URL se zapisují až při sběru dat a jejich dostupnost se zaznamenává v `data/search_log.csv`.
+
+**Obchodní rejstřík na or.justice.cz se nepoužívá:** jeho `robots.txt` zakazuje cestu `/ias/` (vyhledávání i výpisy). Při prvním sběru byla tato cesta omylem použita; všechny takto získané fakty byly nahrazeny ověřením v ARES, jehož API `robots.txt` povoluje. Sbírka listin (výroční zprávy) leží pod stejnou zakázanou cestou, a proto se v pilotu nevyužívá.
 
 ### Pravidla pro sběr faktů
 
