@@ -1,0 +1,87 @@
+import argparse
+import sys
+from datetime import date
+from pathlib import Path
+
+from investor_db.io import SchemaError, load_dataset, table_path, write_table
+from investor_db.metrics import verified_ids
+from investor_db.report import render_report
+from investor_db.review import add_pending_reviews, sample_fact_ids
+from investor_db.schema import FACT_REVIEW_COLUMNS, REVIEW_COLUMNS, REVIEWERS
+from investor_db.validation import validate_dataset
+
+DEFAULT_DATA_DIR = Path("data")
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="investor_db", description="Validace a metriky databáze investorů.")
+    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR, help="složka s CSV soubory")
+    commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("validate", help="zkontroluje integritu dat").set_defaults(handler=run_validate)
+    commands.add_parser("metrics", help="vypíše metriky kvality dat").set_defaults(handler=run_metrics)
+    for name, handler, help_text in (
+        ("review-template", run_review_template, "doplní šablonu kontroly ověřených investorů"),
+        ("fact-review-template", run_fact_review_template, "doplní šablonu kontroly vzorku faktů"),
+    ):
+        command = commands.add_parser(name, help=help_text)
+        command.add_argument("--reviewer", choices=REVIEWERS, required=True)
+        command.set_defaults(handler=handler)
+    return parser
+
+
+def report_issues(data_dir: Path) -> bool:
+    issues = validate_dataset(load_dataset(data_dir), date.today())
+    for issue in issues:
+        print(issue)
+    return not issues
+
+
+def run_validate(args: argparse.Namespace) -> int:
+    if not report_issues(args.data_dir):
+        print("Validace selhala.")
+        return 1
+    print("Validace prošla bez chyb.")
+    return 0
+
+
+def run_metrics(args: argparse.Namespace) -> int:
+    if not report_issues(args.data_dir):
+        print("Metriky se nepočítají, dokud data neprojdou validací.")
+        return 1
+    print(render_report(load_dataset(args.data_dir), date.today()), end="")
+    return 0
+
+
+def run_review_template(args: argparse.Namespace) -> int:
+    dataset = load_dataset(args.data_dir)
+    target_ids = sorted(verified_ids(dataset.investors))
+    rows = add_pending_reviews(dataset.reviews, REVIEW_COLUMNS, "investor_id", target_ids, args.reviewer)
+    write_table(table_path(args.data_dir, "reviews"), REVIEW_COLUMNS, rows)
+    print(f"Přidáno {len(rows) - len(dataset.reviews)} řádků ke kontrole pro {args.reviewer}.")
+    return 0
+
+
+def run_fact_review_template(args: argparse.Namespace) -> int:
+    dataset = load_dataset(args.data_dir)
+    sample = sample_fact_ids([row["fact_id"] for row in dataset.facts])
+    rows = add_pending_reviews(dataset.fact_reviews, FACT_REVIEW_COLUMNS, "fact_id", sample, args.reviewer)
+    write_table(table_path(args.data_dir, "fact_reviews"), FACT_REVIEW_COLUMNS, rows)
+    print(
+        f"Vzorek {len(sample)} z {len(dataset.facts)} faktů; "
+        f"přidáno {len(rows) - len(dataset.fact_reviews)} řádků ke kontrole pro {args.reviewer}."
+    )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    sys.stdout.reconfigure(encoding="utf-8")
+    args = build_parser().parse_args(argv)
+    try:
+        return args.handler(args)
+    except (SchemaError, FileNotFoundError) as error:
+        print(f"Chyba načtení dat: {error}")
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

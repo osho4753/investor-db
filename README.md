@@ -21,6 +21,30 @@ Reprodukovatelný proces vyhledávání, klasifikace a ověřování reálných 
 | 3 | Odhad globálního pokrytí, počtu investorů a spolehlivosti | `docs/03-globalni-odhad.md` *(připravuje se)* |
 | 4 | Pilotní vzorek v ČR a zdůvodnění výběru země | `data/investors.csv` *(připravuje se)*, [docs/01-plan-a-kriteria.md](docs/01-plan-a-kriteria.md) |
 | 5 | Zdroje a data ověření záznamů i faktů | `data/facts.csv`, `data/sources.csv`, `data/search_log.csv` *(připravuje se)* |
-| 6 | Ruční kontrola vzorku a precision | `data/reviews.csv`, `data/fact_reviews.csv`, `docs/04-rucni-kontrola.md` *(připravuje se)* |
+| 6 | Ruční kontrola vzorku a precision | [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), `data/reviews.csv`, `data/fact_reviews.csv` *(vyplní hodnotitelé)* |
 | 7 | Odhad nákladů a složitosti globálního škálování | `docs/03-globalni-odhad.md` *(připravuje se)* |
 | 8 | Kód, testy, dokumentace, historie commitů, ai-log | `investor_db/`, `tests/`, `docs/`, `git log`, [ai-log/](ai-log/) |
+
+## Použití
+
+Vyžaduje Python 3.11+. Kód používá pouze standardní knihovnu; pro testy je potřeba pytest ≥ 8 (deklarován v `pyproject.toml` jako volitelná závislost `dev`).
+
+```
+python -m investor_db validate                              # kontrola integrity dat
+python -m investor_db metrics                               # precision a další metriky
+python -m investor_db review-template --reviewer R1         # šablona kontroly investorů
+python -m investor_db fact-review-template --reviewer R1    # šablona kontroly vzorku faktů
+python -m pytest                                            # testy
+```
+
+## Struktura
+
+```
+data/          CSV tabulky (jediný zdroj pravdy)
+docs/          plán, metodika, odhady, ruční kontrola
+investor_db/   schéma, validace, metriky, CLI
+tests/         testy nad fiktivními daty
+ai-log/        exporty dialogů s AI
+```
+
+Pytest je zvolen místo `unittest`, protože parametrizované testy validačních pravidel a dočasné složky (`tmp_path`) jsou s ním výrazně kratší a čitelnější; samotný kód na něm nezávisí.
