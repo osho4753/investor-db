@@ -1,4 +1,5 @@
 import hashlib
+import json
 import re
 import time
 import urllib.error
@@ -92,8 +93,11 @@ def default_opener(request: urllib.request.Request) -> Response:
     return urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS)
 
 
-def download(url: str, opener: Opener) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+class RobotsDisallowedError(Exception):
+    pass
+
+
+def read_request(request: urllib.request.Request, opener: Opener) -> str:
     with opener(request) as response:
         body = response.read()
         charset = getattr(response.headers, "get_content_charset", lambda: None)() or "utf-8"
@@ -107,11 +111,34 @@ def robots_url(url: str) -> str:
 
 def is_allowed_by_robots(url: str, opener: Opener) -> bool:
     parser = urllib.robotparser.RobotFileParser()
+    request = urllib.request.Request(robots_url(url), headers={"User-Agent": USER_AGENT})
     try:
-        parser.parse(download(robots_url(url), opener).splitlines())
+        parser.parse(read_request(request, opener).splitlines())
     except (urllib.error.URLError, TimeoutError, ValueError):
         return True
     return parser.can_fetch(USER_AGENT, url)
+
+
+def polite_request(request: urllib.request.Request, opener: Opener) -> str:
+    if not is_allowed_by_robots(request.full_url, opener):
+        raise RobotsDisallowedError(request.full_url)
+    try:
+        return read_request(request, opener)
+    finally:
+        time.sleep(REQUEST_DELAY_SECONDS)
+
+
+def download(url: str, opener: Opener = default_opener) -> str:
+    return polite_request(urllib.request.Request(url, headers={"User-Agent": USER_AGENT}), opener)
+
+
+def post_json(url: str, payload: object, opener: Opener = default_opener) -> object:
+    request = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"User-Agent": USER_AGENT, "Content-Type": "application/json", "Accept": "application/json"},
+    )
+    return json.loads(polite_request(request, opener))
 
 
 def cache_path(cache_dir: Path, url: str) -> Path:
@@ -122,16 +149,14 @@ def fetch_raw_text(url: str, cache_dir: Path, opener: Opener = default_opener) -
     cached = cache_path(cache_dir, url)
     if cached.exists():
         return RawPage(url, "z cache", cached.read_text(encoding="utf-8"))
-    if not is_allowed_by_robots(url, opener):
-        return RawPage(url, "zakázáno v robots.txt", "")
     try:
         text = html_to_text(download(url, opener))
+    except RobotsDisallowedError:
+        return RawPage(url, "zakázáno v robots.txt", "")
     except urllib.error.HTTPError as error:
         return RawPage(url, f"HTTP {error.code}", "")
     except (urllib.error.URLError, TimeoutError, ValueError) as error:
         return RawPage(url, f"chyba spojení: {error}", "")
-    finally:
-        time.sleep(REQUEST_DELAY_SECONDS)
     cache_dir.mkdir(parents=True, exist_ok=True)
     cached.write_text(text, encoding="utf-8")
     return RawPage(url, "staženo", text)

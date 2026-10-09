@@ -8,7 +8,16 @@ from pathlib import Path
 import pytest
 
 import investor_db.rawtext as rawtext
-from investor_db.rawtext import date_patterns, fetch_raw_text, find_first, html_to_text, money_patterns
+from investor_db.rawtext import (
+    RobotsDisallowedError,
+    date_patterns,
+    download,
+    fetch_raw_text,
+    find_first,
+    html_to_text,
+    money_patterns,
+    post_json,
+)
 
 
 class FakeResponse:
@@ -123,3 +132,41 @@ def test_month_precision_patterns(text: str) -> None:
 
 def test_date_patterns_do_not_match_other_day() -> None:
     assert find_first("15. 11. 2025", date_patterns(date(2025, 11, 5))) is None
+
+
+def test_download_reads_robots_txt_before_every_request() -> None:
+    opener = fake_opener({"https://example.com/robots.txt": "User-agent: *\nDisallow: /private/", "https://example.com/a": "A", "https://example.com/b": "B"})
+
+    download("https://example.com/a", opener)
+    download("https://example.com/b", opener)
+
+    assert opener.requested == [
+        "https://example.com/robots.txt",
+        "https://example.com/a",
+        "https://example.com/robots.txt",
+        "https://example.com/b",
+    ]
+
+
+def test_download_refuses_disallowed_path_without_requesting_it() -> None:
+    opener = fake_opener({"https://example.com/robots.txt": "User-agent: *\nDisallow: /ias/", "https://example.com/ias/x": "tajné"})
+
+    with pytest.raises(RobotsDisallowedError):
+        download("https://example.com/ias/x", opener)
+
+    assert opener.requested == ["https://example.com/robots.txt"]
+
+
+def test_post_json_respects_robots_txt() -> None:
+    opener = fake_opener({"https://example.com/robots.txt": "User-agent: *\nDisallow: /api/"})
+
+    with pytest.raises(RobotsDisallowedError):
+        post_json("https://example.com/api/search", {"q": "x"}, opener)
+
+    assert "https://example.com/api/search" not in opener.requested
+
+
+def test_post_json_returns_parsed_body() -> None:
+    opener = fake_opener({"https://example.com/robots.txt": "User-agent: *\nDisallow:", "https://example.com/api": '{"pocetCelkem": 0}'})
+
+    assert post_json("https://example.com/api", {"q": "x"}, opener) == {"pocetCelkem": 0}
