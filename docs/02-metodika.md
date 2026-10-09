@@ -53,7 +53,7 @@ Scraping je povolen, ale v pilotu se neimplementuje. Pro budoucí automatizaci p
 
 ### Spojení značky s českou právnickou osobou (Z1)
 
-Česká právnická osoba se přiřadí ke značce, pokud ji (a) jmenuje web značky nebo její profil v asociaci a obchodní rejstřík či ARES ji potvrzuje, nebo (b) obchodní firma obsahuje název značky a její sídlo se shoduje s adresou, kterou zveřejňuje značka nebo její profil v asociaci. Odpovídá-li pravidlu (b) více subjektů, vybere se ten, jehož název ukazuje na poradenskou či správcovskou roli, a ostatní se uvedou v `evidence_note`. Nelze-li použít ani jedno pravidlo, Z1 zůstává nedoloženo a subjekt zůstává `kandidat`.
+Česká právnická osoba se přiřadí ke značce, pokud ji (a) jmenuje web značky nebo její profil v asociaci a obchodní rejstřík či ARES ji potvrzuje, nebo (b) obchodní firma obsahuje název značky a její sídlo se shoduje s adresou, kterou zveřejňuje značka nebo její profil v asociaci. Odpovídá-li pravidlu (b) více subjektů, vybere se ten, jehož název ukazuje na poradenskou či správcovskou roli, a ostatní se uvedou v `evidence_note`. Dále (c) se přijme subjekt, jehož obchodní firma se shoduje s názvem značky až na právní formu a který je jediným takovým subjektem v rejstříku. Nelze-li použít žádné z pravidel, Z1 zůstává nedoloženo a subjekt zůstává `kandidat`.
 
 ### Data s měsíční přesností
 

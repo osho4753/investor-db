@@ -1,13 +1,13 @@
 investor_id,name,investor_type,country,registry_id,website,investment_sectors,investment_stages,typical_ticket_min,typical_ticket_max,currency,total_fund_size,assets_under_management,invested_capital,verification_status,exclusion_reason,evidence_urls,last_verified_at
 inv-0001,Stratum Partners,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0002,Thein,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0003,Tensor Ventures,,,,,,,,,,,,,kandidat,,,
+inv-0003,Tensor Ventures,vc,CZ,06257241,https://tensor.ventures/,ai;biotech;deeptech;cleantech,seed;serie_a,250000,1000000,EUR,,,,overeny,,https://brnotechregion.eu/en/news/cipova-revoluce-z-univerzitniho-brna-tensor-ventur;https://cvca.cz/en/tensor-ventures/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=Tensor&polozek=50;https://tensor.ventures/,2026-10-09
 inv-0004,CVI,jiny,,,,,,,,,,,,vyloucen,mimo_definici_pilotu,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0005,Espira Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0006,KAYA VC,vc,CZ,22585737,https://www.kaya.vc/,,pre_seed;seed,1000000,3000000,USD,,500000000,,overeny,,https://cvca.cz/en/kaya-vc-2/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=KAYA&polozek=50;https://www.kaya.vc/;https://www.kaya.vc/sustainability;https://www.vestbee.com/blog/articles/riptides-secures-3-3-m,2026-10-09
 inv-0007,EVERITA Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0008,Depo Ventures,vc,CZ,04753101,https://depoventures.com/,fintech;energetika;prumysl,pre_seed,250000,500000,EUR,,,,overeny,,https://cvca.cz/en/depo-ventures-2/;https://depoventures.com/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=DEPO+Ventures&polozek=50;https://www.caplight.com/investor/depoventures;https://www.nrb.cz/nri-dokoncila-vyber-venture-kapitaloveho-fondu-pro-program-fond-ukrajina/,2026-10-09
-inv-0009,i&i Biotech Investments,,,,,,,,,,,,,kandidat,,,
+inv-0009,i&i Biotech Investments,vc,CZ,10885978,https://www.inibio.eu/,biotech;healthtech;ai,pre_seed;seed,150000,2000000,EUR,,,,overeny,,https://cvca.cz/en/biotech-investments/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=Biotech+Investments&polozek=50;https://www.inibio.eu/,2026-10-09
 inv-0010,Abris Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0011,ARX Equity Partners,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0012,Integral Capital Group,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
@@ -15,7 +15,7 @@ inv-0013,Credo Ventures,vc,CZ,28538137,https://www.credoventures.com/,sektorove_
 inv-0014,MAM Private Equity Fund SICAV a.s.,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0015,Enterprise Investors,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0016,Genesis Capital Equity s.r.o.,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0017,Inven Capital,vc,,,,,,,,,,,,kandidat,,,
+inv-0017,Inven Capital,vc,CZ,02059533,https://www.invencapital.cz/,cleantech,growth,2000000,30000000,EUR,,,,overeny,,https://cvca.cz/en/inven-capital-2/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=Inven+Capital&polozek=50;https://www.invencapital.cz/,2026-10-09
 inv-0018,Innova Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0019,Jet Investment,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0020,Mid Europa Partners,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
@@ -23,9 +23,9 @@ inv-0021,Nation1,vc,,,https://www.nation1.vc,,pre_seed;seed,50000,1500000,EUR,,,
 inv-0022,SkyLimit Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0023,Versute Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0024,V4C Investment Advisers Limited,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0025,Orbit Capital,vc,,,,,,,,,,,,kandidat,,,
+inv-0025,Orbit Capital,vc,,,https://www.orbitcapital.com/,software,growth,6000000,15000000,EUR,,,,kandidat,,https://cvca.cz/en/orbit-capital-2/;https://tech.eu/2026/07/02/orbit-capital-closes-eur107m-venture-debt-fund-for-cee-scaleups/,2026-10-09
 inv-0026,Sandberg Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0027,Tilia Impact Ventures,vc,,,,,,,,,,,,kandidat,,,
+inv-0027,Tilia Impact Ventures,vc,CZ,17621615,https://tilia.vc/,sektorove_agnosticky,pre_seed;seed,300000,1200000,EUR,,,,overeny,,https://funding.tech.eu/investors/Tilia%20Impact%20Ventures;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=Tilia+Impact&polozek=50;https://tilia.vc/,2026-10-09
 inv-0028,Presto Ventures,vc,,,,,,,,,,,,kandidat,,,
 inv-0029,Rockaway Ventures,vc,,,,,,,,,,,,kandidat,,,
 inv-0030,Miton,jiny,,,,,,,,,,,,vyloucen,bez_fondu,https://en.wikipedia.org/wiki/Venture_capital_in_the_Czech_Republic,2026-10-09

@@ -26,3 +26,8 @@ inv-0006,overeni,model,3,2026-10-09,Web neuvádí datované investice; dva agreg
 inv-0008,overeni,model,2,2026-10-09,Web ani sekce Latest neuvádějí data investic; datum z agregátoru s měsíční přesností.
 inv-0021,overeni,model,2,2026-10-09,Z1 nedoloženo: jediná entita Nation1 Investment s.r.o. (IČO 09172807) sídlí jinde než adresa v profilu CVCA a web je nedostupný.
 inv-0051,overeni,model,1,2026-10-09,Rozhodnuto v rámci ověření Nation1.
+inv-0003,overeni,model,2,2026-10-09,Web neuvádí datované investice; dva zdroje vrátily HTTP 403.
+inv-0009,overeni,model,2,2026-10-09,Hledání v rejstříku pod názvem i&i Biotech nenašlo nic; entita dohledána podle webu. Čas je odhad z časových značek – měření přerušil zamčený soubor.
+inv-0027,overeni,model,3,2026-10-09,Web neuvádí datované investice. Čas je odhad z časových značek – start se kvůli zamčenému souboru nezaznamenal.
+inv-0025,overeni,model,2,2026-10-09,"Z1 nedoloženo: jediný subjekt ORBIT Capital GP s.r.o. (IČO 08319961) má jiné sídlo než profil CVCA a jiný název. Nejnovější aktivita je dluhová (otázka, zda nevyloučit jako dluhový fond). Datovanou equity investici se nepodařilo najít."
+inv-0017,overeni,model,1,2026-10-09,"Vazba na skupinu ČEZ zapsána ve faktu o fondu; podle webu jde o kapitál třetích osob, ne o vlastní kapitál korporace."

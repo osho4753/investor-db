@@ -56,3 +56,46 @@ f-00054,inv-0021,typical_ticket_max,1500000,EUR,,,src-0017,2026-10-09,"Profil č
 f-00055,inv-0021,cilova_velikost_fondu,35000000,EUR,Nation 1,2019-08-09,src-0018,2026-10-09,Zpráva z 9. 8. 2019 uvádí debutový seed fond Nation 1 s cílem 35 mil. EUR; EIF přispěl 15 mil. EUR z 20 mil. EUR získaných.
 f-00056,inv-0021,dolozena_investice,Paratus Health,,,2025-11-01,src-0019,2026-10-09,"Přehled pražských seed investorů uvádí u Nation 1 (N1) seed kolo Paratus Health cca 2,3 mil. USD v listopadu 2025 (měsíční přesnost, den doplněn konvencí na 1.)."
 f-00057,inv-0051,duvod_vylouceni,duplicita,,,,src-0019,2026-10-09,Přehled pražských seed investorů uvádí fond jako „Nation 1 (N1)“ – N1 je zkratka značky Nation1 (inv-0021).
+f-00058,inv-0003,name,Tensor Ventures,,,,src-0020,2026-10-09,"Web značky Tensor Ventures (tensor.vc přesměrovává na tensor.ventures) uvádí pražskou kontaktní adresu Pernerova 697/35, Karlín."
+f-00059,inv-0003,website,https://tensor.ventures/,,,,src-0020,2026-10-09,Oficiální web; adresa tensor.vc na něj přesměrovává.
+f-00060,inv-0003,registry_id,06257241,,,,src-0021,2026-10-09,"Obchodní rejstřík: Tensor Ventures a.s., IČO 06257241, sídlo Pernerova 635/57, Karlín, zapsáno 10. 7. 2017 – jediný subjekt s názvem značky (pravidlo c); web uvádí kontakt na téže ulici v jiném čísle (697/35)."
+f-00061,inv-0003,investment_stages,seed;serie_a,,,,src-0020,2026-10-09,"Web uvádí investice do kol Seed a Series A, někdy jako lead, jindy s partnery."
+f-00062,inv-0003,investment_sectors,ai;biotech;deeptech;cleantech,,,,src-0020,2026-10-09,"Web uvádí AI, kvantové technologie, computational biotech a udržitelné technologie."
+f-00063,inv-0003,typical_ticket_min,250000,EUR,,,src-0022,2026-10-09,Profil člena CVCA uvádí preferovanou investici 250 tis. – 1 mil. EUR (u fondu 20 mil. EUR).
+f-00064,inv-0003,typical_ticket_max,1000000,EUR,,,src-0022,2026-10-09,Profil člena CVCA uvádí preferovanou investici 250 tis. – 1 mil. EUR (u fondu 20 mil. EUR).
+f-00065,inv-0003,informace_o_fondu,"fond uvedený na webu; GP Tensor Ventures GP S.à r.l. (Senningerberg, Lucembursko)",,Tensor Ventures Fund I SCSp,,src-0020,2026-10-09,Web uvádí jako právní subjekty Tensor Ventures GP S.à r.l. a Tensor Ventures Fund I SCSp se sídlem v Lucembursku.
+f-00066,inv-0003,dolozena_investice,DYNANIC,,,2024-11-28,src-0023,2026-10-09,Zpráva z 28. 11. 2024 uvádí investici 550 tis. EUR Tensor Ventures a business andělů do brněnského spin-offu DYNANIC jako první investici z druhého fondu.
+f-00067,inv-0009,name,i&i Biotech Investments,,,,src-0024,2026-10-09,"Profil člena CVCA uvádí název i&i Biotech Investments (fond i&i Biotech Fund, zkráceně i&i Bio), adresu Pobřežní 394/12, Praha 8 a web www.inibio.eu."
+f-00068,inv-0009,website,https://www.inibio.eu/,,,,src-0024,2026-10-09,Profil člena CVCA uvádí web www.inibio.eu.
+f-00069,inv-0009,registry_id,10885978,,,,src-0025,2026-10-09,"Obchodní rejstřík: Biotech Investments s.r.o., IČO 10885978, sídlo Pobřežní 394/12, Praha 8, zapsáno 25. 5. 2021; web tuto společnost jmenuje jako investičního poradce fondu (pravidlo a)."
+f-00070,inv-0009,investment_stages,pre_seed;seed,,,,src-0026,2026-10-09,"Web se popisuje jako early-stage biotech VC, který investuje už při založení firmy od 150 tis. EUR."
+f-00071,inv-0009,investment_sectors,biotech;healthtech;ai,,,,src-0026,2026-10-09,"Web uvádí zaměření na life science: drug discovery, medtech, diagnostiku a AI."
+f-00072,inv-0009,typical_ticket_min,150000,EUR,,,src-0026,2026-10-09,"Web uvádí investice od 150 tis. EUR při založení firmy, hlavní zájem 0,5–2 mil. EUR."
+f-00073,inv-0009,typical_ticket_max,2000000,EUR,,,src-0026,2026-10-09,"Web uvádí hlavní zájem o investice 0,5–2 mil. EUR."
+f-00074,inv-0009,informace_o_fondu,"lucemburský fond; investiční poradce Biotech Investments s.r.o., Praha 8; EIF uveden jako partner",,i&i Biotech Fund I SCSp,,src-0026,2026-10-09,"Web uvádí fond i&i Biotech Fund I SCSp se sídlem v Lucemburku, pražského investičního poradce Biotech Investments s.r.o. a EIF jako partnera."
+f-00075,inv-0009,dolozena_investice,Captain T Cell,,,2025-11-17,src-0026,2026-10-09,Úvodní stránka uvádí 17. 11. 2025 uzavření kola Captain T Cell; sekce News uvádí účast i&i Biotech Fund I SCSp v sérii A (20 mil. EUR).
+f-00076,inv-0027,name,Tilia Impact Ventures,,,,src-0027,2026-10-09,"Patička webu uvádí © 2018–2024 Tilia Impact Ventures a adresu Drtinova 557/10, Praha."
+f-00077,inv-0027,website,https://tilia.vc/,,,,src-0027,2026-10-09,Oficiální web; tiliaimpactventures.cz na něj přesměrovává a profil CVCA uvádí www.tilia.vc.
+f-00078,inv-0027,registry_id,17621615,,,,src-0028,2026-10-09,"Obchodní rejstřík: Tilia Impact Partners s.r.o., IČO 17621615, sídlo Drtinova 557/10, Praha 5, zapsáno 10. 10. 2022 – shodné s adresou na webu a v profilu CVCA (pravidlo b); na téže adrese sídlí fondový vehikl Tilia Impact Ventures, osoba rizikového kapitálu, s.r.o."
+f-00079,inv-0027,investment_stages,pre_seed;seed,,,,src-0027,2026-10-09,Web uvádí investice v rané fázi (early stage) formou equity nebo konvertibilního dluhu.
+f-00080,inv-0027,investment_sectors,sektorove_agnosticky,,,,src-0027,2026-10-09,Web uvádí sektorově agnostické investice zaměřené na dopad.
+f-00081,inv-0027,typical_ticket_min,300000,EUR,,,src-0027,2026-10-09,"Web uvádí počáteční investici 0,3–1,2 mil. EUR."
+f-00082,inv-0027,typical_ticket_max,1200000,EUR,,,src-0027,2026-10-09,"Web uvádí počáteční investici 0,3–1,2 mil. EUR."
+f-00083,inv-0027,informace_o_fondu,fondový vehikl zapsaný v obchodním rejstříku 19. 12. 2022 na adrese značky,,"Tilia Impact Ventures, osoba rizikového kapitálu, s.r.o.",,src-0028,2026-10-09,"Obchodní rejstřík uvádí Tilia Impact Ventures, osoba rizikového kapitálu, s.r.o., IČO 17848911, sídlo Drtinova 557/10, Praha 5, zapsáno 19. 12. 2022."
+f-00084,inv-0027,dolozena_investice,Flox Intelligence,,,2026-02-01,src-0029,2026-10-09,"Přehled kol investora uvádí seed kolo Flox Intelligence 2,5 mil. EUR v únoru 2026 (měsíční přesnost, den doplněn konvencí na 1.)."
+f-00085,inv-0025,website,https://www.orbitcapital.com/,,,,src-0030,2026-10-09,"Profil člena CVCA uvádí web www.orbitcapital.com; web nabízí produkty Growth Equity a Growth Debt, právní subjekt neuvádí."
+f-00086,inv-0025,investment_stages,growth,,,,src-0030,2026-10-09,Profil člena CVCA uvádí typ investic growth equity a venture debt.
+f-00087,inv-0025,investment_sectors,software,,,,src-0030,2026-10-09,Profil člena CVCA uvádí sektory technologie a technologicky podporované scale-upy.
+f-00088,inv-0025,typical_ticket_min,6000000,EUR,,,src-0030,2026-10-09,Profil člena CVCA uvádí ticket growth equity 6–15 mil. EUR (venture debt 2–6 mil. EUR).
+f-00089,inv-0025,typical_ticket_max,15000000,EUR,,,src-0030,2026-10-09,Profil člena CVCA uvádí ticket growth equity 6–15 mil. EUR.
+f-00090,inv-0025,cilova_velikost_fondu,200000000,EUR,Orbit Capital Growth Equity,,src-0030,2026-10-09,Profil člena CVCA uvádí growth equity fond škálovaný na 200 mil. EUR a venture debt fond 30 mil. EUR.
+f-00091,inv-0025,informace_o_fondu,"second closing 107 mil. EUR nad původní cíl; dluhové (nezřeďující) financování, ticket 3–15 mil. EUR",,Growth Debt Fund II,2026-07-02,src-0031,2026-10-09,Článek z 2. 7. 2026 uvádí second closing dluhového fondu Growth Debt Fund II ve výši 107 mil. EUR a pět dosavadních investic bez dat.
+f-00092,inv-0017,name,Inven Capital,,,,src-0032,2026-10-09,"Profil člena CVCA uvádí název Inven Capital, adresu Pod křížkem 1773/2, Praha 4 a web www.invencapital.cz."
+f-00093,inv-0017,website,https://www.invencapital.cz/,,,,src-0032,2026-10-09,Profil člena CVCA uvádí web https://www.invencapital.cz.
+f-00094,inv-0017,registry_id,02059533,,,,src-0033,2026-10-09,"Obchodní rejstřík: Inven Capital, SICAV, a.s., IČO 02059533, sídlo Pod křížkem 1773/2, Praha 4, zapsáno 1. 9. 2013; web tento subjekt jmenuje jako fond (pravidlo a)."
+f-00095,inv-0017,investment_stages,growth,,,,src-0032,2026-10-09,Profil člena CVCA uvádí investice do inovativních cleantech firem v pozdní růstové fázi.
+f-00096,inv-0017,investment_sectors,cleantech,,,,src-0034,2026-10-09,Web uvádí zaměření na klimatické technologie v Evropě a Izraeli.
+f-00097,inv-0017,typical_ticket_min,2000000,EUR,,,src-0034,2026-10-09,Web uvádí ticket 2–30 mil. EUR.
+f-00098,inv-0017,typical_ticket_max,30000000,EUR,,,src-0034,2026-10-09,Web uvádí ticket 2–30 mil. EUR.
+f-00099,inv-0017,informace_o_fondu,"podfondy A–D; 500 mil. EUR od institucionálních investorů a globálních korporací a dalších 50 mil. EUR od EIB; patička webu uvádí © ČEZ, a. s.",,"Inven Capital, SICAV, a.s.",,src-0034,2026-10-09,"Web uvádí fond Inven Capital, SICAV, a.s. s podfondy A–D, kapitál 500 mil. EUR od institucionálních investorů a korporací, 50 mil. EUR od EIB a v patičce © ČEZ, a. s."
+f-00100,inv-0017,dolozena_investice,Ember,,,2024-03-26,src-0034,2026-10-09,Sekce zpráv na webu uvádí spoluvedení série A firmy Ember (11 mil. GBP); datum 26. 3. 2024 vyplývá z adresy zprávy.
