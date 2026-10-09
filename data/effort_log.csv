@@ -37,3 +37,9 @@ inv-0031,overeni,model,1,2026-10-09,Wikipedie zmiňuje subjekt jen historicky (v
 inv-0034,overeni,model,2,2026-10-09,
 inv-0035,overeni,model,1,2026-10-09,
 inv-0036,overeni,model,1,2026-10-09,Rozhodnutí opřeno o článek z roku 2020; novější zdroj o změně struktury kapitálu se nenašel.
+inv-0037,overeni,model,1,2026-10-09,Z1 nedoloženo: jediný subjekt Lighthouse Ventures GP s.r.o. (IČO 07500912) nesplňuje pravidla a–c a web značky se nepodařilo najít. Z4 nedoloženo: nejnovější nalezená investice (Pekat Vision) je z června 2019.
+inv-0038,overeni,model,1,2026-10-09,Web neuvádí strategii ani datované investice.
+inv-0039,overeni,model,1,2026-10-09,"Z1 nedoloženo: web tachles.vc neexistuje (DNS), v rejstříku jsou tachles s.r.o. (IČO 07904207, zapsán 2019) a Tachles VC Management s.r.o. (IČO 14376032), ani jeden nesplňuje pravidla a–c. Z4: konkrétní datovaná investice nenalezena."
+inv-0040,overeni,model,1,2026-10-09,Fond digitálních aktiv doplněn do definice mimo_definici_pilotu.
+inv-0042,overeni,model,1,2026-10-09,Zdroj byl otevřen při hledání (s-007) a znovu s dotazem na kontext zmínek.
+inv-0052,overeni,model,1,2026-10-09,"Z1 nedoloženo: hledání IP Lab Ventures v obchodním rejstříku nenašlo žádný subjekt a web značky nebyl nalezen. Z4: nový fond, investice do firem zatím nedoloženy."
