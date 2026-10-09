@@ -99,3 +99,39 @@ f-00097,inv-0017,typical_ticket_min,2000000,EUR,,,src-0034,2026-10-09,Web uvád�
 f-00098,inv-0017,typical_ticket_max,30000000,EUR,,,src-0034,2026-10-09,Web uvádí ticket 2–30 mil. EUR.
 f-00099,inv-0017,informace_o_fondu,"podfondy A–D; 500 mil. EUR od institucionálních investorů a globálních korporací a dalších 50 mil. EUR od EIB; patička webu uvádí © ČEZ, a. s.",,"Inven Capital, SICAV, a.s.",,src-0034,2026-10-09,"Web uvádí fond Inven Capital, SICAV, a.s. s podfondy A–D, kapitál 500 mil. EUR od institucionálních investorů a korporací, 50 mil. EUR od EIB a v patičce © ČEZ, a. s."
 f-00100,inv-0017,dolozena_investice,Ember,,,2024-03-26,src-0034,2026-10-09,Sekce zpráv na webu uvádí spoluvedení série A firmy Ember (11 mil. GBP); datum 26. 3. 2024 vyplývá z adresy zprávy.
+f-00101,inv-0028,name,Presto Ventures,,,,src-0035,2026-10-09,"Patička webu uvádí © 2024 Presto Ventures a adresu Senovážné náměstí 869/28, Praha 1."
+f-00102,inv-0028,website,https://www.prestoventures.com/,,,,src-0035,2026-10-09,"Oficiální web značky (adresa presto.vc je zaparkovaná doména na prodej, nepatří značce)."
+f-00103,inv-0028,registry_id,11678704,,,,src-0036,2026-10-09,"Obchodní rejstřík: Presto Ventures II a.s., osoba rizikového kapitálu, IČO 11678704, sídlo Revoluční 763/15, Praha 1, zapsáno 21. 7. 2021; web ve zprávě z 25. 5. 2026 uvádí tento subjekt se stejným IČO (pravidlo a), ale se sídlem Na Příkopě 859/22."
+f-00104,inv-0028,investment_stages,seed;serie_a,,,,src-0035,2026-10-09,Web uvádí investice od seed po Series A do firem po prvních tržbách.
+f-00105,inv-0028,typical_ticket_min,500000,EUR,,,src-0035,2026-10-09,Web uvádí ticket 500 tis. – 5 mil. EUR.
+f-00106,inv-0028,typical_ticket_max,5000000,EUR,,,src-0035,2026-10-09,Web uvádí ticket 500 tis. – 5 mil. EUR.
+f-00107,inv-0028,informace_o_fondu,fond ve formě osoby rizikového kapitálu zapsaný 21. 7. 2021,,"Presto Ventures II a.s., osoba rizikového kapitálu",,src-0036,2026-10-09,"Obchodní rejstřík uvádí Presto Ventures II a.s., osoba rizikového kapitálu, zapsanou 21. 7. 2021."
+f-00108,inv-0028,cilova_velikost_fondu,150000000,EUR,Presto Tech Horizons,2024-06-26,src-0037,2026-10-09,Článek z 26. 6. 2024 uvádí nový fond Presto Tech Horizons se skupinou CSG s cílem až 150 mil. EUR zaměřený na obranu a bezpečnost.
+f-00109,inv-0028,dolozena_investice,Vidar Systems,,,2024-11-27,src-0038,2026-10-09,Sekce News uvádí 27. 11. 2024 Vidar Systems jako jednu z prvních investic fondu Presto Tech Horizons.
+f-00110,inv-0029,name,Rockaway Ventures,,,,src-0039,2026-10-09,Článek z 16. 5. 2025 uvádí pražský fond Rockaway Ventures a jeho web rockawayventures.com.
+f-00111,inv-0029,website,https://rockawayventures.com/,,,,src-0039,2026-10-09,Článek z 16. 5. 2025 uvádí web https://rockawayventures.com/; patička webu uvádí Rockaway Ventures Fund.
+f-00112,inv-0029,registry_id,06387136,,,,src-0040,2026-10-09,"Obchodní rejstřík: Rockaway Ventures a.s., IČO 06387136, sídlo Generála Píky 430/26, Praha 6, zapsáno 29. 8. 2017 – jediný subjekt s přesným názvem značky (pravidlo c); na téže adrese sídlí i Rockaway Ventures Fund SICAV a.s. a Rockaway Ventures Advisors a.s."
+f-00113,inv-0029,investment_stages,seed;serie_a,,,,src-0041,2026-10-09,Web uvádí investice ve fázi late seed nebo Series A s prokázanou trakcí.
+f-00114,inv-0029,investment_sectors,ecommerce;media;kyberbezpecnost;cleantech;proptech,,,,src-0041,2026-10-09,"Web uvádí retail a e-commerce, cestování, digitální logistiku, digitální média, kyberbezpečnost, obranu, cleantech a proptech; cestování, logistika a obrana nemají kód ve slovníku."
+f-00115,inv-0029,informace_o_fondu,"uzavřen na téměř 55 mil. EUR (květen 2025), typ uzavření neuveden; přibližně 25 % kapitálu od Rockaway Capital, zbytek soukromí investoři",,Rockaway Ventures Fund II,2025-05-16,src-0039,2026-10-09,Článek z 16. 5. 2025 uvádí uzavření druhého fondu na téměř 55 mil. EUR a podíl Rockaway Capital asi 25 %.
+f-00116,inv-0029,dolozena_investice,Filuta AI,,,2025-06-24,src-0041,2026-10-09,"Web uvádí 24. 6. 2025 seed kolo Filuta AI 4,2 mil. USD vedené Rockaway Ventures."
+f-00117,inv-0031,duvod_vylouceni,zanikly_subjekt,,,,src-0042,2026-10-09,"Hledání podle názvu Fond rizikového kapitálu včetně vymazaných subjektů vrací jediný subjekt, dnes International brands Europe s.r.o. v likvidaci (IČO 63675285, zapsán 4. 5. 1995), označený jako vymazaný."
+f-00118,inv-0034,name,J&T Ventures,,,,src-0043,2026-10-09,"Patička webu uvádí © 2024 J&T Ventures a adresu Sokolovská 700/113a, Praha 8."
+f-00119,inv-0034,website,https://www.jtventures.cz/,,,,src-0043,2026-10-09,Oficiální web značky.
+f-00120,inv-0034,registry_id,08220867,,,,src-0044,2026-10-09,"Zásady zpracování osobních údajů uvádějí jako správce J&T Ventures CG SICAV a.s., IČO 08220867, Sokolovská 700/113a, Praha 8, vedenou u Městského soudu v Praze, oddíl B, vložka 24448 (pravidlo a)."
+f-00121,inv-0034,investment_stages,pre_seed;seed;serie_a,,,,src-0043,2026-10-09,Web uvádí fáze pre-seed až Series A.
+f-00122,inv-0034,investment_sectors,sektorove_agnosticky,,,,src-0043,2026-10-09,"Web uvádí B2B, B2C, marketplaces a sektorově agnostický přístup."
+f-00123,inv-0034,typical_ticket_min,300000,EUR,,,src-0043,2026-10-09,Web uvádí ticket 300 tis. – 3 mil. EUR.
+f-00124,inv-0034,typical_ticket_max,3000000,EUR,,,src-0043,2026-10-09,Web uvádí ticket 300 tis. – 3 mil. EUR.
+f-00125,inv-0034,informace_o_fondu,fond SICAV zapsaný v obchodním rejstříku 21. 10. 2024 na adrese značky,,J&T Ventures III SICAV a.s.,,src-0045,2026-10-09,"Obchodní rejstřík uvádí J&T Ventures III SICAV a.s., IČO 22175903, Sokolovská 700/113a, Praha 8, zapsanou 21. 10. 2024."
+f-00126,inv-0034,dolozena_investice,grid.online,,,2025-03-03,src-0046,2026-10-09,"Blog uvádí 3. 3. 2025 investici 1,5 mil. EUR do grid.online od Reflex Capital, J&T Ventures a Grid Invest."
+f-00127,inv-0035,name,Purple Ventures,,,,src-0047,2026-10-09,"Web značky Purple Ventures (purple.ventures přesměrovává na purple-ventures.com); uvádí Purple Ventures s.r.o., člena Purple Holding."
+f-00128,inv-0035,website,https://purple-ventures.com/,,,,src-0047,2026-10-09,Oficiální web; adresa purple.ventures na něj přesměrovává.
+f-00129,inv-0035,registry_id,05775574,,,,src-0047,2026-10-09,"Patička webu uvádí IČO 05775574 a adresu Masarykova 26, Brno (pravidlo a)."
+f-00130,inv-0035,registry_id,05775574,,,,src-0048,2026-10-09,"Obchodní rejstřík: Purple Ventures s.r.o., IČO 05775574, sídlo Masarykova 409/26, Brno, zapsáno 3. 2. 2017."
+f-00131,inv-0035,investment_stages,pre_seed;seed,,,,src-0047,2026-10-09,Web uvádí fáze pre-seed a seed a menšinové podíly.
+f-00132,inv-0035,typical_ticket_min,250000,EUR,,,src-0047,2026-10-09,Web uvádí počáteční investici 250–400 tis. EUR s možností follow-on.
+f-00133,inv-0035,typical_ticket_max,400000,EUR,,,src-0047,2026-10-09,Web uvádí počáteční investici 250–400 tis. EUR.
+f-00134,inv-0035,informace_o_fondu,"fond kvalifikovaných investorů; podle webu závazky přes 700 mil. Kč, investováno 250 mil. Kč do 22 firem, cíl 50 firem",,Purple Ventures 2,,src-0047,2026-10-09,Web uvádí fond Purple Ventures 2 (Fund II) se závazky přes 700 mil. Kč a 22 portfoliovými firmami.
+f-00135,inv-0035,dolozena_investice,Kilde,,,2025-10-20,src-0049,2026-10-09,Článek z 20. 10. 2025 uvádí investici 12 mil. Kč z fondu kvalifikovaných investorů Purple Ventures 2 do fintechu Kilde.
+f-00136,inv-0036,duvod_vylouceni,bez_fondu,,,,src-0050,2026-10-09,"Článek z 9. 9. 2020 uvádí, že Impulse Ventures investuje výhradně vlastní peníze (kapitál dodal Ondřej Tomek, vkládá i Samuel Huba) a není fondem; externí investoři zmíněni nejsou."

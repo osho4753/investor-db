@@ -31,3 +31,9 @@ inv-0009,overeni,model,2,2026-10-09,Hledání v rejstříku pod názvem i&i Biot
 inv-0027,overeni,model,3,2026-10-09,Web neuvádí datované investice. Čas je odhad z časových značek – start se kvůli zamčenému souboru nezaznamenal.
 inv-0025,overeni,model,2,2026-10-09,"Z1 nedoloženo: jediný subjekt ORBIT Capital GP s.r.o. (IČO 08319961) má jiné sídlo než profil CVCA a jiný název. Nejnovější aktivita je dluhová (otázka, zda nevyloučit jako dluhový fond). Datovanou equity investici se nepodařilo najít."
 inv-0017,overeni,model,1,2026-10-09,"Vazba na skupinu ČEZ zapsána ve faktu o fondu; podle webu jde o kapitál třetích osob, ne o vlastní kapitál korporace."
+inv-0028,overeni,model,2,2026-10-09,"Sektory nevyplněny – obrana, bezpečnost a letectví nemají kód ve slovníku. Doménu presto.vc jsem nejdřív chybně odhadl (zaparkovaná)."
+inv-0029,overeni,model,1,2026-10-09,Vazba na Rockaway Capital (asi 25 % kapitálu fondu) zapsána ve faktu o fondu.
+inv-0031,overeni,model,1,2026-10-09,Wikipedie zmiňuje subjekt jen historicky (výnosy do roku 2000).
+inv-0034,overeni,model,2,2026-10-09,
+inv-0035,overeni,model,1,2026-10-09,
+inv-0036,overeni,model,1,2026-10-09,Rozhodnutí opřeno o článek z roku 2020; novější zdroj o změně struktury kapitálu se nenašel.
