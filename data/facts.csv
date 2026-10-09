@@ -1,1 +1,23 @@
 fact_id,investor_id,field,value,currency,fund_name,value_as_of,source_id,accessed_at,evidence_note
+f-00001,inv-0001,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: růstový kapitál, buyouty a rekapitalizace."
+f-00002,inv-0002,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: LBO a růstový kapitál.
+f-00003,inv-0004,duvod_vylouceni,mimo_definici_pilotu,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: přímé úvěry, seniorní dluh a mezanin, jen výjimečně menšinové kapitálové investice – dluhový fond."
+f-00004,inv-0005,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: růstové financování, akvizice, restrukturalizace vlastnictví a management buyout."
+f-00005,inv-0007,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: private equity – růstový kapitál.
+f-00006,inv-0010,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: růstové a buyoutové akvizice (MBO a MBI), expanzní financování, konsolidace odvětví."
+f-00007,inv-0011,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: akvizice, management buyout (MBO a MBI), expanzní kapitál, konsolidace sektoru."
+f-00008,inv-0012,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: private equity.
+f-00009,inv-0014,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: management buyouty (MBO, MBI), LBO akvizice a růstový kapitál."
+f-00010,inv-0015,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: buyout (MBO a MBI) a expanzní kapitál.
+f-00011,inv-0016,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: akvizice firem, management buyouty, konsolidace sektoru, růstový kapitál a sekundární buyouty."
+f-00012,inv-0018,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: expanzní a rozvojový kapitál, překlenovací financování, náhradní kapitál, buyout a buy-in."
+f-00013,inv-0019,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: buyout, růst, záchrana/turnaround a pozdní fáze venture – převažují buyouty."
+f-00014,inv-0020,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: akvizice, management buyouty (MBO a MBI), expanzní financování, konsolidace odvětví."
+f-00015,inv-0022,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: management buyouty, LBO, konsolidace sektoru, příležitostně růstový kapitál."
+f-00016,inv-0023,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,"Seznam řádných členů CVCA uvádí u člena typ investic: růstový kapitál, LBO a management buyouty."
+f-00017,inv-0024,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: buyouty a expanzní kapitál.
+f-00018,inv-0026,duvod_vylouceni,pe_budouci_rozsireni,,,,src-0001,2026-10-09,Seznam řádných členů CVCA uvádí u člena typ investic: buy-and-build a růst.
+f-00019,inv-0030,duvod_vylouceni,bez_fondu,,,,src-0002,2026-10-09,"Článek o VC v ČR uvádí, že Miton investuje výhradně vlastní kapitál bez externích investorů (LP); chybí fond s kapitálem třetích osob."
+f-00020,inv-0032,duvod_vylouceni,mimo_definici_pilotu,,,,src-0002,2026-10-09,"Článek o VC v ČR popisuje Seed Fund jako program ministerstva průmyslu a obchodu financovaný z fondů EU, který spolufinancuje soukromé investory."
+f-00021,inv-0033,duvod_vylouceni,mimo_definici_pilotu,,,,src-0002,2026-10-09,"Článek o VC v ČR uvádí, že EIF s českými úřady spustil fondy fondů (ESIF 2017, RRF 2023) a investuje do českých fondů, ne přímo do firem."
+f-00022,inv-0041,duvod_vylouceni,zahranicni_subjekt,,,,src-0003,2026-10-09,Článek ze 2. 4. 2024 označuje OTB Ventures za polský fond investující po celé Evropě.
