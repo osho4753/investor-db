@@ -21,3 +21,38 @@ f-00019,inv-0030,duvod_vylouceni,bez_fondu,,,,src-0002,2026-10-09,"Článek o VC
 f-00020,inv-0032,duvod_vylouceni,mimo_definici_pilotu,,,,src-0002,2026-10-09,"Článek o VC v ČR popisuje Seed Fund jako program ministerstva průmyslu a obchodu financovaný z fondů EU, který spolufinancuje soukromé investory."
 f-00021,inv-0033,duvod_vylouceni,mimo_definici_pilotu,,,,src-0002,2026-10-09,"Článek o VC v ČR uvádí, že EIF s českými úřady spustil fondy fondů (ESIF 2017, RRF 2023) a investuje do českých fondů, ne přímo do firem."
 f-00022,inv-0041,duvod_vylouceni,zahranicni_subjekt,,,,src-0003,2026-10-09,Článek ze 2. 4. 2024 označuje OTB Ventures za polský fond investující po celé Evropě.
+f-00023,inv-0013,name,Credo Ventures,,,,src-0004,2026-10-09,Patička webu uvádí © 2026 Credo Ventures; značka působí od roku 2009.
+f-00024,inv-0013,website,https://www.credoventures.com/,,,,src-0004,2026-10-09,Oficiální web značky; stejnou adresu uvádí profil člena CVCA.
+f-00025,inv-0013,registry_id,28538137,,,,src-0005,2026-10-09,"Obchodní rejstřík: Credo Ventures a.s., IČO 28538137, sídlo Karlovo náměstí 2097/10, Praha 2, zapsáno 2. 3. 2009; adresa odpovídá pražské adrese na webu."
+f-00026,inv-0013,investment_stages,pre_seed,,,,src-0004,2026-10-09,"Úvodní stránka uvádí, že Credo vede pre-seed kola a píše první šek ještě před produktem a tržbami."
+f-00027,inv-0013,investment_sectors,sektorove_agnosticky,,,,src-0004,2026-10-09,"Úvodní stránka uvádí, že investují do lidí, ne do témat; sektorové zaměření nedefinuje."
+f-00028,inv-0013,typical_ticket_min,1000000,USD,,,src-0004,2026-10-09,Úvodní stránka uvádí velikost šeku 1–5 mil. USD.
+f-00029,inv-0013,typical_ticket_max,5000000,USD,,,src-0004,2026-10-09,Úvodní stránka uvádí velikost šeku 1–5 mil. USD.
+f-00030,inv-0013,informace_o_fondu,first close 88 mil. USD v březnu 2026,,Credo Stage 5,,src-0002,2026-10-09,"Článek uvádí, že Credo v březnu 2026 uzavřelo first close pátého fondu Credo Stage 5 ve výši 88 mil. USD."
+f-00031,inv-0013,dolozena_investice,Wabi,,,2025-11-05,src-0006,2026-10-09,Newsroom Credo uvádí k 5. 11. 2025 pre-seed kolo Wabi (20 mil. USD); úvodní stránka řadí Wabi mezi pre-seed investice Credo.
+f-00032,inv-0006,name,KAYA VC,,,,src-0007,2026-10-09,"Profil člena CVCA uvádí název KAYA VC, adresu Thámova 183/11, Praha 8 a web www.kaya.vc."
+f-00033,inv-0006,website,https://www.kaya.vc/,,,,src-0007,2026-10-09,Profil člena CVCA uvádí web www.kaya.vc.
+f-00034,inv-0006,registry_id,22585737,,,,src-0008,2026-10-09,"Obchodní rejstřík: KAYA Advisory s.r.o., IČO 22585737, sídlo Thámova 183/11, Praha 8 (zapsáno 12. 2. 2025) – shodné s adresou v profilu CVCA. Na téže adrese sídlí i další subjekty Kaya (např. Kaya Services, Kaya F3 GP); web entitu neuvádí, výběr podle pravidla shody názvu a adresy."
+f-00035,inv-0006,investment_stages,pre_seed;seed,,,,src-0009,2026-10-09,Úvodní stránka uvádí investice od pre-seed až po růst a zmiňuje kolo Pre+Seed.
+f-00036,inv-0006,typical_ticket_min,1000000,USD,,,src-0009,2026-10-09,Úvodní stránka uvádí velikost investice 1–3 mil. USD.
+f-00037,inv-0006,typical_ticket_max,3000000,USD,,,src-0009,2026-10-09,Úvodní stránka uvádí velikost investice 1–3 mil. USD.
+f-00038,inv-0006,assets_under_management,500000000,USD,,,src-0009,2026-10-09,Úvodní stránka uvádí celkové AUM 500 mil. USD (vedle aktuálního fondu 85 mil. USD).
+f-00039,inv-0006,informace_o_fondu,subfond podporovaný InnovFin Equity; jako GP uveden lucemburský AIFM KAYA VC GP S.à r.l,,ET3,,src-0010,2026-10-09,Stránka o udržitelnosti zmiňuje subfondy ET3 a ET4 podporované InnovFin Equity a správce KAYA VC GP S.à r.l registrovaného jako lucemburský AIFM.
+f-00040,inv-0006,dolozena_investice,Riptides,,,2025-04-23,src-0011,2026-10-09,"Článek z 23. 4. 2025 uvádí pre-seed kolo Riptides 3,3 mil. USD vedené PortfoLion, ke kterému se připojila česká KAYA VC."
+f-00041,inv-0008,name,Depo Ventures,,,,src-0012,2026-10-09,"Profil člena CVCA uvádí název Depo Ventures a v adrese DEPO VENTURES, s.r.o., Plynární 10, Praha 7."
+f-00042,inv-0008,website,https://depoventures.com/,,,,src-0013,2026-10-09,"Web značky; patička uvádí DEPO VENTURES s.r.o., Plynární 10, Praha 7."
+f-00043,inv-0008,registry_id,04753101,,,,src-0014,2026-10-09,"Obchodní rejstřík: DEPO VENTURES, s.r.o., IČO 04753101, sídlo Plynární 1617/10, Praha 7, zapsáno 26. 1. 2016; název a adresa odpovídají patičce webu a profilu CVCA."
+f-00044,inv-0008,investment_stages,pre_seed,,,,src-0013,2026-10-09,Úvodní stránka uvádí investice ve fázích inception a pre-seed.
+f-00045,inv-0008,investment_sectors,fintech;energetika;prumysl,,,,src-0013,2026-10-09,"Úvodní stránka uvádí sektory obrana, vesmír, fintech, Industry 4.0 a energetika; obrana a vesmír nemají kód ve slovníku."
+f-00046,inv-0008,typical_ticket_min,250000,EUR,,,src-0013,2026-10-09,Úvodní stránka uvádí ticket 250–500 tis. EUR.
+f-00047,inv-0008,typical_ticket_max,500000,EUR,,,src-0013,2026-10-09,Úvodní stránka uvádí ticket 250–500 tis. EUR.
+f-00048,inv-0008,informace_o_fondu,fondový vehikl zapsaný v obchodním rejstříku 6. 8. 2021,,"DEPO VENTURES AF II., osoba rizikového kapitálu, s.r.o.",,src-0014,2026-10-09,"Obchodní rejstřík uvádí subjekt DEPO VENTURES AF II., osoba rizikového kapitálu, s.r.o., IČO 11726377, zapsaný 6. 8. 2021."
+f-00049,inv-0008,informace_o_fondu,"vybrán NRI pro program Fond Ukrajina, závazek NRI 94 mil. Kč; správce DEPO Ventures Sàrl (Lucembursko)",,DEPO Ventures One SCSp,2026-08-26,src-0015,2026-10-09,"Zpráva NRB z 26. 8. 2026 uvádí výběr fondu DEPO Ventures One SCSp, investici NRI 94 mil. Kč a lucemburského správce DEPO Ventures Sàrl."
+f-00050,inv-0008,dolozena_investice,Tapaya,,,2026-04-01,src-0016,2026-10-09,"Přehled investic uvádí pre-seed kolo Tapaya v dubnu 2026 vedené DEPO (měsíční přesnost, den doplněn konvencí na 1.). Sekce Latest na webu DEPO potvrzuje vedení kola s Passion Capital bez data."
+f-00051,inv-0021,website,https://www.nation1.vc,,,,src-0017,2026-10-09,Profil člena CVCA uvádí web https://www.nation1.vc; při ověření 9. 10. 2026 web odmítl spojení (ECONNREFUSED).
+f-00052,inv-0021,investment_stages,pre_seed;seed,,,,src-0017,2026-10-09,"Profil člena CVCA uvádí typ investic pre-seed, seed a financování startupů."
+f-00053,inv-0021,typical_ticket_min,50000,EUR,,,src-0017,2026-10-09,"Profil člena CVCA uvádí ticket 50 tis. – 1,5 mil. EUR."
+f-00054,inv-0021,typical_ticket_max,1500000,EUR,,,src-0017,2026-10-09,"Profil člena CVCA uvádí ticket 50 tis. – 1,5 mil. EUR."
+f-00055,inv-0021,cilova_velikost_fondu,35000000,EUR,Nation 1,2019-08-09,src-0018,2026-10-09,Zpráva z 9. 8. 2019 uvádí debutový seed fond Nation 1 s cílem 35 mil. EUR; EIF přispěl 15 mil. EUR z 20 mil. EUR získaných.
+f-00056,inv-0021,dolozena_investice,Paratus Health,,,2025-11-01,src-0019,2026-10-09,"Přehled pražských seed investorů uvádí u Nation 1 (N1) seed kolo Paratus Health cca 2,3 mil. USD v listopadu 2025 (měsíční přesnost, den doplněn konvencí na 1.)."
+f-00057,inv-0051,duvod_vylouceni,duplicita,,,,src-0019,2026-10-09,Přehled pražských seed investorů uvádí fond jako „Nation 1 (N1)“ – N1 je zkratka značky Nation1 (inv-0021).

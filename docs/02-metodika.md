@@ -51,6 +51,14 @@ Scraping je povolen, ale v pilotu se neimplementuje. Pro budoucí automatizaci p
 5. **Přidělení statusu `overeny`.** Až když jsou doložena kritéria Z1–Z4 a validační skript projde.
 6. **Ruční kontrola** – viz `docs/04-rucni-kontrola.md`.
 
+### Spojení značky s českou právnickou osobou (Z1)
+
+Česká právnická osoba se přiřadí ke značce, pokud ji (a) jmenuje web značky nebo její profil v asociaci a obchodní rejstřík či ARES ji potvrzuje, nebo (b) obchodní firma obsahuje název značky a její sídlo se shoduje s adresou, kterou zveřejňuje značka nebo její profil v asociaci. Odpovídá-li pravidlu (b) více subjektů, vybere se ten, jehož název ukazuje na poradenskou či správcovskou roli, a ostatní se uvedou v `evidence_note`. Nelze-li použít ani jedno pravidlo, Z1 zůstává nedoloženo a subjekt zůstává `kandidat`.
+
+### Data s měsíční přesností
+
+Uvádí-li zdroj jen měsíc a rok (např. „duben 2026“), zapíše se `value_as_of` jako první den měsíce a `evidence_note` výslovně uvede měsíční přesnost.
+
 ### Konflikty mezi zdroji
 
 - Všechny protichůdné hodnoty se zapíšou jako samostatné fakty; žádný se nemaže.

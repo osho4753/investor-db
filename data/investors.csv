@@ -4,14 +4,14 @@ inv-0002,Thein,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/ca
 inv-0003,Tensor Ventures,,,,,,,,,,,,,kandidat,,,
 inv-0004,CVI,jiny,,,,,,,,,,,,vyloucen,mimo_definici_pilotu,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0005,Espira Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0006,KAYA VC,vc,,,,,,,,,,,,kandidat,,,
+inv-0006,KAYA VC,vc,CZ,22585737,https://www.kaya.vc/,,pre_seed;seed,1000000,3000000,USD,,500000000,,overeny,,https://cvca.cz/en/kaya-vc-2/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=KAYA&polozek=50;https://www.kaya.vc/;https://www.kaya.vc/sustainability;https://www.vestbee.com/blog/articles/riptides-secures-3-3-m,2026-10-09
 inv-0007,EVERITA Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0008,Depo Ventures,vc,,,,,,,,,,,,kandidat,,,
+inv-0008,Depo Ventures,vc,CZ,04753101,https://depoventures.com/,fintech;energetika;prumysl,pre_seed,250000,500000,EUR,,,,overeny,,https://cvca.cz/en/depo-ventures-2/;https://depoventures.com/;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=DEPO+Ventures&polozek=50;https://www.caplight.com/investor/depoventures;https://www.nrb.cz/nri-dokoncila-vyber-venture-kapitaloveho-fondu-pro-program-fond-ukrajina/,2026-10-09
 inv-0009,i&i Biotech Investments,,,,,,,,,,,,,kandidat,,,
 inv-0010,Abris Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0011,ARX Equity Partners,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0012,Integral Capital Group,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0013,Credo Ventures,vc,,,,,,,,,,,,kandidat,,,
+inv-0013,Credo Ventures,vc,CZ,28538137,https://www.credoventures.com/,sektorove_agnosticky,pre_seed,1000000,5000000,USD,,,,overeny,,https://en.wikipedia.org/wiki/Venture_capital_in_the_Czech_Republic;https://or.justice.cz/ias/ui/rejstrik-$firma?jenPlatne=PLATNE&nazev=Credo+Ventures&polozek=50;https://www.credoventures.com/;https://www.credoventures.com/newsroom,2026-10-09
 inv-0014,MAM Private Equity Fund SICAV a.s.,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0015,Enterprise Investors,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0016,Genesis Capital Equity s.r.o.,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
@@ -19,7 +19,7 @@ inv-0017,Inven Capital,vc,,,,,,,,,,,,kandidat,,,
 inv-0018,Innova Capital,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0019,Jet Investment,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0020,Mid Europa Partners,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
-inv-0021,Nation1,vc,,,,,,,,,,,,kandidat,,,
+inv-0021,Nation1,vc,,,https://www.nation1.vc,,pre_seed;seed,50000,1500000,EUR,,,,kandidat,,https://cvca.cz/en/nation1-2/;https://www.ellty.com/investors/prague-seed-investors;https://www.unquote.com/cee/official-record/3016081/nation-1-launches-debut-fund-with-a-target-of-eur35m,2026-10-09
 inv-0022,SkyLimit Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0023,Versute Investments,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
 inv-0024,V4C Investment Advisers Limited,pe,,,,,,,,,,,,vyloucen,pe_budouci_rozsireni,https://cvca.cz/en/category/full-members/,2026-10-09
@@ -49,5 +49,5 @@ inv-0047,Startguide VC,,,,,,,,,,,,,kandidat,,,
 inv-0048,Gain Ventures,,,,,,,,,,,,,kandidat,,,
 inv-0049,StartupYard,,,,,,,,,,,,,kandidat,,,
 inv-0050,Zaka VC,vc,,,,,,,,,,,,kandidat,,,
-inv-0051,N1,vc,,,,,,,,,,,,kandidat,,,
+inv-0051,N1,vc,,,,,,,,,,,,vyloucen,duplicita,https://www.ellty.com/investors/prague-seed-investors,2026-10-09
 inv-0052,IP Lab Ventures,vc,,,,,,,,,,,,kandidat,,,

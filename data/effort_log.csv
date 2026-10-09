@@ -21,3 +21,8 @@ inv-0030,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnn�
 inv-0032,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
 inv-0033,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
 inv-0041,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
+inv-0013,overeni,model,5,2026-10-09,Čas zahrnuje i přípravu pomocných skriptů pro zápis (cca 3 min).
+inv-0006,overeni,model,3,2026-10-09,Web neuvádí datované investice; dva agregátory vrátily HTTP 403.
+inv-0008,overeni,model,2,2026-10-09,Web ani sekce Latest neuvádějí data investic; datum z agregátoru s měsíční přesností.
+inv-0021,overeni,model,2,2026-10-09,Z1 nedoloženo: jediná entita Nation1 Investment s.r.o. (IČO 09172807) sídlí jinde než adresa v profilu CVCA a web je nedostupný.
+inv-0051,overeni,model,1,2026-10-09,Rozhodnuto v rámci ověření Nation1.
