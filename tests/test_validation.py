@@ -167,6 +167,12 @@ def test_money_fact_in_other_currency_is_allowed(dataset: Dataset) -> None:
     assert validate_dataset(dataset, TODAY) == []
 
 
+def test_fund_info_requires_fund_name(dataset: Dataset) -> None:
+    dataset.facts.append(fact("f-00012", "informace_o_fondu", "first close 10 mil. EUR", "src-0002"))
+
+    assert_reported(dataset, "fakt informace_o_fondu musí mít fund_name")
+
+
 def test_target_fund_size_requires_fund_name(dataset: Dataset) -> None:
     dataset.facts.append(fact("f-00012", "cilova_velikost_fondu", "50000000", "src-0002", currency="EUR"))
 

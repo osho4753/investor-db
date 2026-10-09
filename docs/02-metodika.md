@@ -109,6 +109,7 @@ Doplňkové typy faktů:
 | `field` | Význam | Pravidla |
 |---|---|---|
 | `pravni_spravce` | Právní správce či administrátor fondu | `fund_name` povinné |
+| `informace_o_fondu` | Doložená existence fondu a jeho stav, který nepatří do jiného pole (např. first close, ročník, spuštění) | `fund_name` povinné; hodnota je stručný popis |
 | `cilova_velikost_fondu` | Cílová velikost fondu (nikdy se nepřebírá do `total_fund_size`) | částka, `currency` a `fund_name` povinné |
 | `registrace_regulator` | Registrace správce či fondu u regulátora | — |
 | `dolozena_investice` | Doložená investice; hodnota je název portfoliové firmy | `value_as_of` = datum investice, povinné |
