@@ -43,7 +43,7 @@ Skutečná dostupnost a užitečnost každého zdroje se ověřuje a zaznamenáv
 | Business angels | Vyloučeny | Jde o fyzické osoby: zpracování jejich údajů naráží na GDPR a veřejná doložitelnost investic je slabá. |
 | Family offices | Vyloučeny | Nemají povinnost zveřejňovat a veřejných dat je málo. |
 | PE fondy | Vyloučeny, **budoucí rozšíření** | Metodicky odlišné (většinové podíly, buyout); smíchání s VC by rozmazalo definici. Evidují se jako vyloučené s důvodem `pe_budouci_rozsireni`. |
-| Corporate VC | Vyloučeny, budoucí rozšíření | Investují vlastní kapitál korporace, ne kapitál třetích osob; hranice vůči strategickým akvizicím je nejasná. Důvod `mimo_definici_pilotu`. |
+| Corporate VC (více než 50 % kapitálu fondu od jedné korporátní skupiny) | Vyloučeny, budoucí rozšíření | Investují převážně kapitál korporace; hranice vůči strategickým akvizicím je nejasná. Není-li rozložení kapitálu doloženo, zůstávají kandidáty. Důvod `mimo_definici_pilotu`. |
 | Fondy fondů | Vyloučeny, budoucí rozšíření | Investují do fondů, ne přímo do firem; jejich zařazení by vedlo k dvojímu započtení kapitálu. Důvod `mimo_definici_pilotu`. |
 | Státní fondy a rozvojové instituce | Vyloučeny, budoucí rozšíření | Kombinují veřejné politiky, dotace a nástroje fondů fondů; vyžadují vlastní definici. Důvod `mimo_definici_pilotu`. |
 | Dluhové fondy (direct lending, mezanin, venture debt jako hlavní strategie) | Vyloučeny, budoucí rozšíření | Poskytují úvěr, ne kapitál za podíl; patří do jiné kategorie investorů. Důvod `mimo_definici_pilotu`. |
@@ -59,7 +59,7 @@ Záznam může mít status `overeny`, jen pokud platí **všechna** kritéria a 
 | Z1 | VC značka má **českou právnickou osobu s IČO** – správcovskou společnost, poradenskou společnost nebo samotný fond. | Fakt `registry_id` z primárního zdroje (rejstřík, ARES, ČNB). |
 | Z2 | Převažující strategií je **rizikový kapitál**: menšinové podíly v nekótovaných firmách ve fázích pre-seed až growth. | Fakty `investment_stages` (a `investment_sectors`) z webu investora nebo výroční zprávy. |
 | Z3 | Značka investuje prostřednictvím **alespoň jednoho fondu nebo vehiklu s kapitálem třetích osob**. | Alespoň jeden fakt s vyplněným `fund_name` (např. velikost fondu, právní správce, registrace u regulátora). |
-| Z4 | Značka je **aktivní**: alespoň jedna doložená investice za posledních 36 měsíců. | Fakt `dolozena_investice` s `value_as_of` nejvýše 36 měsíců před `last_verified_at`. |
+| Z4 | Značka je **aktivní**: alespoň jedna doložená investice nebo nový fond za posledních 36 měsíců. | Fakt `dolozena_investice`, nebo fondový fakt (`informace_o_fondu`, `total_fund_size`, `cilova_velikost_fondu`) s `value_as_of` nejvýše 36 měsíců před `last_verified_at`. |
 
 Hranice 36 měsíců je **předpoklad**: odpovídá typické investiční periodě, kdy VC fond aktivně vybírá nové investice. Lze ji změnit v `investor_db/schema.py`.
 
@@ -74,7 +74,7 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 | `pe_budouci_rozsireni` | Private equity s převažujícími většinovými podíly; kandidát pro budoucí rozšíření. |
 | `business_angel` | Business angel nebo angel síť. |
 | `family_office` | Family office. |
-| `bez_fondu` | Akcelerátor, inkubátor, crowdfundingová platforma nebo program bez fondu s kapitálem třetích osob. |
+| `bez_fondu` | Akcelerátor, inkubátor, crowdfundingová platforma nebo program bez fondu s kapitálem třetích osob. Akcelerátor, který investuje přes vehikl s kapitálem třetích osob, do pilotu patří a ověřuje se podle Z1–Z4. |
 | `neaktivni` | Žádná doložená investice za posledních 36 měsíců. |
 | `zanikly_subjekt` | Subjekt zanikl nebo je v likvidaci. |
 | `duplicita` | Duplicitní záznam jiného investora. |

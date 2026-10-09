@@ -71,7 +71,6 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("facts", 7, "fund_name", "", "musí mít fund_name"),
         ("facts", 7, "value_as_of", "2025-02-30", "value_as_of není platné datum"),
         ("facts", 8, "value_as_of", "", "musí mít value_as_of"),
-        ("facts", 8, "value_as_of", "2023-01-01", "kritérium Z4"),
         ("sources", 0, "source_id", "src-1", "neplatný formát source_id"),
         ("sources", 0, "url", "rejstrik", "url není platná URL"),
         ("sources", 0, "publisher", "", "chybí povinné pole publisher"),
@@ -83,19 +82,19 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("search_log", 0, "query", "", "chybí povinné pole query"),
         ("search_log", 0, "results_count", "-1", "results_count není nezáporné celé číslo"),
         ("search_log", 0, "minutes", "", "chybí povinné pole minutes"),
-        ("search_log", 0, "minutes", "0", "minutes není kladné celé číslo"),
+        ("search_log", 0, "minutes", "0", "minutes není kladné číslo"),
         ("investors", 2, "exclusion_reason", "family_office", "není doložen faktem duvod_vylouceni"),
         ("facts", 10, "value", "nelibi_se", "hodnota má neplatnou hodnotu"),
         ("facts", 10, "investor_id", "inv-0002", "není doložen faktem duvod_vylouceni"),
         ("effort_log", 0, "investor_id", "inv-0999", "neexistujícího investora"),
         ("effort_log", 0, "activity", "pauza", "activity má neplatnou hodnotu"),
         ("effort_log", 0, "actor", "R3", "actor má neplatnou hodnotu"),
-        ("effort_log", 0, "minutes", "1.5", "minutes není kladné celé číslo"),
+        ("effort_log", 0, "minutes", "1.555", "minutes není kladné číslo"),
         ("effort_log", 0, "minutes", "", "chybí povinné pole minutes"),
         ("effort_log", 0, "logged_at", "", "chybí povinné pole logged_at"),
         ("effort_log", 0, "activity", "kontrola", "activity má neplatnou hodnotu"),
-        ("reviews", 0, "review_minutes", "0", "minutes není kladné celé číslo"),
-        ("fact_reviews", 0, "review_minutes", "2.5", "minutes není kladné celé číslo"),
+        ("reviews", 0, "review_minutes", "0", "minutes není kladné číslo"),
+        ("fact_reviews", 0, "review_minutes", "-2", "minutes není kladné číslo"),
         ("candidate_sources", 0, "investor_id", "inv-0999", "neexistujícího investora"),
         ("candidate_sources", 0, "search_id", "s-999", "neexistující průchod"),
         ("candidate_sources", 1, "investor_id", "inv-0001", "duplicitní vazba"),
@@ -219,5 +218,26 @@ def test_foreign_excluded_subject_needs_foreign_country(dataset: Dataset, countr
 
 def test_excluded_subject_with_unknown_country_is_allowed(dataset: Dataset) -> None:
     dataset.investors[2]["country"] = ""
+
+    assert validate_dataset(dataset, TODAY) == []
+
+
+def test_old_investment_without_new_fund_violates_z4(dataset: Dataset) -> None:
+    dataset.facts[8]["value_as_of"] = "2023-01-01"
+    dataset.facts[7]["value_as_of"] = "2020-01-01"
+
+    assert_reported(dataset, "kritérium Z4")
+
+
+def test_new_fund_within_window_satisfies_z4(dataset: Dataset) -> None:
+    dataset.facts[8]["value_as_of"] = "2023-01-01"
+
+    assert validate_dataset(dataset, TODAY) == []
+
+
+@pytest.mark.parametrize("minutes", ["0.04", "1.5", "12"])
+def test_decimal_minutes_are_allowed(dataset: Dataset, minutes: str) -> None:
+    dataset.effort_log[0]["minutes"] = minutes
+    dataset.search_log[0]["minutes"] = minutes
 
     assert validate_dataset(dataset, TODAY) == []

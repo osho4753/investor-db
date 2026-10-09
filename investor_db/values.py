@@ -8,6 +8,7 @@ from investor_db.schema import LIST_SEPARATOR
 
 DATE_PATTERN = re.compile(r"\d{4}-\d{2}-\d{2}")
 MONEY_PATTERN = re.compile(r"\d+(\.\d+)?")
+MINUTES_PATTERN = re.compile(r"\d+(\.\d{1,2})?")
 ICO_PATTERN = re.compile(r"\d{8}")
 COUNTRY_PATTERN = re.compile(r"[A-Z]{2}")
 LEGAL_FORM_SUFFIX = re.compile(
@@ -30,6 +31,13 @@ def parse_money(text: str) -> Decimal | None:
     if not MONEY_PATTERN.fullmatch(text):
         return None
     return Decimal(text)
+
+
+def parse_minutes(text: str) -> Decimal | None:
+    if not MINUTES_PATTERN.fullmatch(text):
+        return None
+    minutes = Decimal(text)
+    return minutes if minutes > 0 else None
 
 
 def split_list(text: str) -> list[str]:

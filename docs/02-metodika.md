@@ -53,7 +53,31 @@ Scraping je povolen, ale v pilotu se neimplementuje. Pro budoucí automatizaci p
 
 ### Spojení značky s českou právnickou osobou (Z1)
 
-Česká právnická osoba se přiřadí ke značce, pokud ji (a) jmenuje web značky nebo její profil v asociaci a obchodní rejstřík či ARES ji potvrzuje, nebo (b) obchodní firma obsahuje název značky a její sídlo se shoduje s adresou, kterou zveřejňuje značka nebo její profil v asociaci. Odpovídá-li pravidlu (b) více subjektů, vybere se ten, jehož název ukazuje na poradenskou či správcovskou roli, a ostatní se uvedou v `evidence_note`. Dále (c) se přijme subjekt, jehož obchodní firma se shoduje s názvem značky až na právní formu a který je jediným takovým subjektem v rejstříku. Nelze-li použít žádné z pravidel, Z1 zůstává nedoloženo a subjekt zůstává `kandidat`.
+Česká právnická osoba se přiřadí ke značce jen na základě jednoho z těchto doložených spojení:
+
+- **(a)** web značky (impresum, kontakty, zásady ochrany osobních údajů) nebo její profil v asociaci subjekt jmenuje či uvádí jeho IČO a obchodní rejstřík či ARES subjekt potvrzuje;
+- **(b)** obchodní firma obsahuje název značky a její sídlo se shoduje s adresou, kterou zveřejňuje značka, její profil v asociaci nebo zdroj o investorovi; odpovídá-li více subjektů, vybere se ten, jehož název ukazuje na poradenskou či správcovskou roli, a ostatní se uvedou v `evidence_note`;
+- **(d)** osoby ve statutárním orgánu subjektu (podle obchodního rejstříku nebo ARES) se shodují s partnery či týmem, které jmenuje web značky nebo zdroj o investorovi.
+
+Samotná shoda obchodní firmy s názvem značky **nestačí** (dřívější pravidlo c bylo zrušeno: u Techstars by přiřadilo nesouvisející firmu stejného jména). Nelze-li použít žádné z pravidel, Z1 zůstává nedoloženo a subjekt zůstává `kandidat`.
+
+### Corporate VC
+
+Subjekt je corporate VC, pokud **více než 50 % kapitálu fondu** pochází od jedné korporátní skupiny. Pravidlo se uplatňuje jednotně: je-li podíl doložen a převyšuje 50 %, subjekt se vylučuje jako `mimo_definici_pilotu`; je-li doložen a nepřevyšuje 50 %, jde o VC; není-li rozložení kapitálu doloženo, ale zdroj uvádí vazbu na korporátní skupinu, status zůstává `kandidat`.
+
+### Velikost fondu (`total_fund_size`)
+
+Přijímá se výslovné tvrzení v minulém čase, že fond byl uzavřen s danou velikostí, z webu investora, tiskové zprávy nebo spolehlivého média (např. „uzavřel třetí fond ve výši 22 mil. EUR“). Nepřijímá se first close, druhé či průběžné uzavření, cílová velikost, přibližné formulace („téměř“, „až X“) ani souhrn závazků. Do `total_fund_size` patří poslední takto uzavřený fond; ostatní údaje o fondech zůstávají ve faktu `informace_o_fondu`.
+
+### Aktivita (Z4)
+
+Z4 doloží buď investice do firmy (`dolozena_investice`), nebo nový fond: fakt `informace_o_fondu`, `total_fund_size` či `cilova_velikost_fondu` s `value_as_of` v posledních 36 měsících.
+
+### Ověření proti surovému textu
+
+Stránky se při sběru čtou nástrojem, který vrací shrnutí obsahu vytvořené jazykovým modelem, nikoli doslovný text. Proto se u všech peněžních částek a dat investic hodnota ověřuje proti surovému textu stránky: `python -m investor_db raw-text URL --grep VÝRAZ` stáhne stránku přes `urllib` (s kontrolou `robots.txt`, identifikací v hlavičce `User-Agent` a prodlevou mezi požadavky), převede HTML na text a vyhledá v něm hodnotu v obvyklých zápisech (např. „1–5M“, „3,3 mil.“, „5. 11. 2025“, „November 5, 2025“). Stažený text se ukládá do dočasné složky mimo repozitář. Výsledek se zapíše na konec `evidence_note` ve tvaru „Ověřeno proti surovému textu: ano“ nebo „ne (důvod)“.
+
+**Omezení:** stránky vykreslované JavaScriptem, stránky za ochranou proti robotům nebo s HTTP chybou surový text neposkytnou; hodnota pak zůstává ověřená jen přes shrnutí a je tak označena. Vyhledávání zápisů je heuristické – nález ve stejné stránce ještě nezaručuje, že se hodnota vztahuje k tomuto investorovi, a nenalezení může znamenat jiný zápis. Rozhodující zůstává ruční kontrola faktů.
 
 ### Data s měsíční přesností
 
@@ -95,7 +119,7 @@ Velikost fondu, AUM, investovaný kapitál a velikost jednotlivé investice jsou
 
 **Měny:** Jeden řádek má jednu měnu. Pokud je některá částka doložena jen v jiné měně, do `investors.csv` se nezapíše a zůstane pouze ve `facts.csv`. Počet takových hodnot se vykazuje jako metrika (omezení dat).
 
-**Řízený slovník sektorů:** `ai`, `agritech`, `biotech`, `cleantech`, `deeptech`, `ecommerce`, `edtech`, `energetika`, `fintech`, `gaming`, `hardware`, `healthtech`, `kyberbezpecnost`, `media`, `mobilita`, `proptech`, `prumysl`, `software`, `spotrebitelske`, `sektorove_agnosticky`.
+**Řízený slovník sektorů:** `ai`, `agritech`, `biotech`, `cleantech`, `deeptech`, `ecommerce`, `edtech`, `energetika`, `fintech`, `gaming`, `hardware`, `healthtech`, `kyberbezpecnost`, `media`, `mobilita`, `proptech`, `prumysl`, `software`, `spotrebitelske`, `obrana_bezpecnost`, `cestovani`, `logistika`, `jine`, `sektorove_agnosticky`.
 
 ### `facts.csv` – jeden řádek = jeden doložený fakt
 
@@ -143,7 +167,7 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 | `source_url` | Prohledaný seznam či stránka |
 | `query` | Dotaz, filtr nebo popis průchodu |
 | `results_count` | Počet nalezených relevantních subjektů |
-| `minutes` | Čas strávený průchodem zdroje v minutách (kladné celé číslo) |
+| `minutes` | Čas strávený průchodem zdroje v minutách (kladné číslo, nejvýše dvě desetinná místa) |
 | `note` | Poznámka (např. omezení zdroje, nenačtená stránka) |
 
 ### `candidate_sources.csv` – kde byl kandidát nalezen
@@ -164,7 +188,7 @@ Jeden subjekt může být nalezen ve více průchodech. Každý subjekt v `inves
 | `investor_id` | Odkaz do `investors.csv` |
 | `activity` | `triaz` (rychlé vyloučení jedním faktem), `overeni` (plné ověření Z1–Z4) |
 | `actor` | `model` (AI asistent), `R1`, `R2` |
-| `minutes` | Čas v minutách, kladné celé číslo zaokrouhlené nahoru |
+| `minutes` | Čas v minutách, kladné číslo s nejvýše dvěma desetinnými místy |
 | `logged_at` | Datum záznamu |
 | `note` | Poznámka |
 

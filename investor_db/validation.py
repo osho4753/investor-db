@@ -18,6 +18,7 @@ from investor_db.schema import (
     FACT_EXCLUSION_REASON,
     FACT_FIELDS,
     FACT_VERDICTS,
+    FUND_ACTIVITY_FACT_FIELDS,
     FUND_SCOPED_FACT_FIELDS,
     ID_PATTERNS,
     INVESTOR_TYPE_VC,
@@ -40,6 +41,7 @@ from investor_db.values import (
     is_valid_url,
     normalize_name,
     parse_date,
+    parse_minutes,
     parse_money,
     split_list,
     website_domain,
@@ -335,8 +337,8 @@ def inclusion_criteria_issues(investor: Row, facts: list[Row], sources_by_id: di
     if not any(row["fund_name"] for row in facts):
         yield Issue("investors", row_id, "kritérium Z3: chybí fakt o fondu (fund_name)")
     last_verified = parse_date(investor["last_verified_at"])
-    if last_verified is not None and not has_recent_investment(facts, last_verified):
-        yield Issue("investors", row_id, f"kritérium Z4: chybí doložená investice za posledních {ACTIVITY_WINDOW_DAYS} dní")
+    if last_verified is not None and not has_recent_activity(facts, last_verified):
+        yield Issue("investors", row_id, f"kritérium Z4: chybí doložená investice ani nový fond za posledních {ACTIVITY_WINDOW_DAYS} dní")
 
 
 def exclusion_evidence_issues(investor: Row, facts: list[Row]) -> Iterator[Issue]:
@@ -359,12 +361,18 @@ def has_primary_registry_fact(investor: Row, facts: list[Row], sources_by_id: di
     )
 
 
-def has_recent_investment(facts: list[Row], reference_date: date) -> bool:
+def has_recent_fact(facts: list[Row], fields: tuple[str, ...], reference_date: date) -> bool:
     window_start = reference_date - timedelta(days=ACTIVITY_WINDOW_DAYS)
-    investment_dates = [
-        parse_date(row["value_as_of"]) for row in facts if row["field"] == FACT_DOCUMENTED_INVESTMENT
-    ]
-    return any(invested_at is not None and invested_at >= window_start for invested_at in investment_dates)
+    dates = [parse_date(row["value_as_of"]) for row in facts if row["field"] in fields]
+    return any(fact_date is not None and fact_date >= window_start for fact_date in dates)
+
+
+def has_recent_investment(facts: list[Row], reference_date: date) -> bool:
+    return has_recent_fact(facts, (FACT_DOCUMENTED_INVESTMENT,), reference_date)
+
+
+def has_recent_activity(facts: list[Row], reference_date: date) -> bool:
+    return has_recent_fact(facts, (FACT_DOCUMENTED_INVESTMENT, *FUND_ACTIVITY_FACT_FIELDS), reference_date)
 
 
 DUPLICATE_KEYS: dict[str, Callable[[Row], str]] = {
@@ -405,8 +413,8 @@ def check_search_log(search_log: list[Row], today: date) -> Iterator[Issue]:
 
 
 def minutes_issues(table: str, row_id: str, text: str) -> Iterator[Issue]:
-    if text and not (text.isdigit() and int(text) > 0):
-        yield Issue(table, row_id, f"minutes není kladné celé číslo: {text!r}")
+    if text and parse_minutes(text) is None:
+        yield Issue(table, row_id, f"minutes není kladné číslo s nejvýše dvěma desetinnými místy: {text!r}")
 
 
 def check_effort_log(dataset: Dataset, today: date) -> Iterator[Issue]:

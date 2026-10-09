@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 
 from investor_db.io import Dataset
 from investor_db.metrics import (
@@ -160,7 +161,7 @@ def evidence_section(dataset: Dataset, today: date) -> list[str]:
     ]
 
 
-def format_decimal(value: float) -> str:
+def format_decimal(value: float | Decimal) -> str:
     return f"{value:.1f}".replace(".", ",")
 
 
@@ -170,7 +171,7 @@ def effort_section(dataset: Dataset) -> list[str]:
         "",
         "### Model",
         "",
-        f"- Hledání kandidátů: {len(dataset.search_log)} průchodů, {search_minutes(dataset.search_log)} min celkem",
+        f"- Hledání kandidátů: {len(dataset.search_log)} průchodů, {format_decimal(search_minutes(dataset.search_log))} min celkem",
     ]
     lines += effort_table([row for row in dataset.effort_log if row["actor"] == EFFORT_ACTOR_MODEL])
     lines += ["", "Čas modelu je čas běhu nástrojů včetně čekání na stránky a není přímo srovnatelný s časem člověka."]
@@ -183,7 +184,7 @@ def effort_section(dataset: Dataset) -> list[str]:
         for effort in efforts:
             lines.append(
                 f"- {label} {effort.reviewer}: {effort.reviews} kontrol, čas uveden u {effort.timed_reviews}, "
-                f"{effort.total_minutes} min celkem"
+                f"{format_decimal(effort.total_minutes)} min celkem"
             )
     return lines
 
@@ -198,7 +199,7 @@ def effort_table(rows: list[dict[str, str]]) -> list[str]:
         "|---|---|---|---|---|---|",
     ]
     lines += [
-        f"| `{summary.activity}` | {summary.actor} | {len(summary.minutes_per_investor)} | {summary.total_minutes} "
+        f"| `{summary.activity}` | {summary.actor} | {len(summary.minutes_per_investor)} | {format_decimal(summary.total_minutes)} "
         f"| {format_decimal(summary.mean_minutes)} | {format_decimal(summary.median_minutes)} |"
         for summary in summaries
     ]

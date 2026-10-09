@@ -93,6 +93,10 @@ INVESTMENT_SECTORS: Final = (
     "prumysl",
     "software",
     "spotrebitelske",
+    "obrana_bezpecnost",
+    "cestovani",
+    "logistika",
+    "jine",
     "sektorove_agnosticky",
 )
 
@@ -158,6 +162,7 @@ SUPPLEMENTARY_FACT_FIELDS: Final = (
 )
 FACT_FIELDS: Final = EVIDENCED_FIELDS + SUPPLEMENTARY_FACT_FIELDS
 MONEY_FACT_FIELDS: Final = MONEY_FIELDS + (FACT_TARGET_FUND_SIZE,)
+FUND_ACTIVITY_FACT_FIELDS: Final = ("total_fund_size", FACT_TARGET_FUND_SIZE, FACT_FUND_INFO)
 FUND_SCOPED_FACT_FIELDS: Final = ("total_fund_size", FACT_TARGET_FUND_SIZE, FACT_LEGAL_MANAGER, FACT_FUND_INFO)
 
 ID_PATTERNS: Final = {

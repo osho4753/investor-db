@@ -3,6 +3,7 @@ import statistics
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import date, timedelta
+from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
@@ -30,7 +31,7 @@ from investor_db.validation import (
     has_recent_investment,
     is_primary_source,
 )
-from investor_db.values import parse_date
+from investor_db.values import parse_date, parse_minutes
 
 COMPLETENESS_FIELDS = tuple(
     column for column in INVESTOR_COLUMNS if column not in ("investor_id", "verification_status", "exclusion_reason")
@@ -220,10 +221,10 @@ def exclusion_reason_counts(investors: list[Row]) -> Counter[str]:
 class EffortSummary:
     activity: str
     actor: str
-    minutes_per_investor: tuple[int, ...]
+    minutes_per_investor: tuple[Decimal, ...]
 
     @property
-    def total_minutes(self) -> int:
+    def total_minutes(self) -> Decimal:
         return sum(self.minutes_per_investor)
 
     @property
@@ -236,18 +237,22 @@ class EffortSummary:
 
 
 def effort_summaries(effort_log: list[Row]) -> list[EffortSummary]:
-    minutes: dict[tuple[str, str], Counter[str]] = defaultdict(Counter)
+    minutes: dict[tuple[str, str], dict[str, Decimal]] = defaultdict(lambda: defaultdict(Decimal))
     for row in effort_log:
-        if row["minutes"].isdigit():
-            minutes[(row["activity"], row["actor"])][row["investor_id"]] += int(row["minutes"])
+        if (parsed := parse_minutes(row["minutes"])) is not None:
+            minutes[(row["activity"], row["actor"])][row["investor_id"]] += parsed
     return [
         EffortSummary(activity, actor, tuple(sorted(per_investor.values())))
         for (activity, actor), per_investor in sorted(minutes.items())
     ]
 
 
-def search_minutes(search_log: list[Row]) -> int:
-    return sum(int(row["minutes"]) for row in search_log if row["minutes"].isdigit())
+def total_parsed_minutes(texts: list[str]) -> Decimal:
+    return sum((parsed for text in texts if (parsed := parse_minutes(text)) is not None), Decimal(0))
+
+
+def search_minutes(search_log: list[Row]) -> Decimal:
+    return total_parsed_minutes([row["minutes"] for row in search_log])
 
 
 @dataclass(frozen=True)
@@ -334,7 +339,7 @@ class ReviewEffort:
     reviewer: str
     reviews: int
     timed_reviews: int
-    total_minutes: int
+    total_minutes: Decimal
 
 
 def review_efforts(rows: list[Row]) -> list[ReviewEffort]:
@@ -344,8 +349,8 @@ def review_efforts(rows: list[Row]) -> list[ReviewEffort]:
         ReviewEffort(
             reviewer,
             sum(row["reviewer"] == reviewer for row in completed),
-            sum(row["reviewer"] == reviewer and row["review_minutes"].isdigit() for row in completed),
-            sum(int(row["review_minutes"]) for row in completed if row["reviewer"] == reviewer and row["review_minutes"].isdigit()),
+            sum(row["reviewer"] == reviewer and parse_minutes(row["review_minutes"]) is not None for row in completed),
+            total_parsed_minutes([row["review_minutes"] for row in completed if row["reviewer"] == reviewer]),
         )
         for reviewer in reviewers
     ]

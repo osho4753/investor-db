@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 
 import pytest
 from conftest import TODAY, fact
@@ -218,3 +219,18 @@ def test_population_estimates_skip_small_searches(dataset: Dataset) -> None:
     dataset.candidate_sources.append({"investor_id": "inv-0001", "search_id": "s-002"})
 
     assert population_estimates(dataset, ("overeny", "kandidat"), min_search_size=2) == []
+
+
+def test_effort_summaries_sum_decimal_minutes(dataset: Dataset) -> None:
+    dataset.effort_log[0]["minutes"] = "0.25"
+    dataset.effort_log[1]["minutes"] = "0.5"
+
+    verification = next(item for item in effort_summaries(dataset.effort_log) if item.activity == "overeni")
+
+    assert verification.minutes_per_investor == (Decimal("0.75"),)
+
+
+def test_search_minutes_accepts_decimals(dataset: Dataset) -> None:
+    dataset.search_log[0]["minutes"] = "0.48"
+
+    assert search_minutes(dataset.search_log) == Decimal("0.48")

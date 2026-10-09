@@ -1,16 +1,20 @@
 import argparse
+import re
 import sys
+import tempfile
 from datetime import date
 from pathlib import Path
 
 from investor_db.io import SchemaError, load_dataset, table_path, write_table
 from investor_db.metrics import verified_ids
+from investor_db.rawtext import fetch_raw_text, find_first
 from investor_db.report import render_report
 from investor_db.review import add_pending_reviews, sample_fact_ids
 from investor_db.schema import FACT_REVIEW_COLUMNS, REVIEW_COLUMNS, REVIEWERS
 from investor_db.validation import validate_dataset
 
 DEFAULT_DATA_DIR = Path("data")
+DEFAULT_RAW_CACHE_DIR = Path(tempfile.gettempdir()) / "investor-db-raw"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -26,6 +30,11 @@ def build_parser() -> argparse.ArgumentParser:
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--reviewer", choices=REVIEWERS, required=True)
         command.set_defaults(handler=handler)
+    raw = commands.add_parser("raw-text", help="stáhne surový text stránky (mimo repozitář) a vyhledá v něm výraz")
+    raw.add_argument("url")
+    raw.add_argument("--grep", help="regulární výraz k vyhledání")
+    raw.add_argument("--cache-dir", type=Path, default=DEFAULT_RAW_CACHE_DIR)
+    raw.set_defaults(handler=run_raw_text)
     return parser
 
 
@@ -70,6 +79,19 @@ def run_fact_review_template(args: argparse.Namespace) -> int:
         f"Vzorek {len(sample)} z {len(dataset.facts)} faktů; "
         f"přidáno {len(rows) - len(dataset.fact_reviews)} řádků ke kontrole pro {args.reviewer}."
     )
+    return 0
+
+
+def run_raw_text(args: argparse.Namespace) -> int:
+    page = fetch_raw_text(args.url, args.cache_dir)
+    print(f"{page.status}; znaků textu: {len(page.text)}")
+    if not page.has_text:
+        return 1
+    if args.grep:
+        snippet = find_first(page.text, [re.compile(args.grep, re.IGNORECASE)])
+        print(snippet if snippet is not None else "výraz nenalezen")
+        return 0 if snippet is not None else 1
+    print(page.text[:2000])
     return 0
 
 
