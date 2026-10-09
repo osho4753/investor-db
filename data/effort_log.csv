@@ -1,53 +1,53 @@
 investor_id,activity,actor,minutes,logged_at,note
-inv-0001,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0002,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0004,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0005,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0007,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0010,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0011,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0012,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0014,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0015,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0016,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0018,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0019,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0020,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0022,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0023,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0024,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0026,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0030,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0032,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0033,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0041,triaz,model,1,2026-10-09,Rychlá triáž 22 subjektů měřena souhrnně; zaokrouhleno na 1 min na subjekt.
-inv-0013,overeni,model,5,2026-10-09,Čas zahrnuje i přípravu pomocných skriptů pro zápis (cca 3 min).
-inv-0006,overeni,model,3,2026-10-09,Web neuvádí datované investice; dva agregátory vrátily HTTP 403.
-inv-0008,overeni,model,2,2026-10-09,Web ani sekce Latest neuvádějí data investic; datum z agregátoru s měsíční přesností.
-inv-0021,overeni,model,2,2026-10-09,Z1 nedoloženo: jediná entita Nation1 Investment s.r.o. (IČO 09172807) sídlí jinde než adresa v profilu CVCA a web je nedostupný.
-inv-0051,overeni,model,1,2026-10-09,Rozhodnuto v rámci ověření Nation1.
-inv-0003,overeni,model,2,2026-10-09,Web neuvádí datované investice; dva zdroje vrátily HTTP 403.
-inv-0009,overeni,model,2,2026-10-09,Hledání v rejstříku pod názvem i&i Biotech nenašlo nic; entita dohledána podle webu. Čas je odhad z časových značek – měření přerušil zamčený soubor.
-inv-0027,overeni,model,3,2026-10-09,Web neuvádí datované investice. Čas je odhad z časových značek – start se kvůli zamčenému souboru nezaznamenal.
-inv-0025,overeni,model,2,2026-10-09,"Z1 nedoloženo: jediný subjekt ORBIT Capital GP s.r.o. (IČO 08319961) má jiné sídlo než profil CVCA a jiný název. Nejnovější aktivita je dluhová (otázka, zda nevyloučit jako dluhový fond). Datovanou equity investici se nepodařilo najít."
-inv-0017,overeni,model,1,2026-10-09,"Vazba na skupinu ČEZ zapsána ve faktu o fondu; podle webu jde o kapitál třetích osob, ne o vlastní kapitál korporace."
-inv-0028,overeni,model,2,2026-10-09,"Sektory nevyplněny – obrana, bezpečnost a letectví nemají kód ve slovníku. Doménu presto.vc jsem nejdřív chybně odhadl (zaparkovaná)."
-inv-0029,overeni,model,1,2026-10-09,Vazba na Rockaway Capital (asi 25 % kapitálu fondu) zapsána ve faktu o fondu.
-inv-0031,overeni,model,1,2026-10-09,Wikipedie zmiňuje subjekt jen historicky (výnosy do roku 2000).
-inv-0034,overeni,model,2,2026-10-09,
-inv-0035,overeni,model,1,2026-10-09,
-inv-0036,overeni,model,1,2026-10-09,Rozhodnutí opřeno o článek z roku 2020; novější zdroj o změně struktury kapitálu se nenašel.
-inv-0037,overeni,model,1,2026-10-09,Z1 nedoloženo: jediný subjekt Lighthouse Ventures GP s.r.o. (IČO 07500912) nesplňuje pravidla a–c a web značky se nepodařilo najít. Z4 nedoloženo: nejnovější nalezená investice (Pekat Vision) je z června 2019.
-inv-0038,overeni,model,1,2026-10-09,Web neuvádí strategii ani datované investice.
-inv-0039,overeni,model,1,2026-10-09,"Z1 nedoloženo: web tachles.vc neexistuje (DNS), v rejstříku jsou tachles s.r.o. (IČO 07904207, zapsán 2019) a Tachles VC Management s.r.o. (IČO 14376032), ani jeden nesplňuje pravidla a–c. Z4: konkrétní datovaná investice nenalezena."
-inv-0040,overeni,model,1,2026-10-09,Fond digitálních aktiv doplněn do definice mimo_definici_pilotu.
-inv-0042,overeni,model,1,2026-10-09,Zdroj byl otevřen při hledání (s-007) a znovu s dotazem na kontext zmínek.
-inv-0052,overeni,model,1,2026-10-09,"Z1 nedoloženo: hledání IP Lab Ventures v obchodním rejstříku nenašlo žádný subjekt a web značky nebyl nalezen. Z4: nový fond, investice do firem zatím nedoloženy."
-inv-0043,overeni,model,1,2026-10-09,"V rejstříku existuje techstars s.r.o. (IČO 23065001, Třinec, zapsána 14. 3. 2025), ale nic ji se značkou nespojuje – nepřiřazena."
-inv-0044,overeni,model,1,2026-10-09,
-inv-0045,overeni,model,2,2026-10-09,Subjekt nalezen jen jako investor v seed kole Flowpay (článek z 20. 3. 2024).
-inv-0046,overeni,model,1,2026-10-09,"Typ subjektu a Z1 nedoloženy: web nenalezen, v rejstříku jsou Patero s.r.o. (IČO 03928446) a Patero Services, s.r.o. (IČO 24122785) bez vazby na investiční činnost. Čas zahrnut i v rešerši 10X."
-inv-0047,overeni,model,1,2026-10-09,Web neuvádí ticket ani datované investice.
-inv-0048,overeni,model,1,2026-10-09,"Typ subjektu a Z1 nedoloženy: web gainventures.cz neexistuje (DNS); v rejstříku jediný subjekt GAIN Ventures s.r.o. (IČO 05690935, Praha 4), ale vazbu na značku nic dalšího nepotvrzuje (pravidlo c samo nestačí, viz případ Techstars). Článek Forbes o Carebotu se nepodařilo načíst celý."
-inv-0049,overeni,model,1,2026-10-09,"Otevřená otázka definice: akcelerátor s kapitálem třetích osob ve vehiklech po ročnících. Z1: web neuvádí právní subjekt ani adresu, nelze vybrat jeden z 17 subjektů. Z4: datovaná investice StartupYard nenalezena."
-inv-0050,overeni,model,1,2026-10-09,"Otevřená otázka: článek označuje ZAKA VC za český family office (vyloučení family_office), ale o šest týdnů později vznikl fondový vehikl – nelze doložit, zda má kapitál třetích osob. Web značky nenalezen, Z1 nedoloženo."
+inv-0001,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0002,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0004,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0005,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0007,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0010,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0011,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0012,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0014,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0015,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0016,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0018,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0019,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0020,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0022,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0023,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0024,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0026,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0030,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0032,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0033,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0041,triaz,model,0.03,2026-10-09,Rychlá triáž 22 subjektů trvala 46 s; čas rozdělen rovným dílem.
+inv-0013,overeni,model,4.58,2026-10-09,Čas zahrnuje i přípravu pomocných skriptů pro zápis (cca 3 min).
+inv-0006,overeni,model,2.35,2026-10-09,Web neuvádí datované investice; dva agregátory vrátily HTTP 403.
+inv-0008,overeni,model,1.65,2026-10-09,Web ani sekce Latest neuvádějí data investic; datum z agregátoru s měsíční přesností.
+inv-0021,overeni,model,1.15,2026-10-09,Z1 nedoloženo: jediná entita Nation1 Investment s.r.o. (IČO 09172807) sídlí jinde než adresa v profilu CVCA a web je nedostupný.
+inv-0051,overeni,model,0.01,2026-10-09,Rozhodnuto v rámci ověření Nation1.
+inv-0003,overeni,model,1.67,2026-10-09,Web neuvádí datované investice; dva zdroje vrátily HTTP 403.
+inv-0009,overeni,model,1.63,2026-10-09,Čas je polovina naměřeného úseku 14:23:58–14:27:13 společného s Tilií – měření přerušil zamčený soubor.
+inv-0027,overeni,model,1.63,2026-10-09,Čas je polovina naměřeného úseku 14:23:58–14:27:13 společného s i&i – start se kvůli zamčenému souboru nezaznamenal.
+inv-0025,overeni,model,1.30,2026-10-09,"Z1 nedoloženo: jediný subjekt ORBIT Capital GP s.r.o. (IČO 08319961) má jiné sídlo než profil CVCA a jiný název. Nejnovější aktivita je dluhová (otázka, zda nevyloučit jako dluhový fond). Datovanou equity investici se nepodařilo najít."
+inv-0017,overeni,model,0.80,2026-10-09,"Vazba na skupinu ČEZ zapsána ve faktu o fondu; podle webu jde o kapitál třetích osob, ne o vlastní kapitál korporace."
+inv-0028,overeni,model,1.33,2026-10-09,"Sektory nevyplněny – obrana, bezpečnost a letectví nemají kód ve slovníku. Doménu presto.vc jsem nejdřív chybně odhadl (zaparkovaná)."
+inv-0029,overeni,model,0.83,2026-10-09,Vazba na Rockaway Capital (asi 25 % kapitálu fondu) zapsána ve faktu o fondu.
+inv-0031,overeni,model,0.47,2026-10-09,Wikipedie zmiňuje subjekt jen historicky (výnosy do roku 2000).
+inv-0034,overeni,model,1.03,2026-10-09,
+inv-0035,overeni,model,0.85,2026-10-09,
+inv-0036,overeni,model,0.53,2026-10-09,Rozhodnutí opřeno o článek z roku 2020; novější zdroj o změně struktury kapitálu se nenašel.
+inv-0037,overeni,model,0.57,2026-10-09,Z1 nedoloženo: jediný subjekt Lighthouse Ventures GP s.r.o. (IČO 07500912) nesplňuje pravidla a–c a web značky se nepodařilo najít. Z4 nedoloženo: nejnovější nalezená investice (Pekat Vision) je z června 2019.
+inv-0038,overeni,model,0.93,2026-10-09,Web neuvádí strategii ani datované investice.
+inv-0039,overeni,model,0.65,2026-10-09,"Z1 nedoloženo: web tachles.vc neexistuje (DNS), v rejstříku jsou tachles s.r.o. (IČO 07904207, zapsán 2019) a Tachles VC Management s.r.o. (IČO 14376032), ani jeden nesplňuje pravidla a–c. Z4: konkrétní datovaná investice nenalezena."
+inv-0040,overeni,model,0.92,2026-10-09,Fond digitálních aktiv doplněn do definice mimo_definici_pilotu.
+inv-0042,overeni,model,0.18,2026-10-09,Zdroj byl otevřen při hledání (s-007) a znovu s dotazem na kontext zmínek.
+inv-0052,overeni,model,0.30,2026-10-09,"Z1 nedoloženo: hledání IP Lab Ventures v obchodním rejstříku nenašlo žádný subjekt a web značky nebyl nalezen. Z4: nový fond, investice do firem zatím nedoloženy."
+inv-0043,overeni,model,0.48,2026-10-09,"V rejstříku existuje techstars s.r.o. (IČO 23065001, Třinec, zapsána 14. 3. 2025), ale nic ji se značkou nespojuje – nepřiřazena."
+inv-0044,overeni,model,0.88,2026-10-09,
+inv-0045,overeni,model,1.05,2026-10-09,Subjekt nalezen jen jako investor v seed kole Flowpay (článek z 20. 3. 2024).
+inv-0046,overeni,model,0.02,2026-10-09,"Typ subjektu a Z1 nedoloženy: web nenalezen, v rejstříku jsou Patero s.r.o. (IČO 03928446) a Patero Services, s.r.o. (IČO 24122785) bez vazby na investiční činnost. Čas zahrnut i v rešerši 10X."
+inv-0047,overeni,model,0.98,2026-10-09,Web neuvádí ticket ani datované investice.
+inv-0048,overeni,model,0.52,2026-10-09,"Typ subjektu a Z1 nedoloženy: web gainventures.cz neexistuje (DNS); v rejstříku jediný subjekt GAIN Ventures s.r.o. (IČO 05690935, Praha 4), ale vazbu na značku nic dalšího nepotvrzuje (pravidlo c samo nestačí, viz případ Techstars). Článek Forbes o Carebotu se nepodařilo načíst celý."
+inv-0049,overeni,model,0.57,2026-10-09,"Otevřená otázka definice: akcelerátor s kapitálem třetích osob ve vehiklech po ročnících. Z1: web neuvádí právní subjekt ani adresu, nelze vybrat jeden z 17 subjektů. Z4: datovaná investice StartupYard nenalezena."
+inv-0050,overeni,model,0.65,2026-10-09,"Otevřená otázka: článek označuje ZAKA VC za český family office (vyloučení family_office), ale o šest týdnů později vznikl fondový vehikl – nelze doložit, zda má kapitál třetích osob. Web značky nenalezen, Z1 nedoloženo."
