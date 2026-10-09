@@ -24,7 +24,6 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("investors", 0, "investor_id", "inv-1", "neplatný formát investor_id"),
         ("investors", 0, "name", "", "chybí povinné pole name"),
         ("investors", 2, "investor_type", "", "chybí povinné pole investor_type"),
-        ("investors", 2, "country", "", "chybí povinné pole country"),
         ("investors", 0, "investor_type", "andel", "investor_type má neplatnou hodnotu"),
         ("investors", 0, "investor_type", "pe", "musí mít investor_type"),
         ("investors", 0, "country", "cz", "ISO 3166-1"),
@@ -94,6 +93,13 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("effort_log", 0, "minutes", "1.5", "minutes není kladné celé číslo"),
         ("effort_log", 0, "minutes", "", "chybí povinné pole minutes"),
         ("effort_log", 0, "logged_at", "", "chybí povinné pole logged_at"),
+        ("effort_log", 0, "activity", "kontrola", "activity má neplatnou hodnotu"),
+        ("reviews", 0, "review_minutes", "0", "minutes není kladné celé číslo"),
+        ("fact_reviews", 0, "review_minutes", "2.5", "minutes není kladné celé číslo"),
+        ("candidate_sources", 0, "investor_id", "inv-0999", "neexistujícího investora"),
+        ("candidate_sources", 0, "search_id", "s-999", "neexistující průchod"),
+        ("candidate_sources", 1, "investor_id", "inv-0001", "duplicitní vazba"),
+        ("candidate_sources", 2, "investor_id", "inv-0002", "chybí záznam v candidate_sources"),
         ("reviews", 0, "investor_id", "inv-0999", "neexistující investor_id"),
         ("reviews", 0, "reviewer", "R3", "reviewer má neplatnou hodnotu"),
         ("reviews", 0, "verdict", "ano", "verdict má neplatnou hodnotu"),
@@ -195,3 +201,17 @@ def test_record_excluded_as_duplicate_is_not_reported(dataset: Dataset) -> None:
     dataset.investors[2].update(name="Fiktivní Ventures", exclusion_reason="duplicita")
 
     assert find_duplicate_groups(dataset.investors) == []
+
+
+@pytest.mark.parametrize("country", ["", "CZ"])
+def test_foreign_excluded_subject_needs_foreign_country(dataset: Dataset, country: str) -> None:
+    dataset.investors[2].update(country=country, exclusion_reason="zahranicni_subjekt")
+    dataset.facts[10]["value"] = "zahranicni_subjekt"
+
+    assert_reported(dataset, "musí mít country jiné než CZ")
+
+
+def test_excluded_subject_with_unknown_country_is_allowed(dataset: Dataset) -> None:
+    dataset.investors[2]["country"] = ""
+
+    assert validate_dataset(dataset, TODAY) == []

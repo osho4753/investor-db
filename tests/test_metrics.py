@@ -6,7 +6,11 @@ from conftest import TODAY, fact
 from investor_db.io import Dataset
 from investor_db.metrics import (
     Proportion,
+    PopulationEstimate,
     cohen_kappa,
+    funnel,
+    population_estimates,
+    review_efforts,
     effort_summaries,
     search_minutes,
     fact_accuracy,
@@ -23,7 +27,7 @@ from investor_db.report import render_report
 
 
 def review(investor_id: str, reviewer: str, verdict: str) -> dict[str, str]:
-    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "note": ""}
+    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "review_minutes": "", "note": ""}
 
 
 def test_wilson_interval_matches_reference_values() -> None:
@@ -87,8 +91,8 @@ def test_agreement_reports_percent_and_kappa(dataset: Dataset) -> None:
 
 def test_fact_accuracy_separates_unverifiable(dataset: Dataset) -> None:
     dataset.fact_reviews += [
-        {"fact_id": "f-00002", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "chybne", "note": ""},
-        {"fact_id": "f-00003", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "nelze_overit", "note": ""},
+        {"fact_id": "f-00002", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "chybne", "review_minutes": "", "note": ""},
+        {"fact_id": "f-00003", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "nelze_overit", "review_minutes": "", "note": ""},
     ]
 
     result = fact_accuracy(dataset)
@@ -129,7 +133,7 @@ def test_values_only_in_facts_due_to_currency(dataset: Dataset, currency: str, e
 def test_report_contains_all_sections(dataset: Dataset) -> None:
     report = render_report(dataset, TODAY)
 
-    for heading in ("Stav záznamů", "Precision", "Shoda hodnotitelů", "Přesnost faktů", "Úplnost polí", "Pracnost", "Omezení dat"):
+    for heading in ("Stav záznamů", "Trychtýř", "Precision", "Shoda hodnotitelů", "Přesnost faktů", "Úplnost polí", "Pracnost", "capture–recapture", "Omezení dat"):
         assert heading in report
     assert "Data R2 nejsou k dispozici" in report
 
@@ -146,7 +150,6 @@ def test_effort_summaries_sum_minutes_per_investor(dataset: Dataset) -> None:
     verification = summaries[("overeni", "model")]
     assert verification.minutes_per_investor == (15,)
     assert summaries[("triaz", "model")].total_minutes == 4
-    assert summaries[("kontrola", "R1")].median_minutes == 20
 
 
 def test_effort_mean_and_median_across_investors(dataset: Dataset) -> None:
@@ -161,3 +164,50 @@ def test_effort_mean_and_median_across_investors(dataset: Dataset) -> None:
 
 def test_search_minutes(dataset: Dataset) -> None:
     assert search_minutes(dataset.search_log) == 15
+
+
+def test_population_estimate_reference_values() -> None:
+    estimate = PopulationEstimate("s-001", "s-002", first_count=27, second_count=16, overlap=5)
+
+    assert estimate.observed == 38
+    assert estimate.lincoln_petersen == pytest.approx(86.4)
+    assert estimate.chapman == pytest.approx(476 / 6 - 1)
+    assert estimate.chapman_interval()[0] >= estimate.observed
+
+
+def test_lincoln_petersen_is_undefined_without_overlap() -> None:
+    assert PopulationEstimate("s-001", "s-002", 3, 4, 0).lincoln_petersen is None
+
+
+def test_population_estimates_use_pairs_of_searches(dataset: Dataset) -> None:
+    dataset.search_log.append(dict(dataset.search_log[0], search_id="s-002"))
+    dataset.candidate_sources += [
+        {"investor_id": "inv-0001", "search_id": "s-002"},
+        {"investor_id": "inv-0002", "search_id": "s-002"},
+    ]
+
+    verified_only = population_estimates(dataset, ("overeny",))
+    with_candidates = population_estimates(dataset, ("overeny", "kandidat"))
+
+    assert [(item.first_count, item.second_count, item.overlap) for item in verified_only] == [(1, 1, 1)]
+    assert [(item.first_count, item.second_count, item.overlap) for item in with_candidates] == [(2, 2, 2)]
+
+
+def test_funnel_groups_by_processing_level(dataset: Dataset) -> None:
+    dataset.effort_log = [row for row in dataset.effort_log if row["investor_id"] != "inv-0002"]
+
+    stages = funnel(dataset)
+
+    assert stages["overeni"] == {"overeny": 1}
+    assert stages["triaz"] == {"vyloucen": 1}
+    assert stages[""] == {"kandidat": 1}
+
+
+def test_review_efforts_count_only_completed_reviews(dataset: Dataset) -> None:
+    dataset.reviews.append(review("inv-0002", "R1", ""))
+
+    efforts = review_efforts(dataset.reviews)
+
+    assert [(item.reviewer, item.reviews, item.timed_reviews, item.total_minutes) for item in efforts] == [
+        ("R1", 1, 1, 20)
+    ]

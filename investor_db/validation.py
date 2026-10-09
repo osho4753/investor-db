@@ -12,6 +12,7 @@ from investor_db.schema import (
     EFFORT_ACTORS,
     EVIDENCED_FIELDS,
     EXCLUSION_DUPLICATE,
+    EXCLUSION_FOREIGN,
     EXCLUSION_REASONS,
     FACT_DOCUMENTED_INVESTMENT,
     FACT_EXCLUSION_REASON,
@@ -73,6 +74,7 @@ def validate_dataset(dataset: Dataset, today: date) -> list[Issue]:
         *check_reviews(dataset, today),
         *check_fact_reviews(dataset, today),
         *check_effort_log(dataset, today),
+        *check_candidate_sources(dataset),
     ]
 
 
@@ -170,7 +172,9 @@ def exclusion_issues(row: Row) -> Iterator[Issue]:
     row_id = row["investor_id"]
     reason = row["exclusion_reason"]
     if row["verification_status"] == STATUS_EXCLUDED:
-        yield from required_issues("investors", row_id, row, ("investor_type", "country"))
+        yield from required_issues("investors", row_id, row, ("investor_type",))
+    if reason == EXCLUSION_FOREIGN and row["country"] in ("", PILOT_COUNTRY):
+        yield Issue("investors", row_id, "zahraniční subjekt musí mít country jiné než CZ")
     if row["verification_status"] == STATUS_EXCLUDED and not reason:
         yield Issue("investors", row_id, "vyloučený subjekt nemá exclusion_reason")
     if row["verification_status"] != STATUS_EXCLUDED and reason:
@@ -444,6 +448,26 @@ def check_review_rows(
         yield from vocabulary_issues(table, row_id, "reviewer", row["reviewer"], REVIEWERS)
         yield from vocabulary_issues(table, row_id, "verdict", row["verdict"], verdicts)
         yield from date_issues(table, row_id, "reviewed_at", row["reviewed_at"], today, required=bool(row["verdict"]))
+        yield from minutes_issues(table, row_id, row["review_minutes"])
     for (target_id, reviewer), count in Counter((row[target_column], row["reviewer"]) for row in rows).items():
         if count > 1:
             yield Issue(table, f"{target_id}/{reviewer}", f"hodnotitel má více kontrol téhož záznamu ({count}×)")
+
+
+def check_candidate_sources(dataset: Dataset) -> Iterator[Issue]:
+    investor_ids = {row["investor_id"] for row in dataset.investors}
+    search_ids = {row["search_id"] for row in dataset.search_log}
+    for row in dataset.candidate_sources:
+        row_id = f"{row['investor_id']}/{row['search_id']}"
+        if row["investor_id"] not in investor_ids:
+            yield Issue("candidate_sources", row_id, f"odkaz na neexistujícího investora {row['investor_id']!r}")
+        if row["search_id"] not in search_ids:
+            yield Issue("candidate_sources", row_id, f"odkaz na neexistující průchod {row['search_id']!r}")
+    for (investor_id, search_id), count in Counter(
+        (row["investor_id"], row["search_id"]) for row in dataset.candidate_sources
+    ).items():
+        if count > 1:
+            yield Issue("candidate_sources", f"{investor_id}/{search_id}", f"duplicitní vazba ({count}×)")
+    found_ids = {row["investor_id"] for row in dataset.candidate_sources}
+    for investor_id in sorted(investor_ids - found_ids):
+        yield Issue("investors", investor_id, "chybí záznam v candidate_sources (ve kterém průchodu byl subjekt nalezen)")

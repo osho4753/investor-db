@@ -27,7 +27,7 @@ Příkaz doplní do `data/reviews.csv` řádek pro každého ověřeného invest
 | `FP` | Některé z kritérií Z1–Z4 neplatí, nebo záznam popisuje jiný či neexistující subjekt. |
 | `nejiste` | Z dostupných zdrojů nelze rozhodnout. Důvod uveďte v `note`. |
 
-Čas strávený kontrolou zapište do `data/effort_log.csv` (`activity` = `kontrola`, `actor` = váš kód); slouží k odhadu nákladů škálování.
+Čas strávený kontrolou záznamu zapište v minutách do sloupce `review_minutes` (kladné celé číslo); slouží k odhadu nákladů škálování a vykazuje se odděleně od času modelu.
 
 Chyby v doplňkových polích (např. špatný ticket) se nepromítají do precision záznamu – zachytí je kontrola faktů.
 
@@ -50,6 +50,8 @@ Příkaz doplní do `data/fact_reviews.csv` náhodný vzorek faktů. Hodnotitel 
 | `spravne` | Zdroj hodnotu uvádí tak, jak je zapsána, včetně měny, fondu a data. |
 | `chybne` | Zdroj uvádí jinou hodnotu, nebo hodnotu neuvádí. |
 | `nelze_overit` | Zdroj není dostupný nebo jej nelze otevřít. |
+
+I zde se čas kontroly faktu zapisuje do `review_minutes`.
 
 Přesnost faktů = správně / (správně + chybně); `nelze_overit` se vykazuje zvlášť.
 

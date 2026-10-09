@@ -6,12 +6,15 @@ from datetime import date, timedelta
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    EFFORT_TRIAGE,
+    EFFORT_VERIFICATION,
     EXCLUSION_DUPLICATE,
     FRESHNESS_WINDOW_DAYS,
     INVESTOR_COLUMNS,
     MONEY_FIELDS,
     REVIEWER_INDEPENDENT,
     REVIEWER_PRIMARY,
+    STATUS_CANDIDATE,
     STATUS_VERIFIED,
     VERDICT_FACT_CORRECT,
     VERDICT_FACT_UNVERIFIABLE,
@@ -245,3 +248,99 @@ def effort_summaries(effort_log: list[Row]) -> list[EffortSummary]:
 
 def search_minutes(search_log: list[Row]) -> int:
     return sum(int(row["minutes"]) for row in search_log if row["minutes"].isdigit())
+
+
+@dataclass(frozen=True)
+class PopulationEstimate:
+    first_search_id: str
+    second_search_id: str
+    first_count: int
+    second_count: int
+    overlap: int
+
+    @property
+    def observed(self) -> int:
+        return self.first_count + self.second_count - self.overlap
+
+    @property
+    def lincoln_petersen(self) -> float | None:
+        if not self.overlap:
+            return None
+        return self.first_count * self.second_count / self.overlap
+
+    @property
+    def chapman(self) -> float:
+        return (self.first_count + 1) * (self.second_count + 1) / (self.overlap + 1) - 1
+
+    @property
+    def chapman_variance(self) -> float:
+        n1, n2, m = self.first_count, self.second_count, self.overlap
+        return (n1 + 1) * (n2 + 1) * (n1 - m) * (n2 - m) / ((m + 1) ** 2 * (m + 2))
+
+    def chapman_interval(self, z: float = 1.96) -> tuple[float, float]:
+        margin = z * math.sqrt(self.chapman_variance)
+        return max(float(self.observed), self.chapman - margin), self.chapman + margin
+
+
+def ids_by_search(dataset: Dataset, eligible_ids: set[str]) -> dict[str, set[str]]:
+    found: dict[str, set[str]] = defaultdict(set)
+    for row in dataset.candidate_sources:
+        if row["investor_id"] in eligible_ids:
+            found[row["search_id"]].add(row["investor_id"])
+    return found
+
+
+def population_estimates(dataset: Dataset, statuses: tuple[str, ...]) -> list[PopulationEstimate]:
+    eligible = {row["investor_id"] for row in dataset.investors if row["verification_status"] in statuses}
+    found = ids_by_search(dataset, eligible)
+    search_ids = sorted(found)
+    return [
+        PopulationEstimate(first, second, len(found[first]), len(found[second]), len(found[first] & found[second]))
+        for index, first in enumerate(search_ids)
+        for second in search_ids[index + 1 :]
+    ]
+
+
+VERIFIED_POPULATION: tuple[str, ...] = (STATUS_VERIFIED,)
+OPEN_POPULATION: tuple[str, ...] = (STATUS_VERIFIED, STATUS_CANDIDATE)
+
+
+def processing_level(investor_id: str, activities_by_investor: dict[str, set[str]]) -> str:
+    activities = activities_by_investor.get(investor_id, set())
+    if EFFORT_VERIFICATION in activities:
+        return EFFORT_VERIFICATION
+    if EFFORT_TRIAGE in activities:
+        return EFFORT_TRIAGE
+    return ""
+
+
+def funnel(dataset: Dataset) -> dict[str, Counter[str]]:
+    activities_by_investor: dict[str, set[str]] = defaultdict(set)
+    for row in dataset.effort_log:
+        activities_by_investor[row["investor_id"]].add(row["activity"])
+    stages: dict[str, Counter[str]] = defaultdict(Counter)
+    for row in dataset.investors:
+        stages[processing_level(row["investor_id"], activities_by_investor)][row["verification_status"]] += 1
+    return dict(stages)
+
+
+@dataclass(frozen=True)
+class ReviewEffort:
+    reviewer: str
+    reviews: int
+    timed_reviews: int
+    total_minutes: int
+
+
+def review_efforts(rows: list[Row]) -> list[ReviewEffort]:
+    completed = [row for row in rows if row["verdict"]]
+    reviewers = sorted({row["reviewer"] for row in completed})
+    return [
+        ReviewEffort(
+            reviewer,
+            sum(row["reviewer"] == reviewer for row in completed),
+            sum(row["reviewer"] == reviewer and row["review_minutes"].isdigit() for row in completed),
+            sum(int(row["review_minutes"]) for row in completed if row["reviewer"] == reviewer and row["review_minutes"].isdigit()),
+        )
+        for reviewer in reviewers
+    ]

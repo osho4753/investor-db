@@ -34,8 +34,9 @@ FACT_COLUMNS: Final = (
 )
 SOURCE_COLUMNS: Final = ("source_id", "url", "publisher", "source_type")
 SEARCH_LOG_COLUMNS: Final = ("search_id", "searched_at", "source_url", "query", "results_count", "minutes", "note")
-REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "note")
-FACT_REVIEW_COLUMNS: Final = ("fact_id", "reviewer", "reviewed_at", "verdict", "note")
+REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
+FACT_REVIEW_COLUMNS: Final = ("fact_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
+CANDIDATE_SOURCE_COLUMNS: Final = ("investor_id", "search_id")
 EFFORT_COLUMNS: Final = ("investor_id", "activity", "actor", "minutes", "logged_at", "note")
 
 STATUS_VERIFIED: Final = "overeny"
@@ -58,9 +59,10 @@ INVESTOR_TYPES: Final = (
 )
 
 EXCLUSION_DUPLICATE: Final = "duplicita"
+EXCLUSION_FOREIGN: Final = "zahranicni_subjekt"
 EXCLUSION_REASONS: Final = (
     "mimo_definici_pilotu",
-    "zahranicni_subjekt",
+    EXCLUSION_FOREIGN,
     "pe_budouci_rozsireni",
     "business_angel",
     "family_office",
@@ -114,7 +116,9 @@ VERDICT_FACT_WRONG: Final = "chybne"
 VERDICT_FACT_UNVERIFIABLE: Final = "nelze_overit"
 FACT_VERDICTS: Final = (VERDICT_FACT_CORRECT, VERDICT_FACT_WRONG, VERDICT_FACT_UNVERIFIABLE)
 
-EFFORT_ACTIVITIES: Final = ("triaz", "overeni", "kontrola")
+EFFORT_TRIAGE: Final = "triaz"
+EFFORT_VERIFICATION: Final = "overeni"
+EFFORT_ACTIVITIES: Final = (EFFORT_TRIAGE, EFFORT_VERIFICATION)
 EFFORT_ACTOR_MODEL: Final = "model"
 EFFORT_ACTORS: Final = (EFFORT_ACTOR_MODEL, *REVIEWERS)
 

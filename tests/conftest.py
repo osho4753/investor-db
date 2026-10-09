@@ -130,16 +130,20 @@ def build_valid_dataset() -> Dataset:
             }
         ],
         reviews=[
-            {"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "note": ""}
+            {"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "20", "note": ""}
         ],
         fact_reviews=[
-            {"fact_id": "f-00001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "spravne", "note": ""}
+            {"fact_id": "f-00001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "spravne", "review_minutes": "3", "note": ""}
         ],
         effort_log=[
             {"investor_id": "inv-0001", "activity": "overeni", "actor": "model", "minutes": "12", "logged_at": "2026-10-01", "note": ""},
             {"investor_id": "inv-0001", "activity": "overeni", "actor": "model", "minutes": "3", "logged_at": "2026-10-01", "note": ""},
             {"investor_id": "inv-0003", "activity": "triaz", "actor": "model", "minutes": "4", "logged_at": "2026-09-29", "note": ""},
-            {"investor_id": "inv-0001", "activity": "kontrola", "actor": "R1", "minutes": "20", "logged_at": "2026-10-05", "note": ""},
+        ],
+        candidate_sources=[
+            {"investor_id": "inv-0001", "search_id": "s-001"},
+            {"investor_id": "inv-0002", "search_id": "s-001"},
+            {"investor_id": "inv-0003", "search_id": "s-001"},
         ],
     )
 

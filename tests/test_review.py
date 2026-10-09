@@ -22,16 +22,16 @@ def test_fact_sample_is_reproducible_subset() -> None:
 
 
 def test_add_pending_reviews_keeps_existing_and_skips_listed() -> None:
-    existing = [{"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "note": ""}]
+    existing = [{"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "", "note": ""}]
 
     rows = add_pending_reviews(existing, REVIEW_COLUMNS, "investor_id", ["inv-0001", "inv-0002"], "R1")
 
     assert rows[0] == existing[0]
-    assert rows[1:] == [{"investor_id": "inv-0002", "reviewer": "R1", "reviewed_at": "", "verdict": "", "note": ""}]
+    assert rows[1:] == [{"investor_id": "inv-0002", "reviewer": "R1", "reviewed_at": "", "verdict": "", "review_minutes": "", "note": ""}]
 
 
 def test_add_pending_reviews_is_per_reviewer() -> None:
-    existing = [{"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "", "verdict": "", "note": ""}]
+    existing = [{"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "", "verdict": "", "review_minutes": "", "note": ""}]
 
     rows = add_pending_reviews(existing, REVIEW_COLUMNS, "investor_id", ["inv-0001"], "R2")
 

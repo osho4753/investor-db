@@ -137,6 +137,15 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 | `minutes` | Čas strávený průchodem zdroje v minutách (kladné celé číslo) |
 | `note` | Poznámka (např. omezení zdroje, nenačtená stránka) |
 
+### `candidate_sources.csv` – kde byl kandidát nalezen
+
+| Sloupec | Popis |
+|---|---|
+| `investor_id` | Odkaz do `investors.csv` |
+| `search_id` | Průchod v `search_log.csv`, ve kterém byl subjekt nalezen |
+
+Jeden subjekt může být nalezen ve více průchodech. Každý subjekt v `investors.csv` musí mít alespoň jeden řádek. Tabulka slouží k deduplikaci a k odhadu celkového počtu metodou capture–recapture.
+
 ### `effort_log.csv` – měření pracnosti
 
 Čas hledání se eviduje u průchodu zdrojem v `search_log.csv`, protože jeden průchod najde více kandidátů a jeho čas nelze poctivě rozpočítat. Čas práce na konkrétním investorovi se eviduje zde:
@@ -144,13 +153,13 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 | Sloupec | Popis |
 |---|---|
 | `investor_id` | Odkaz do `investors.csv` |
-| `activity` | `triaz` (zařazení či vyloučení), `overeni` (sběr a ověření faktů), `kontrola` (ruční kontrola) |
+| `activity` | `triaz` (rychlé vyloučení jedním faktem), `overeni` (plné ověření Z1–Z4) |
 | `actor` | `model` (AI asistent), `R1`, `R2` |
 | `minutes` | Čas v minutách, kladné celé číslo zaokrouhlené nahoru |
 | `logged_at` | Datum záznamu |
 | `note` | Poznámka |
 
-Čas modelu se měří časovými značkami začátku a konce práce na investorovi a zahrnuje čekání na načtení stránek. Není přímo srovnatelný s časem člověka; pro odhad nákladů škálování je proto podstatný i čas ruční kontroly zapsaný hodnotiteli (`actor` = `R1`/`R2`).
+Čas modelu se měří časovými značkami začátku a konce práce na investorovi a zahrnuje čekání na načtení stránek. Není přímo srovnatelný s časem člověka, proto se čas modelu a čas člověka vykazují zvlášť. Čas ruční kontroly zapisují hodnotitelé do sloupce `review_minutes` v `reviews.csv` a `fact_reviews.csv`.
 
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
@@ -186,4 +195,18 @@ Pole `investor_type` a `country` jsou klasifikace odvozené z ostatních faktů 
 | Aktuálnost | Podíl záznamů `overeny` ověřených v posledních 12 měsících. |
 | Duplicity | Počet skupin potenciálních duplicit a počet záznamů vyloučených jako `duplicita`. |
 | Hodnoty jen ve `facts.csv` | Počet peněžních hodnot, které nebyly převzaty do `investors.csv`, protože jsou v jiné měně než řádek. |
-| Pracnost | Minuty hledání celkem; minuty na investora podle činnosti a aktéra (součet, průměr, medián). |
+| Trychtýř | Počet nalezených subjektů a výsledné statusy podle úrovně zpracování (nezpracováno, rychlá triáž, plné ověření). |
+| Pracnost | Zvlášť model a člověk: minuty hledání, minuty na investora podle činnosti (součet, průměr, medián), minuty ruční kontroly. |
+| Odhad celkového počtu | Capture–recapture pro každou dvojici průchodů hledání (viz 2.7). |
+
+## 2.7 Odhad celkového počtu VC v ČR (capture–recapture)
+
+Z toho, kolik subjektů se objevuje ve dvou různých průchodech hledání, lze odhadnout, kolik jich existuje celkem, včetně těch, které žádný průchod nenašel. Pro každou dvojici průchodů s počty nalezených subjektů n₁, n₂ a překryvem m:
+
+- Lincoln–Petersen: N = n₁ · n₂ / m (pro m = 0 nedefinováno),
+- Chapmanova korekce (méně zkreslená u malých vzorků): N = (n₁ + 1)(n₂ + 1) / (m + 1) − 1,
+- rozptyl Chapmanova odhadu: (n₁ + 1)(n₂ + 1)(n₁ − m)(n₂ − m) / ((m + 1)² (m + 2)); 95% interval je N ± 1,96 · √rozptyl, dolní mez nejméně rovna počtu pozorovaných subjektů.
+
+Odhad se počítá pro dvě populace: jen ověření investoři a ověření spolu s dosud otevřenými kandidáty.
+
+**Omezení:** Metoda předpokládá nezávislé zdroje a stejnou pravděpodobnost nalezení každého subjektu. Ani jedno neplatí – sekundární zdroje (média, Wikipedie) přebírají hlavně viditelné fondy a navzájem se citují, takže překryv je vyšší než u nezávislých zdrojů. Odhad je proto **spíše dolní mezí** skutečného počtu a slouží jen k řádovému posouzení pokrytí pilotu.

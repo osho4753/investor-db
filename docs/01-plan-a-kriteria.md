@@ -46,6 +46,7 @@ Skutečná dostupnost a užitečnost každého zdroje se ověřuje a zaznamenáv
 | Corporate VC | Vyloučeny, budoucí rozšíření | Investují vlastní kapitál korporace, ne kapitál třetích osob; hranice vůči strategickým akvizicím je nejasná. Důvod `mimo_definici_pilotu`. |
 | Fondy fondů | Vyloučeny, budoucí rozšíření | Investují do fondů, ne přímo do firem; jejich zařazení by vedlo k dvojímu započtení kapitálu. Důvod `mimo_definici_pilotu`. |
 | Státní fondy a rozvojové instituce | Vyloučeny, budoucí rozšíření | Kombinují veřejné politiky, dotace a nástroje fondů fondů; vyžadují vlastní definici. Důvod `mimo_definici_pilotu`. |
+| Dluhové fondy (direct lending, mezanin, venture debt jako hlavní strategie) | Vyloučeny, budoucí rozšíření | Poskytují úvěr, ne kapitál za podíl; patří do jiné kategorie investorů. Důvod `mimo_definici_pilotu`. |
 | Zahraniční VC bez české právnické osoby | Vyloučeny, budoucí rozšíření | Nelze je doložit z českých registrů; patří do pilotu své domovské země. Důvod `zahranicni_subjekt`. |
 
 ## 1.3 Kritéria zařazení
@@ -67,7 +68,7 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 
 | Kód | Význam |
 |---|---|
-| `mimo_definici_pilotu` | Corporate VC, fond fondů, státní fond nebo rozvojová instituce. |
+| `mimo_definici_pilotu` | Corporate VC, fond fondů, státní fond, rozvojová instituce nebo dluhový fond. |
 | `zahranicni_subjekt` | Zahraniční investor bez české právnické osoby. |
 | `pe_budouci_rozsireni` | Private equity s převažujícími většinovými podíly; kandidát pro budoucí rozšíření. |
 | `business_angel` | Business angel nebo angel síť. |
@@ -79,7 +80,18 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 
 Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno. Důvod vyloučení musí být doložen alespoň jedním faktem `duvod_vylouceni` se zdrojem (např. stránka, ze které plyne, že jde o corporate VC nebo zahraniční subjekt); kontroluje to validátor.
 
-## 1.5 Statusy
+## 1.5 Dvě úrovně zpracování a trychtýř
+
+Po hledání se každý nalezený subjekt zpracuje jednou ze dvou úrovní:
+
+| Úroveň | Pro koho | Co se dělá | Záznam v `effort_log.csv` |
+|---|---|---|---|
+| Rychlá triáž | Subjekty, které už podle zdroje hledání zjevně spadají pod důvod vyloučení (např. PE podle typu investic na webu asociace) | Jeden doložený fakt `duvod_vylouceni`, status `vyloucen` | `triaz` |
+| Plné ověření | VC kandidáti a nejasné subjekty | Doložení Z1–Z4 a dalších polí; výsledkem je `overeny`, `kandidat` nebo `vyloucen` | `overeni` |
+
+Trychtýř (nalezeno → triáž → ověřeno/vyloučeno) se počítá z `investors.csv` a `effort_log.csv` příkazem `python -m investor_db metrics`. Čas obou úrovní se měří zvlášť, aby odhad nákladů škálování mohl odlišit levnou triáž od drahého ověření.
+
+## 1.6 Statusy
 
 | Status | Kód | Podmínka |
 |---|---|---|
@@ -89,7 +101,7 @@ Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno
 
 Status nastavuje ten, kdo sbírá data. Ruční kontrola (viz `docs/04-rucni-kontrola.md`) pak nezávisle měří, zda byl status `overeny` přidělen správně – to je základ výpočtu precision.
 
-## 1.6 Kritéria dokončení projektu
+## 1.7 Kritéria dokončení projektu
 
 1. `python -m investor_db validate` projde bez chyb.
 2. `python -m pytest` projde; každé validační pravidlo má pozitivní i negativní test.
@@ -99,7 +111,7 @@ Status nastavuje ten, kdo sbírá data. Ruční kontrola (viz `docs/04-rucni-kon
 6. Dokumentace pokrývá povinné výstupy 1–7 včetně předpokladů a rozsahu nejistoty.
 7. Historie Gitu obsahuje malé logické commity; `ai-log/` obsahuje exporty dialogů.
 
-## 1.7 Plán postupu
+## 1.8 Plán postupu
 
 1. Kostra repozitáře, dokumentace kritérií a metodiky.
 2. Datové schéma, validace a metriky včetně testů (bez reálných dat).
@@ -109,7 +121,7 @@ Status nastavuje ten, kdo sbírá data. Ruční kontrola (viz `docs/04-rucni-kon
 6. **Ruční kontrola** záznamů a vzorku faktů (R1, volitelně R2).
 7. Výpočet metrik, vyhodnocení a odhad globálního škálování.
 
-## 1.8 Fakta, předpoklady a otevřené otázky
+## 1.9 Fakta, předpoklady a otevřené otázky
 
 **Rozhodnutí zadavatele:** rozsah pilotu (VC, ČR), jednotka záznamu (VC značka), vyloučení CVC, fondů fondů, státních fondů a zahraničních subjektů, jedna měna na řádek bez přepočtů, ASCII kódy ve slovnících, ruční kontrola R1 povinně a R2 volitelně.
 

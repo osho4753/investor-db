@@ -1,1 +1,1 @@
-fact_id,reviewer,reviewed_at,verdict,note
+fact_id,reviewer,reviewed_at,verdict,review_minutes,note
