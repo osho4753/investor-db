@@ -51,3 +51,17 @@ inv-0047,overeni,model,0.98,2026-10-09,Web neuvádí ticket ani datované invest
 inv-0048,overeni,model,0.52,2026-10-09,"Typ subjektu a Z1 nedoloženy: web gainventures.cz neexistuje (DNS); v rejstříku jediný subjekt GAIN Ventures s.r.o. (IČO 05690935, Praha 4), ale vazbu na značku nic dalšího nepotvrzuje (pravidlo c samo nestačí, viz případ Techstars). Článek Forbes o Carebotu se nepodařilo načíst celý."
 inv-0049,overeni,model,0.57,2026-10-09,"Otevřená otázka definice: akcelerátor s kapitálem třetích osob ve vehiklech po ročnících. Z1: web neuvádí právní subjekt ani adresu, nelze vybrat jeden z 17 subjektů. Z4: datovaná investice StartupYard nenalezena."
 inv-0050,overeni,model,0.65,2026-10-09,"Otevřená otázka: článek označuje ZAKA VC za český family office (vyloučení family_office), ale o šest týdnů později vznikl fondový vehikl – nelze doložit, zda má kapitál třetích osob. Web značky nenalezen, Z1 nedoloženo."
+inv-0029,overeni,model,0.43,2026-10-09,Přepracování: Z1 doloženo pravidlem d místo zrušeného pravidla c; sektory podle rozšířeného slovníku.
+inv-0003,overeni,model,0.25,2026-10-09,Přepracování: Z1 doloženo pravidlem d místo zrušeného pravidla c.
+inv-0017,overeni,model,0.84,2026-10-09,Pravidlo CVC: podíl ČEZ na aktuálním kapitálu (web uvádí 500 mil. EUR od institucionálních investorů a korporací) není doložen – kandidat.
+inv-0042,overeni,model,0.35,2026-10-09,"Pravidlo CVC: zdroje uvádějí příslušnost ke skupině KKCG, ale podíl skupiny na kapitálu fondu nedokládají – vyloučení zrušeno, kandidat."
+inv-0025,overeni,model,0.15,2026-10-09,Rozhodnutí zadavatele: dluhový fond.
+inv-0050,overeni,model,0.01,2026-10-09,Rozhodnutí zadavatele: bez doložení kapitálu třetích osob family office.
+inv-0037,overeni,model,0.56,2026-10-09,Poslední doložená investice je z roku 2019; podle rozhodnutí zadavatele zůstává kandidat bez nového statusu.
+inv-0049,overeni,model,0.97,2026-10-09,"Model akcelerátoru: konvertibilní dluhopis za program + hotovost, vehikl s kapitálem třetích osob pro každý ročník, follow-on fond s DEPO Ventures. Z4 doloženo novým vehiklem (11/2024); poslední datovaná investice nenalezena."
+inv-0052,overeni,model,1.10,2026-10-09,"Z4 doloženo novým fondem IP Lab Ventures Fund (investice EIF, září 2026) podle rozhodnutí zadavatele."
+inv-0021,overeni,model,1.01,2026-10-09,"Pravidlo d nesplněno: jednatelé Nation1 Investment s.r.o. (Jaroslav Ton, Petr Jiříček) se neshodují se správcem fondu Markem Moravcem uvedeným ve zdroji; primární doklad Z1 nenalezen."
+inv-0039,overeni,model,0.01,2026-10-09,"Z1 nově doloženo (pravidlo d). Z2 nedoloženo – žádný otevřený zdroj neuvádí fázi investic, proto kandidat."
+inv-0028,overeni,model,0.32,2026-10-09,"Přepracování: sektory podle rozšířeného slovníku, velikost fondu podle upraveného pravidla."
+inv-0038,overeni,model,0.01,2026-10-09,Přepracování: velikost fondu podle upraveného pravidla.
+inv-0008,overeni,model,0.01,2026-10-09,Přepracování: sektory podle rozšířeného slovníku.
