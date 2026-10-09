@@ -33,9 +33,10 @@ FACT_COLUMNS: Final = (
     "evidence_note",
 )
 SOURCE_COLUMNS: Final = ("source_id", "url", "publisher", "source_type")
-SEARCH_LOG_COLUMNS: Final = ("search_id", "searched_at", "source_url", "query", "results_count", "note")
+SEARCH_LOG_COLUMNS: Final = ("search_id", "searched_at", "source_url", "query", "results_count", "minutes", "note")
 REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "note")
 FACT_REVIEW_COLUMNS: Final = ("fact_id", "reviewer", "reviewed_at", "verdict", "note")
+EFFORT_COLUMNS: Final = ("investor_id", "activity", "actor", "minutes", "logged_at", "note")
 
 STATUS_VERIFIED: Final = "overeny"
 STATUS_CANDIDATE: Final = "kandidat"
@@ -113,6 +114,10 @@ VERDICT_FACT_WRONG: Final = "chybne"
 VERDICT_FACT_UNVERIFIABLE: Final = "nelze_overit"
 FACT_VERDICTS: Final = (VERDICT_FACT_CORRECT, VERDICT_FACT_WRONG, VERDICT_FACT_UNVERIFIABLE)
 
+EFFORT_ACTIVITIES: Final = ("triaz", "overeni", "kontrola")
+EFFORT_ACTOR_MODEL: Final = "model"
+EFFORT_ACTORS: Final = (EFFORT_ACTOR_MODEL, *REVIEWERS)
+
 MONEY_FIELDS: Final = (
     "typical_ticket_min",
     "typical_ticket_max",
@@ -137,11 +142,13 @@ FACT_LEGAL_MANAGER: Final = "pravni_spravce"
 FACT_TARGET_FUND_SIZE: Final = "cilova_velikost_fondu"
 FACT_REGULATOR_REGISTRATION: Final = "registrace_regulator"
 FACT_DOCUMENTED_INVESTMENT: Final = "dolozena_investice"
+FACT_EXCLUSION_REASON: Final = "duvod_vylouceni"
 SUPPLEMENTARY_FACT_FIELDS: Final = (
     FACT_LEGAL_MANAGER,
     FACT_TARGET_FUND_SIZE,
     FACT_REGULATOR_REGISTRATION,
     FACT_DOCUMENTED_INVESTMENT,
+    FACT_EXCLUSION_REASON,
 )
 FACT_FIELDS: Final = EVIDENCED_FIELDS + SUPPLEMENTARY_FACT_FIELDS
 MONEY_FACT_FIELDS: Final = MONEY_FIELDS + (FACT_TARGET_FUND_SIZE,)

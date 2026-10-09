@@ -81,6 +81,17 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("search_log", 0, "source_url", "seznam", "source_url není platná URL"),
         ("search_log", 0, "query", "", "chybí povinné pole query"),
         ("search_log", 0, "results_count", "-1", "results_count není nezáporné celé číslo"),
+        ("search_log", 0, "minutes", "", "chybí povinné pole minutes"),
+        ("search_log", 0, "minutes", "0", "minutes není kladné celé číslo"),
+        ("investors", 2, "exclusion_reason", "family_office", "není doložen faktem duvod_vylouceni"),
+        ("facts", 10, "value", "nelibi_se", "hodnota má neplatnou hodnotu"),
+        ("facts", 10, "investor_id", "inv-0002", "není doložen faktem duvod_vylouceni"),
+        ("effort_log", 0, "investor_id", "inv-0999", "neexistujícího investora"),
+        ("effort_log", 0, "activity", "pauza", "activity má neplatnou hodnotu"),
+        ("effort_log", 0, "actor", "R3", "actor má neplatnou hodnotu"),
+        ("effort_log", 0, "minutes", "1.5", "minutes není kladné celé číslo"),
+        ("effort_log", 0, "minutes", "", "chybí povinné pole minutes"),
+        ("effort_log", 0, "logged_at", "", "chybí povinné pole logged_at"),
         ("reviews", 0, "investor_id", "inv-0999", "neexistující investor_id"),
         ("reviews", 0, "reviewer", "R3", "reviewer má neplatnou hodnotu"),
         ("reviews", 0, "verdict", "ano", "verdict má neplatnou hodnotu"),
@@ -136,20 +147,21 @@ def test_duplicate_fact_is_reported(dataset: Dataset) -> None:
 
 def test_money_fact_in_other_currency_is_allowed(dataset: Dataset) -> None:
     dataset.facts.append(
-        fact("f-00011", "assets_under_management", "900000000", "src-0002", currency="CZK", value_as_of="2025-12-31")
+        fact("f-00012", "assets_under_management", "900000000", "src-0002", currency="CZK", value_as_of="2025-12-31")
     )
 
     assert validate_dataset(dataset, TODAY) == []
 
 
 def test_target_fund_size_requires_fund_name(dataset: Dataset) -> None:
-    dataset.facts.append(fact("f-00011", "cilova_velikost_fondu", "50000000", "src-0002", currency="EUR"))
+    dataset.facts.append(fact("f-00012", "cilova_velikost_fondu", "50000000", "src-0002", currency="EUR"))
 
     assert_reported(dataset, "fakt cilova_velikost_fondu musí mít fund_name")
 
 
 def test_foreign_excluded_subject_is_allowed(dataset: Dataset) -> None:
     dataset.investors[2].update(investor_type="vc", country="DE", exclusion_reason="zahranicni_subjekt")
+    dataset.facts[10]["value"] = "zahranicni_subjekt"
 
     assert validate_dataset(dataset, TODAY) == []
 

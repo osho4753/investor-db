@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from investor_db.schema import (
+    EFFORT_COLUMNS,
     FACT_COLUMNS,
     FACT_REVIEW_COLUMNS,
     INVESTOR_COLUMNS,
@@ -20,6 +21,7 @@ TABLE_COLUMNS: dict[str, tuple[str, ...]] = {
     "search_log": SEARCH_LOG_COLUMNS,
     "reviews": REVIEW_COLUMNS,
     "fact_reviews": FACT_REVIEW_COLUMNS,
+    "effort_log": EFFORT_COLUMNS,
 }
 
 
@@ -35,6 +37,7 @@ class Dataset:
     search_log: list[Row] = field(default_factory=list)
     reviews: list[Row] = field(default_factory=list)
     fact_reviews: list[Row] = field(default_factory=list)
+    effort_log: list[Row] = field(default_factory=list)
 
 
 def table_path(data_dir: Path, table: str) -> Path:

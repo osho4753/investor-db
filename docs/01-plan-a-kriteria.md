@@ -77,7 +77,7 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 | `zanikly_subjekt` | Subjekt zanikl nebo je v likvidaci. |
 | `duplicita` | Duplicitní záznam jiného investora. |
 
-Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno.
+Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno. Důvod vyloučení musí být doložen alespoň jedním faktem `duvod_vylouceni` se zdrojem (např. stránka, ze které plyne, že jde o corporate VC nebo zahraniční subjekt); kontroluje to validátor.
 
 ## 1.5 Statusy
 

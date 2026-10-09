@@ -1,5 +1,6 @@
 import math
-from collections import Counter
+import statistics
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import date, timedelta
 
@@ -210,3 +211,37 @@ def status_counts(investors: list[Row]) -> Counter[str]:
 
 def exclusion_reason_counts(investors: list[Row]) -> Counter[str]:
     return Counter(row["exclusion_reason"] for row in investors if row["exclusion_reason"])
+
+
+@dataclass(frozen=True)
+class EffortSummary:
+    activity: str
+    actor: str
+    minutes_per_investor: tuple[int, ...]
+
+    @property
+    def total_minutes(self) -> int:
+        return sum(self.minutes_per_investor)
+
+    @property
+    def mean_minutes(self) -> float:
+        return statistics.mean(self.minutes_per_investor)
+
+    @property
+    def median_minutes(self) -> float:
+        return statistics.median(self.minutes_per_investor)
+
+
+def effort_summaries(effort_log: list[Row]) -> list[EffortSummary]:
+    minutes: dict[tuple[str, str], Counter[str]] = defaultdict(Counter)
+    for row in effort_log:
+        if row["minutes"].isdigit():
+            minutes[(row["activity"], row["actor"])][row["investor_id"]] += int(row["minutes"])
+    return [
+        EffortSummary(activity, actor, tuple(sorted(per_investor.values())))
+        for (activity, actor), per_investor in sorted(minutes.items())
+    ]
+
+
+def search_minutes(search_log: list[Row]) -> int:
+    return sum(int(row["minutes"]) for row in search_log if row["minutes"].isdigit())

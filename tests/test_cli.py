@@ -5,6 +5,7 @@ from conftest import build_valid_dataset
 
 from investor_db.__main__ import main
 from investor_db.io import TABLE_COLUMNS, Dataset, load_dataset, table_path, write_table
+from investor_db.review import sample_fact_ids
 
 
 def write_dataset(data_dir: Path, dataset: Dataset) -> None:
@@ -59,8 +60,10 @@ def test_review_template_adds_rows_for_second_reviewer(data_dir: Path) -> None:
 def test_fact_review_template_adds_sample(data_dir: Path) -> None:
     assert main(["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1"]) == 0
 
-    fact_reviews = load_dataset(data_dir).fact_reviews
-    assert len(fact_reviews) == 10
+    dataset = load_dataset(data_dir)
+    listed_ids = [row["fact_id"] for row in dataset.fact_reviews]
+    assert set(sample_fact_ids([row["fact_id"] for row in dataset.facts])) <= set(listed_ids)
+    assert len(listed_ids) == len(set(listed_ids))
     assert main(["--data-dir", str(data_dir), "validate"]) == 0
 
 

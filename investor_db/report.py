@@ -4,6 +4,7 @@ from investor_db.io import Dataset
 from investor_db.metrics import (
     Proportion,
     duplicate_group_count,
+    effort_summaries,
     exclusion_reason_counts,
     excluded_duplicate_count,
     fact_accuracy,
@@ -14,6 +15,7 @@ from investor_db.metrics import (
     primary_fact_share,
     primary_registry_share,
     reviewer_agreement,
+    search_minutes,
     status_counts,
     values_only_in_facts_due_to_currency,
 )
@@ -43,6 +45,7 @@ def render_report(dataset: Dataset, today: date) -> str:
         fact_accuracy_section(dataset),
         completeness_section(dataset),
         evidence_section(dataset, today),
+        effort_section(dataset),
         limitation_section(dataset),
     ]
     return "\n\n".join("\n".join(lines) for lines in sections) + "\n"
@@ -116,6 +119,32 @@ def evidence_section(dataset: Dataset, today: date) -> list[str]:
         f"- Skupiny možných duplicit: {duplicate_group_count(dataset.investors)}",
         f"- Záznamy vyloučené jako duplicita: {excluded_duplicate_count(dataset.investors)}",
     ]
+
+
+def format_minutes(value: float) -> str:
+    return f"{value:.1f}".replace(".", ",")
+
+
+def effort_section(dataset: Dataset) -> list[str]:
+    lines = [
+        "## Pracnost",
+        "",
+        f"- Hledání kandidátů: {len(dataset.search_log)} průchodů, {search_minutes(dataset.search_log)} min celkem",
+    ]
+    summaries = effort_summaries(dataset.effort_log)
+    if not summaries:
+        return lines + ["- Čas po investorech zatím není zaznamenán."]
+    lines += [
+        "",
+        "| Činnost | Kdo | Investorů | Minut celkem | Průměr na investora | Medián na investora |",
+        "|---|---|---|---|---|---|",
+    ]
+    lines += [
+        f"| `{summary.activity}` | {summary.actor} | {len(summary.minutes_per_investor)} | {summary.total_minutes} "
+        f"| {format_minutes(summary.mean_minutes)} | {format_minutes(summary.median_minutes)} |"
+        for summary in summaries
+    ]
+    return lines + ["", "Čas modelu je čas běhu nástrojů a není přímo srovnatelný s časem člověka."]
 
 
 def limitation_section(dataset: Dataset) -> list[str]:

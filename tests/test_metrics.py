@@ -7,6 +7,8 @@ from investor_db.io import Dataset
 from investor_db.metrics import (
     Proportion,
     cohen_kappa,
+    effort_summaries,
+    search_minutes,
     fact_accuracy,
     field_completeness,
     freshness_share,
@@ -104,7 +106,7 @@ def test_field_completeness_counts_verified_investors_only(dataset: Dataset) -> 
 
 def test_primary_source_shares(dataset: Dataset) -> None:
     assert primary_registry_share(dataset) == Proportion(1, 1)
-    assert primary_fact_share(dataset) == Proportion(9, 10)
+    assert primary_fact_share(dataset) == Proportion(9, 11)
 
 
 @pytest.mark.parametrize(("today", "expected"), [(TODAY, Proportion(1, 1)), (date(2029, 1, 1), Proportion(0, 1))])
@@ -119,7 +121,7 @@ def test_freshness_share(dataset: Dataset, today: date, expected: Proportion) ->
 
 @pytest.mark.parametrize(("currency", "expected"), [("CZK", 1), ("EUR", 0)])
 def test_values_only_in_facts_due_to_currency(dataset: Dataset, currency: str, expected: int) -> None:
-    dataset.facts.append(fact("f-00011", "assets_under_management", "900000000", "src-0002", currency=currency))
+    dataset.facts.append(fact("f-00012", "assets_under_management", "900000000", "src-0002", currency=currency))
 
     assert values_only_in_facts_due_to_currency(dataset) == expected
 
@@ -127,7 +129,7 @@ def test_values_only_in_facts_due_to_currency(dataset: Dataset, currency: str, e
 def test_report_contains_all_sections(dataset: Dataset) -> None:
     report = render_report(dataset, TODAY)
 
-    for heading in ("Stav záznamů", "Precision", "Shoda hodnotitelů", "Přesnost faktů", "Úplnost polí", "Omezení dat"):
+    for heading in ("Stav záznamů", "Precision", "Shoda hodnotitelů", "Přesnost faktů", "Úplnost polí", "Pracnost", "Omezení dat"):
         assert heading in report
     assert "Data R2 nejsou k dispozici" in report
 
@@ -136,3 +138,26 @@ def test_report_handles_empty_dataset() -> None:
     report = render_report(Dataset(), TODAY)
 
     assert "Ruční kontrola R1 zatím není vyplněna." in report
+
+
+def test_effort_summaries_sum_minutes_per_investor(dataset: Dataset) -> None:
+    summaries = {(summary.activity, summary.actor): summary for summary in effort_summaries(dataset.effort_log)}
+
+    verification = summaries[("overeni", "model")]
+    assert verification.minutes_per_investor == (15,)
+    assert summaries[("triaz", "model")].total_minutes == 4
+    assert summaries[("kontrola", "R1")].median_minutes == 20
+
+
+def test_effort_mean_and_median_across_investors(dataset: Dataset) -> None:
+    dataset.effort_log.append(dict(dataset.effort_log[2], investor_id="inv-0002", minutes="10"))
+    dataset.effort_log.append(dict(dataset.effort_log[2], investor_id="inv-0001", minutes="1"))
+
+    triage = next(summary for summary in effort_summaries(dataset.effort_log) if summary.activity == "triaz")
+
+    assert triage.minutes_per_investor == (1, 4, 10)
+    assert triage.mean_minutes == 5 and triage.median_minutes == 4
+
+
+def test_search_minutes(dataset: Dataset) -> None:
+    assert search_minutes(dataset.search_log) == 15

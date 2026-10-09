@@ -30,6 +30,14 @@ Používají se pouze bezplatné veřejné zdroje. Placené databáze (Dealroom,
 
 Konkrétní URL se zapisují až při sběru dat a jejich dostupnost se zaznamenává v `data/search_log.csv`.
 
+### Pravidla pro sběr faktů
+
+- Každý fakt pochází ze stránky nebo dokumentu, který byl při sběru **skutečně otevřen**. Nic se nedoplňuje z paměti, obecné znalosti ani odhadem.
+- Pokud se stránka nenačte nebo údaj neobsahuje, hodnota zůstává neznámá a neúspěch se zapíše do poznámky v protokolu hledání.
+- `accessed_at` je skutečné datum přístupu.
+- `evidence_note` stručně parafrázuje, co a kde na stránce je; delší pasáže se necitují.
+- Stránky se čtou ručně po jedné, bez hromadného stahování.
+
 ### Pravidla pro sběr (scraping)
 
 Scraping je povolen, ale v pilotu se neimplementuje. Pro budoucí automatizaci platí: respektovat `robots.txt` a podmínky užití webů, omezit rychlost dotazů, cachovat odpovědi a identifikovat se v hlavičce `User-Agent`.
@@ -104,6 +112,7 @@ Doplňkové typy faktů:
 | `cilova_velikost_fondu` | Cílová velikost fondu (nikdy se nepřebírá do `total_fund_size`) | částka, `currency` a `fund_name` povinné |
 | `registrace_regulator` | Registrace správce či fondu u regulátora | — |
 | `dolozena_investice` | Doložená investice; hodnota je název portfoliové firmy | `value_as_of` = datum investice, povinné |
+| `duvod_vylouceni` | Doklad důvodu vyloučení; hodnota je kód z `exclusion_reason` | povinný u každého vyloučeného subjektu |
 
 Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 
@@ -125,7 +134,23 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 | `source_url` | Prohledaný seznam či stránka |
 | `query` | Dotaz, filtr nebo popis průchodu |
 | `results_count` | Počet nalezených relevantních subjektů |
-| `note` | Poznámka (např. omezení zdroje) |
+| `minutes` | Čas strávený průchodem zdroje v minutách (kladné celé číslo) |
+| `note` | Poznámka (např. omezení zdroje, nenačtená stránka) |
+
+### `effort_log.csv` – měření pracnosti
+
+Čas hledání se eviduje u průchodu zdrojem v `search_log.csv`, protože jeden průchod najde více kandidátů a jeho čas nelze poctivě rozpočítat. Čas práce na konkrétním investorovi se eviduje zde:
+
+| Sloupec | Popis |
+|---|---|
+| `investor_id` | Odkaz do `investors.csv` |
+| `activity` | `triaz` (zařazení či vyloučení), `overeni` (sběr a ověření faktů), `kontrola` (ruční kontrola) |
+| `actor` | `model` (AI asistent), `R1`, `R2` |
+| `minutes` | Čas v minutách, kladné celé číslo zaokrouhlené nahoru |
+| `logged_at` | Datum záznamu |
+| `note` | Poznámka |
+
+Čas modelu se měří časovými značkami začátku a konce práce na investorovi a zahrnuje čekání na načtení stránek. Není přímo srovnatelný s časem člověka; pro odhad nákladů škálování je proto podstatný i čas ruční kontroly zapsaný hodnotiteli (`actor` = `R1`/`R2`).
 
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
@@ -141,7 +166,7 @@ Popsány v `docs/04-rucni-kontrola.md`. Vyplňuje je výhradně člověk.
 - vazby mezi tabulkami (fakt → investor, fakt → zdroj, kontrola → investor/fakt),
 - že každá vyplněná hodnota v `investors.csv` má fakt se shodnou hodnotou (u částek i měnou); výjimkou je `name` u statusů `kandidat` a `vyloucen`, kde název stačí k identifikaci a jeho původ je v protokolu hledání,
 - shodu `evidence_urls` se zdroji faktů a `last_verified_at` s daty přístupu,
-- kritéria Z1–Z4 u záznamů `overeny`,
+- kritéria Z1–Z4 u záznamů `overeny` a doložení důvodu vyloučení faktem u záznamů `vyloucen`,
 - duplicity investorů (IČO, doména, normalizovaný název), faktů a zdrojů.
 
 Pole `investor_type` a `country` jsou klasifikace odvozené z ostatních faktů (typ ze strategie, země z IČO), proto pro ně samostatný fakt není vyžadován.
@@ -161,3 +186,4 @@ Pole `investor_type` a `country` jsou klasifikace odvozené z ostatních faktů 
 | Aktuálnost | Podíl záznamů `overeny` ověřených v posledních 12 měsících. |
 | Duplicity | Počet skupin potenciálních duplicit a počet záznamů vyloučených jako `duplicita`. |
 | Hodnoty jen ve `facts.csv` | Počet peněžních hodnot, které nebyly převzaty do `investors.csv`, protože jsou v jiné měně než řádek. |
+| Pracnost | Minuty hledání celkem; minuty na investora podle činnosti a aktéra (součet, průměr, medián). |

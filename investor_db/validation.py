@@ -8,10 +8,13 @@ from investor_db.io import Dataset, Row
 from investor_db.schema import (
     ACTIVITY_WINDOW_DAYS,
     CURRENCIES,
+    EFFORT_ACTIVITIES,
+    EFFORT_ACTORS,
     EVIDENCED_FIELDS,
     EXCLUSION_DUPLICATE,
     EXCLUSION_REASONS,
     FACT_DOCUMENTED_INVESTMENT,
+    FACT_EXCLUSION_REASON,
     FACT_FIELDS,
     FACT_VERDICTS,
     FUND_SCOPED_FACT_FIELDS,
@@ -69,6 +72,7 @@ def validate_dataset(dataset: Dataset, today: date) -> list[Issue]:
         *check_search_log(dataset.search_log, today),
         *check_reviews(dataset, today),
         *check_fact_reviews(dataset, today),
+        *check_effort_log(dataset, today),
     ]
 
 
@@ -234,6 +238,8 @@ def fact_value_issues(row: Row) -> Iterator[Issue]:
         yield Issue("facts", row_id, f"hodnota není platná URL: {value!r}")
     if field in FUND_SCOPED_FACT_FIELDS and not row["fund_name"]:
         yield Issue("facts", row_id, f"fakt {field} musí mít fund_name")
+    if field == FACT_EXCLUSION_REASON:
+        yield from vocabulary_issues("facts", row_id, "hodnota", value, EXCLUSION_REASONS)
     if field == FACT_DOCUMENTED_INVESTMENT and not row["value_as_of"]:
         yield Issue("facts", row_id, "doložená investice musí mít value_as_of (datum investice)")
 
@@ -265,6 +271,8 @@ def check_investor_evidence(dataset: Dataset) -> Iterator[Issue]:
         yield from verification_date_issues(investor, facts)
         if investor["verification_status"] == STATUS_VERIFIED:
             yield from inclusion_criteria_issues(investor, facts, sources_by_id)
+        if investor["verification_status"] == STATUS_EXCLUDED:
+            yield from exclusion_evidence_issues(investor, facts)
 
 
 def fields_requiring_evidence(investor: Row) -> tuple[str, ...]:
@@ -325,6 +333,12 @@ def inclusion_criteria_issues(investor: Row, facts: list[Row], sources_by_id: di
         yield Issue("investors", row_id, f"kritérium Z4: chybí doložená investice za posledních {ACTIVITY_WINDOW_DAYS} dní")
 
 
+def exclusion_evidence_issues(investor: Row, facts: list[Row]) -> Iterator[Issue]:
+    reason = investor["exclusion_reason"]
+    if reason and not any(row["field"] == FACT_EXCLUSION_REASON and row["value"] == reason for row in facts):
+        yield Issue("investors", investor["investor_id"], f"důvod vyloučení {reason!r} není doložen faktem {FACT_EXCLUSION_REASON}")
+
+
 def is_primary_source(source_id: str, sources_by_id: dict[str, Row]) -> bool:
     source = sources_by_id.get(source_id)
     return source is not None and source["source_type"] in PRIMARY_SOURCE_TYPES
@@ -375,12 +389,31 @@ def check_search_log(search_log: list[Row], today: date) -> Iterator[Issue]:
     yield from check_identifiers("search_log", search_log, "search_id")
     for row in search_log:
         row_id = row["search_id"]
-        yield from required_issues("search_log", row_id, row, ("source_url", "query", "results_count"))
+        yield from required_issues("search_log", row_id, row, ("source_url", "query", "results_count", "minutes"))
         yield from date_issues("search_log", row_id, "searched_at", row["searched_at"], today, required=True)
         if row["source_url"] and not is_valid_url(row["source_url"]):
             yield Issue("search_log", row_id, f"source_url není platná URL: {row['source_url']!r}")
         if row["results_count"] and not row["results_count"].isdigit():
             yield Issue("search_log", row_id, f"results_count není nezáporné celé číslo: {row['results_count']!r}")
+        yield from minutes_issues("search_log", row_id, row["minutes"])
+
+
+def minutes_issues(table: str, row_id: str, text: str) -> Iterator[Issue]:
+    if text and not (text.isdigit() and int(text) > 0):
+        yield Issue(table, row_id, f"minutes není kladné celé číslo: {text!r}")
+
+
+def check_effort_log(dataset: Dataset, today: date) -> Iterator[Issue]:
+    investor_ids = {row["investor_id"] for row in dataset.investors}
+    for row in dataset.effort_log:
+        row_id = f"{row['investor_id']}/{row['activity']}/{row['actor']}"
+        yield from required_issues("effort_log", row_id, row, ("activity", "actor", "minutes"))
+        if row["investor_id"] not in investor_ids:
+            yield Issue("effort_log", row_id, f"odkaz na neexistujícího investora {row['investor_id']!r}")
+        yield from vocabulary_issues("effort_log", row_id, "activity", row["activity"], EFFORT_ACTIVITIES)
+        yield from vocabulary_issues("effort_log", row_id, "actor", row["actor"], EFFORT_ACTORS)
+        yield from minutes_issues("effort_log", row_id, row["minutes"])
+        yield from date_issues("effort_log", row_id, "logged_at", row["logged_at"], today, required=True)
 
 
 def check_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:

@@ -88,7 +88,7 @@ def build_valid_dataset() -> Dataset:
                 "invested_capital": "",
                 "verification_status": "vyloucen",
                 "exclusion_reason": "business_angel",
-                "evidence_urls": "",
+                "evidence_urls": MEDIA_URL,
                 "last_verified_at": "",
             },
         ],
@@ -111,6 +111,7 @@ def build_valid_dataset() -> Dataset:
             ),
             fact("f-00009", "dolozena_investice", "Fiktivní Startup s.r.o.", "src-0003", value_as_of="2025-11-15"),
             fact("f-00010", "pravni_spravce", "Fiktivní Správce a.s.", "src-0002", fund_name=FUND_NAME),
+            fact("f-00011", "duvod_vylouceni", "business_angel", "src-0003", investor_id="inv-0003"),
         ],
         sources=[
             {"source_id": "src-0001", "url": REGISTRY_URL, "publisher": "Fiktivní rejstřík", "source_type": "rejstrik"},
@@ -124,6 +125,7 @@ def build_valid_dataset() -> Dataset:
                 "source_url": "https://seznam.example.org",
                 "query": "průchod fiktivního seznamu",
                 "results_count": "3",
+                "minutes": "15",
                 "note": "",
             }
         ],
@@ -132,6 +134,12 @@ def build_valid_dataset() -> Dataset:
         ],
         fact_reviews=[
             {"fact_id": "f-00001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "spravne", "note": ""}
+        ],
+        effort_log=[
+            {"investor_id": "inv-0001", "activity": "overeni", "actor": "model", "minutes": "12", "logged_at": "2026-10-01", "note": ""},
+            {"investor_id": "inv-0001", "activity": "overeni", "actor": "model", "minutes": "3", "logged_at": "2026-10-01", "note": ""},
+            {"investor_id": "inv-0003", "activity": "triaz", "actor": "model", "minutes": "4", "logged_at": "2026-09-29", "note": ""},
+            {"investor_id": "inv-0001", "activity": "kontrola", "actor": "R1", "minutes": "20", "logged_at": "2026-10-05", "note": ""},
         ],
     )
 
