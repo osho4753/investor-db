@@ -186,8 +186,8 @@ def test_population_estimates_use_pairs_of_searches(dataset: Dataset) -> None:
         {"investor_id": "inv-0002", "search_id": "s-002"},
     ]
 
-    verified_only = population_estimates(dataset, ("overeny",))
-    with_candidates = population_estimates(dataset, ("overeny", "kandidat"))
+    verified_only = population_estimates(dataset, ("overeny",), min_search_size=1)
+    with_candidates = population_estimates(dataset, ("overeny", "kandidat"), min_search_size=1)
 
     assert [(item.first_count, item.second_count, item.overlap) for item in verified_only] == [(1, 1, 1)]
     assert [(item.first_count, item.second_count, item.overlap) for item in with_candidates] == [(2, 2, 2)]
@@ -211,3 +211,10 @@ def test_review_efforts_count_only_completed_reviews(dataset: Dataset) -> None:
     assert [(item.reviewer, item.reviews, item.timed_reviews, item.total_minutes) for item in efforts] == [
         ("R1", 1, 1, 20)
     ]
+
+
+def test_population_estimates_skip_small_searches(dataset: Dataset) -> None:
+    dataset.search_log.append(dict(dataset.search_log[0], search_id="s-002"))
+    dataset.candidate_sources.append({"investor_id": "inv-0001", "search_id": "s-002"})
+
+    assert population_estimates(dataset, ("overeny", "kandidat"), min_search_size=2) == []

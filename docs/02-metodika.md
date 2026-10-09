@@ -207,6 +207,6 @@ Z toho, kolik subjektů se objevuje ve dvou různých průchodech hledání, lze
 - Chapmanova korekce (méně zkreslená u malých vzorků): N = (n₁ + 1)(n₂ + 1) / (m + 1) − 1,
 - rozptyl Chapmanova odhadu: (n₁ + 1)(n₂ + 1)(n₁ − m)(n₂ − m) / ((m + 1)² (m + 2)); 95% interval je N ± 1,96 · √rozptyl, dolní mez nejméně rovna počtu pozorovaných subjektů.
 
-Odhad se počítá pro dvě populace: jen ověření investoři a ověření spolu s dosud otevřenými kandidáty.
+Odhad se počítá pro dvě populace: jen ověření investoři a ověření spolu s dosud otevřenými kandidáty. Do výpočtu vstupují jen průchody, které v dané populaci našly alespoň 5 subjektů (`MIN_SEARCH_SIZE` v `investor_db/metrics.py`); u menších zdrojů (jednotlivé tiskové zprávy) je odhad degenerovaný.
 
 **Omezení:** Metoda předpokládá nezávislé zdroje a stejnou pravděpodobnost nalezení každého subjektu. Ani jedno neplatí – sekundární zdroje (média, Wikipedie) přebírají hlavně viditelné fondy a navzájem se citují, takže překryv je vyšší než u nezávislých zdrojů. Odhad je proto **spíše dolní mezí** skutečného počtu a slouží jen k řádovému posouzení pokrytí pilotu.

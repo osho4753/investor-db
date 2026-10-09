@@ -290,10 +290,15 @@ def ids_by_search(dataset: Dataset, eligible_ids: set[str]) -> dict[str, set[str
     return found
 
 
-def population_estimates(dataset: Dataset, statuses: tuple[str, ...]) -> list[PopulationEstimate]:
+MIN_SEARCH_SIZE = 5
+
+
+def population_estimates(
+    dataset: Dataset, statuses: tuple[str, ...], min_search_size: int = MIN_SEARCH_SIZE
+) -> list[PopulationEstimate]:
     eligible = {row["investor_id"] for row in dataset.investors if row["verification_status"] in statuses}
     found = ids_by_search(dataset, eligible)
-    search_ids = sorted(found)
+    search_ids = sorted(search_id for search_id, ids in found.items() if len(ids) >= min_search_size)
     return [
         PopulationEstimate(first, second, len(found[first]), len(found[second]), len(found[first] & found[second]))
         for index, first in enumerate(search_ids)
