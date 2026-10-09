@@ -61,7 +61,7 @@ Všechny soubory jsou v `data/`, kódování UTF-8, oddělovač čárka, konce �
 | `name` | vždy | Název VC značky |
 | `investor_type` | vždy | `vc`, `pe`, `cvc`, `fond_fondu`, `statni_fond`, `business_angel`, `family_office`, `akcelerator`, `crowdfunding`, `jiny` |
 | `country` | vždy | ISO 3166-1 alpha-2 země české právnické osoby, resp. sídla (`CZ`) |
-| `registry_id` | `overeny` | IČO české právnické osoby (8 číslic, kontrolní součet) |
+| `registry_id` | `overeny` | IČO vlastní české právnické osoby značky – správcovské či poradenské společnosti nebo fondu (8 číslic, kontrolní součet). **Nikdy IČO licencovaného třetího správce**, ten se ukládá jako fakt `pravni_spravce`; jinak by se různé značky jednoho správce jevily jako duplicity. |
 | `website` | ne | URL webu značky |
 | `investment_sectors` | ne | Řízený slovník, viz níže |
 | `investment_stages` | `overeny` | `pre_seed`, `seed`, `serie_a`, `serie_b`, `growth` |
@@ -139,7 +139,7 @@ Popsány v `docs/04-rucni-kontrola.md`. Vyplňuje je výhradně člověk.
 - povinná pole podle statusu a hodnoty řízených slovníků,
 - formáty dat (ne v budoucnosti), URL, IČO (kontrolní součet), částek a měn, `typical_ticket_min ≤ typical_ticket_max`,
 - vazby mezi tabulkami (fakt → investor, fakt → zdroj, kontrola → investor/fakt),
-- že každá vyplněná hodnota v `investors.csv` má fakt se shodnou hodnotou (u částek i měnou),
+- že každá vyplněná hodnota v `investors.csv` má fakt se shodnou hodnotou (u částek i měnou); výjimkou je `name` u statusů `kandidat` a `vyloucen`, kde název stačí k identifikaci a jeho původ je v protokolu hledání,
 - shodu `evidence_urls` se zdroji faktů a `last_verified_at` s daty přístupu,
 - kritéria Z1–Z4 u záznamů `overeny`,
 - duplicity investorů (IČO, doména, normalizovaný název), faktů a zdrojů.
