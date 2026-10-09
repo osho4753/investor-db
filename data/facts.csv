@@ -74,7 +74,7 @@ f-00079,inv-0027,investment_stages,pre_seed;seed,,,,src-0027,2026-10-09,Web uvá
 f-00080,inv-0027,investment_sectors,sektorove_agnosticky,,,,src-0027,2026-10-09,Web uvádí sektorově agnostické investice zaměřené na dopad.
 f-00081,inv-0027,typical_ticket_min,300000,EUR,,,src-0027,2026-10-09,"Web uvádí počáteční investici 0,3–1,2 mil. EUR. Ověřeno proti surovému textu: ano."
 f-00082,inv-0027,typical_ticket_max,1200000,EUR,,,src-0027,2026-10-09,"Web uvádí počáteční investici 0,3–1,2 mil. EUR. Ověřeno proti surovému textu: ano."
-f-00084,inv-0027,dolozena_investice,Flox Intelligence,,,2026-02-01,src-0029,2026-10-09,"Přehled kol investora uvádí seed kolo Flox Intelligence 2,5 mil. EUR v únoru 2026 (měsíční přesnost, den doplněn konvencí na 1.). Ověřeno proti surovému textu: ne (zdroj opakovaně vrátil HTTP 429; hodnota převzata jen ze shrnutí nástroje)."
+f-00084,inv-0027,dolozena_investice,Flox Intelligence,,,2026-02-01,src-0029,2026-10-09,"Přehled kol investora uvádí seed kolo Flox Intelligence 2,5 mil. EUR v únoru 2026 (měsíční přesnost, den doplněn konvencí na 1.). Ověřeno proti surovému textu: ne (zdroj vrátil HTTP 429 při čtyřech pokusech 9. 10. 2026, naposledy po prodlevě 1 a 4 minuty; omezení neobcházeno, hodnota převzata jen ze shrnutí nástroje)."
 f-00085,inv-0025,website,https://www.orbitcapital.com/,,,,src-0030,2026-10-09,"Profil člena CVCA uvádí web www.orbitcapital.com; web nabízí produkty Growth Equity a Growth Debt, právní subjekt neuvádí."
 f-00086,inv-0025,investment_stages,growth,,,,src-0030,2026-10-09,Profil člena CVCA uvádí typ investic growth equity a venture debt.
 f-00087,inv-0025,investment_sectors,software,,,,src-0030,2026-10-09,Profil člena CVCA uvádí sektory technologie a technologicky podporované scale-upy.
