@@ -47,6 +47,7 @@ Skutečná dostupnost a užitečnost každého zdroje se ověřuje a zaznamenáv
 | Fondy fondů | Vyloučeny, budoucí rozšíření | Investují do fondů, ne přímo do firem; jejich zařazení by vedlo k dvojímu započtení kapitálu. Důvod `mimo_definici_pilotu`. |
 | Státní fondy a rozvojové instituce | Vyloučeny, budoucí rozšíření | Kombinují veřejné politiky, dotace a nástroje fondů fondů; vyžadují vlastní definici. Důvod `mimo_definici_pilotu`. |
 | Dluhové fondy (direct lending, mezanin, venture debt jako hlavní strategie) | Vyloučeny, budoucí rozšíření | Poskytují úvěr, ne kapitál za podíl; patří do jiné kategorie investorů. Důvod `mimo_definici_pilotu`. |
+| Fondy digitálních aktiv a otevřené smíšené fondy | Vyloučeny | Nekupují (výhradně) podíly v nekótovaných firmách; jde o jinou třídu aktiv. Důvod `mimo_definici_pilotu`. |
 | Zahraniční VC bez české právnické osoby | Vyloučeny, budoucí rozšíření | Nelze je doložit z českých registrů; patří do pilotu své domovské země. Důvod `zahranicni_subjekt`. |
 
 ## 1.3 Kritéria zařazení
@@ -68,7 +69,7 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 
 | Kód | Význam |
 |---|---|
-| `mimo_definici_pilotu` | Corporate VC, fond fondů, státní fond, rozvojová instituce nebo dluhový fond. |
+| `mimo_definici_pilotu` | Corporate VC, fond fondů, státní fond, rozvojová instituce, dluhový fond, fond digitálních aktiv (tokeny, protokoly), který nekupuje podíly ve firmách, nebo otevřený smíšený fond s průběžnou likviditou, který kombinuje podíly ve firmách s kotovanými akciemi. |
 | `zahranicni_subjekt` | Zahraniční investor bez české právnické osoby. |
 | `pe_budouci_rozsireni` | Private equity s převažujícími většinovými podíly; kandidát pro budoucí rozšíření. |
 | `business_angel` | Business angel nebo angel síť. |

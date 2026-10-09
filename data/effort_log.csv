@@ -43,3 +43,11 @@ inv-0039,overeni,model,1,2026-10-09,"Z1 nedoloženo: web tachles.vc neexistuje (
 inv-0040,overeni,model,1,2026-10-09,Fond digitálních aktiv doplněn do definice mimo_definici_pilotu.
 inv-0042,overeni,model,1,2026-10-09,Zdroj byl otevřen při hledání (s-007) a znovu s dotazem na kontext zmínek.
 inv-0052,overeni,model,1,2026-10-09,"Z1 nedoloženo: hledání IP Lab Ventures v obchodním rejstříku nenašlo žádný subjekt a web značky nebyl nalezen. Z4: nový fond, investice do firem zatím nedoloženy."
+inv-0043,overeni,model,1,2026-10-09,"V rejstříku existuje techstars s.r.o. (IČO 23065001, Třinec, zapsána 14. 3. 2025), ale nic ji se značkou nespojuje – nepřiřazena."
+inv-0044,overeni,model,1,2026-10-09,
+inv-0045,overeni,model,2,2026-10-09,Subjekt nalezen jen jako investor v seed kole Flowpay (článek z 20. 3. 2024).
+inv-0046,overeni,model,1,2026-10-09,"Typ subjektu a Z1 nedoloženy: web nenalezen, v rejstříku jsou Patero s.r.o. (IČO 03928446) a Patero Services, s.r.o. (IČO 24122785) bez vazby na investiční činnost. Čas zahrnut i v rešerši 10X."
+inv-0047,overeni,model,1,2026-10-09,Web neuvádí ticket ani datované investice.
+inv-0048,overeni,model,1,2026-10-09,"Typ subjektu a Z1 nedoloženy: web gainventures.cz neexistuje (DNS); v rejstříku jediný subjekt GAIN Ventures s.r.o. (IČO 05690935, Praha 4), ale vazbu na značku nic dalšího nepotvrzuje (pravidlo c samo nestačí, viz případ Techstars). Článek Forbes o Carebotu se nepodařilo načíst celý."
+inv-0049,overeni,model,1,2026-10-09,"Otevřená otázka definice: akcelerátor s kapitálem třetích osob ve vehiklech po ročnících. Z1: web neuvádí právní subjekt ani adresu, nelze vybrat jeden z 17 subjektů. Z4: datovaná investice StartupYard nenalezena."
+inv-0050,overeni,model,1,2026-10-09,"Otevřená otázka: článek označuje ZAKA VC za český family office (vyloučení family_office), ale o šest týdnů později vznikl fondový vehikl – nelze doložit, zda má kapitál třetích osob. Web značky nenalezen, Z1 nedoloženo."
