@@ -6,7 +6,7 @@ from investor_db.schema import REVIEW_COLUMNS
 
 @pytest.mark.parametrize(
     ("population", "expected"),
-    [(0, 0), (1, 1), (20, 17), (150, 59), (300, 73), (10000, 96)],
+    [(0, 0), (1, 1), (20, 14), (150, 34), (205, 36), (300, 38), (10000, 43)],
 )
 def test_fact_sample_size(population: int, expected: int) -> None:
     assert fact_sample_size(population) == expected
@@ -18,7 +18,7 @@ def test_fact_sample_is_reproducible_subset() -> None:
     first = sample_fact_ids(fact_ids)
 
     assert first == sample_fact_ids(list(reversed(fact_ids)))
-    assert len(first) == 73 and set(first) <= set(fact_ids)
+    assert len(first) == 38 and set(first) <= set(fact_ids)
 
 
 def test_add_pending_reviews_keeps_existing_and_skips_listed() -> None:

@@ -225,7 +225,7 @@ Pole `investor_type` a `country` jsou klasifikace odvozené z ostatních faktů 
 |---|---|
 | **Precision** | TP / (TP + FP) přes záznamy `overeny` zkontrolované R1; verdikt `nejiste` se vykazuje zvlášť a v pesimistické variantě se počítá jako FP. Uvádí se 95% Wilsonův interval. |
 | Shoda hodnotitelů | Jen pokud existují data R2: prosté procento shody a Cohenovo κ. Při malém vzorku a vysokém podílu TP je κ nestabilní, proto se vždy uvádí i procento shody. |
-| Přesnost faktů | správně / (správně + chybně) přes zkontrolované fakty; `nelze_overit` zvlášť. |
+| Přesnost faktů | správně / (správně + chybně) přes zkontrolované fakty; `nelze_overit` zvlášť. Fakty se kontrolují na náhodném vzorku (Cochran, 95 %, ±15 p. b., seed 2026); důvod volby ±15 p. b. (časová kapacita hodnotitele) viz [04-rucni-kontrola.md](04-rucni-kontrola.md#velikost-vzorku-faktů). |
 | Úplnost polí | Podíl vyplněných hodnot každého pole u záznamů `overeny`. |
 | Primární zdroje | Podíl záznamů `overeny`, jejichž IČO je doloženo primárním zdrojem; podíl všech faktů z primárních zdrojů. |
 | Doložení investiční činnosti | Podíl záznamů `overeny` s doloženou investicí za posledních 36 měsíců. |

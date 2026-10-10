@@ -4,7 +4,7 @@ import random
 from investor_db.io import Row
 
 FACT_SAMPLE_SEED = 2026
-FACT_SAMPLE_MARGIN = 0.10
+FACT_SAMPLE_MARGIN = 0.15
 FACT_SAMPLE_Z = 1.96
 FACT_SAMPLE_PROPORTION = 0.5
 
