@@ -86,6 +86,17 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 
 Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno. Kódy jsou konkrétní, aby hodnotitel u faktu `duvod_vylouceni` věděl, který znak má ve zdroji hledat. Dřívější souhrnný kód `mimo_definici_pilotu` byl rozdělen na kódy `cvc` až `otevreny_smiseny_fond` (viz [02-metodika.md](02-metodika.md), Incidenty a poučení) a validátor ho odmítá. Důvod vyloučení musí být doložen alespoň jedním faktem `duvod_vylouceni` se zdrojem (např. stránka, ze které plyne, že jde o corporate VC nebo zahraniční subjekt); kontroluje to validátor.
 
+### Hraniční případy (rozhodnutí zadavatele)
+
+| Subjekt | Rozhodnutí | Zdůvodnění |
+|---|---|---|
+| Impulse Ventures, Patero | `vyloucen`, `bez_fondu` | Investují vlastní kapitál zakladatelů či společníků bez fondu a bez kapitálu třetích osob (Impulse podle článku z roku 2020, Patero s.r.o. podle ARES s pěti fyzickými osobami po 20 %). Patero bylo nejdřív zařazeno jako `business_angel`, sjednoceno s Impulse. Chybí fond (Z3). |
+| Orbit Capital | `vyloucen`, `dluhovy_fond` | Nejnovější fond je dluhový (venture debt), profil CVCA uvádí i growth equity. Kandidát pro budoucí rozšíření definice o venture debt. |
+| Springtide Ventures | `vyloucen`, `cvc` | Bez cizích peněz, kapitál od skupiny KKCG (Forbes 2018). |
+| StartupYard | `overeny` | Akcelerátor, který investuje přes vehikl s kapitálem třetích osob. |
+| Zaka VC | `vyloucen`, `family_office` | Kapitál třetích osob není doložen. |
+| Inven Capital | `kandidat` | Vazba na ČEZ doložena, podíl ČEZ na kapitálu fondu nad 50 % ne (pravidlo CVC). |
+
 ## 1.5 Dvě úrovně zpracování a trychtýř
 
 Po hledání se každý nalezený subjekt zpracuje jednou ze dvou úrovní:
