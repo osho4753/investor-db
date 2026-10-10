@@ -10,11 +10,13 @@ from investor_db.metrics import verified_ids
 from investor_db.rawtext import fetch_raw_text, find_first
 from investor_db.report import render_report
 from investor_db.review import add_pending_reviews, sample_fact_ids
+from investor_db.review_guide import GuideTemplateError, render_checklist, sampled_fact_ids
 from investor_db.schema import FACT_REVIEW_COLUMNS, REVIEW_COLUMNS, REVIEWERS
 from investor_db.validation import validate_dataset
 
 DEFAULT_DATA_DIR = Path("data")
 DEFAULT_RAW_CACHE_DIR = Path(tempfile.gettempdir()) / "investor-db-raw"
+DEFAULT_CHECKLIST_PATH = Path("review") / "kontrolni-list-faktu.md"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,6 +32,9 @@ def build_parser() -> argparse.ArgumentParser:
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--reviewer", choices=REVIEWERS, required=True)
         command.set_defaults(handler=handler)
+    guide = commands.add_parser("review-guide", help="vygeneruje kontrolní list faktů pro hodnotitele")
+    guide.add_argument("--output", type=Path, default=DEFAULT_CHECKLIST_PATH)
+    guide.set_defaults(handler=run_review_guide)
     raw = commands.add_parser("raw-text", help="stáhne surový text stránky (mimo repozitář) a vyhledá v něm výraz")
     raw.add_argument("url")
     raw.add_argument("--grep", help="regulární výraz k vyhledání")
@@ -79,6 +84,19 @@ def run_fact_review_template(args: argparse.Namespace) -> int:
         f"Vzorek {len(sample)} z {len(dataset.facts)} faktů; "
         f"přidáno {len(rows) - len(dataset.fact_reviews)} řádků ke kontrole pro {args.reviewer}."
     )
+    return 0
+
+
+def run_review_guide(args: argparse.Namespace) -> int:
+    dataset = load_dataset(args.data_dir)
+    try:
+        checklist = render_checklist(dataset)
+    except GuideTemplateError as error:
+        print(f"Kontrolní list nelze vygenerovat: {error}")
+        return 1
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(checklist, encoding="utf-8", newline="\n")
+    print(f"Kontrolní list {len(sampled_fact_ids(dataset))} faktů uložen do {args.output}.")
     return 0
 
 

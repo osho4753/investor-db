@@ -21,7 +21,7 @@ Reprodukovatelný proces vyhledávání, klasifikace a ověřování reálných 
 | 3 | Odhad globálního pokrytí, počtu investorů a spolehlivosti | `docs/03-globalni-odhad.md` *(připravuje se)* |
 | 4 | Pilotní vzorek v ČR a zdůvodnění výběru země | `data/investors.csv` *(připravuje se)*, [docs/01-plan-a-kriteria.md](docs/01-plan-a-kriteria.md) |
 | 5 | Zdroje a data ověření záznamů i faktů | `data/facts.csv`, `data/sources.csv`, `data/search_log.csv` *(připravuje se)* |
-| 6 | Ruční kontrola vzorku a precision | [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), `data/reviews.csv`, `data/fact_reviews.csv` *(vyplní hodnotitelé)* |
+| 6 | Ruční kontrola vzorku a precision | [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), [review/kontrolni-list-faktu.md](review/kontrolni-list-faktu.md), `data/reviews.csv`, `data/fact_reviews.csv` *(vyplní hodnotitelé)* |
 | 7 | Odhad nákladů a složitosti globálního škálování | `docs/03-globalni-odhad.md` *(připravuje se)* |
 | 8 | Kód, testy, dokumentace, historie commitů, ai-log | `investor_db/`, `tests/`, `docs/`, `git log`, [ai-log/](ai-log/) |
 
@@ -34,6 +34,7 @@ python -m investor_db validate                              # kontrola integrity
 python -m investor_db metrics                               # precision a další metriky
 python -m investor_db review-template --reviewer R1         # šablona kontroly investorů
 python -m investor_db fact-review-template --reviewer R1    # šablona kontroly vzorku faktů
+python -m investor_db review-guide                          # kontrolní list faktů pro hodnotitele
 python -m pytest                                            # testy
 ```
 
@@ -43,6 +44,7 @@ python -m pytest                                            # testy
 data/          CSV tabulky (jediný zdroj pravdy)
 docs/          plán, metodika, odhady, ruční kontrola
 investor_db/   schéma, validace, metriky, CLI
+review/        vygenerovaný kontrolní list faktů pro hodnotitele
 tests/         testy nad fiktivními daty
 ai-log/        exporty dialogů s AI
 ```
