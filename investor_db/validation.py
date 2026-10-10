@@ -14,6 +14,7 @@ from investor_db.schema import (
     EXCLUSION_DUPLICATE,
     EXCLUSION_FOREIGN,
     EXCLUSION_REASONS,
+    RETIRED_EXCLUSION_REASONS,
     FACT_DOCUMENTED_INVESTMENT,
     FACT_EXCLUSION_REASON,
     FACT_FIELDS,
@@ -101,6 +102,14 @@ def vocabulary_issues(table: str, row_id: str, column: str, text: str, vocabular
         yield Issue(table, row_id, f"{column} má neplatnou hodnotu {text!r}")
 
 
+def exclusion_reason_issues(table: str, row_id: str, column: str, reason: str) -> Iterator[Issue]:
+    if reason in RETIRED_EXCLUSION_REASONS:
+        replacements = ", ".join(RETIRED_EXCLUSION_REASONS[reason])
+        yield Issue(table, row_id, f"{column} {reason!r} se už nepoužívá; použij konkrétní kód: {replacements}")
+        return
+    yield from vocabulary_issues(table, row_id, column, reason, EXCLUSION_REASONS)
+
+
 def list_issues(table: str, row_id: str, column: str, text: str) -> Iterator[Issue]:
     items = split_list(text)
     for item in items:
@@ -181,7 +190,7 @@ def exclusion_issues(row: Row) -> Iterator[Issue]:
         yield Issue("investors", row_id, "vyloučený subjekt nemá exclusion_reason")
     if row["verification_status"] != STATUS_EXCLUDED and reason:
         yield Issue("investors", row_id, "exclusion_reason je vyplněn u nevyloučeného subjektu")
-    yield from vocabulary_issues("investors", row_id, "exclusion_reason", reason, EXCLUSION_REASONS)
+    yield from exclusion_reason_issues("investors", row_id, "exclusion_reason", reason)
 
 
 def verified_row_issues(row: Row) -> Iterator[Issue]:
@@ -247,7 +256,7 @@ def fact_value_issues(row: Row) -> Iterator[Issue]:
     if field in FUND_SCOPED_FACT_FIELDS and not row["fund_name"]:
         yield Issue("facts", row_id, f"fakt {field} musí mít fund_name")
     if field == FACT_EXCLUSION_REASON:
-        yield from vocabulary_issues("facts", row_id, "hodnota", value, EXCLUSION_REASONS)
+        yield from exclusion_reason_issues("facts", row_id, "hodnota", value)
     if field == FACT_DOCUMENTED_INVESTMENT and not row["value_as_of"]:
         yield Issue("facts", row_id, "doložená investice musí mít value_as_of (datum investice)")
 

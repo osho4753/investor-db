@@ -60,8 +60,16 @@ INVESTOR_TYPES: Final = (
 
 EXCLUSION_DUPLICATE: Final = "duplicita"
 EXCLUSION_FOREIGN: Final = "zahranicni_subjekt"
+OUT_OF_SCOPE_EXCLUSION_REASONS: Final = (
+    "cvc",
+    "fond_fondu",
+    "statni_fond",
+    "dluhovy_fond",
+    "digitalni_aktiva",
+    "otevreny_smiseny_fond",
+)
 EXCLUSION_REASONS: Final = (
-    "mimo_definici_pilotu",
+    *OUT_OF_SCOPE_EXCLUSION_REASONS,
     EXCLUSION_FOREIGN,
     "pe_budouci_rozsireni",
     "business_angel",
@@ -71,6 +79,7 @@ EXCLUSION_REASONS: Final = (
     "zanikly_subjekt",
     EXCLUSION_DUPLICATE,
 )
+RETIRED_EXCLUSION_REASONS: Final = {"mimo_definici_pilotu": OUT_OF_SCOPE_EXCLUSION_REASONS}
 
 INVESTMENT_STAGES: Final = ("pre_seed", "seed", "serie_a", "serie_b", "growth")
 INVESTMENT_SECTORS: Final = (

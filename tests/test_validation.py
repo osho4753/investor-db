@@ -85,6 +85,8 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("search_log", 0, "minutes", "0", "minutes není kladné číslo"),
         ("investors", 2, "exclusion_reason", "family_office", "není doložen faktem duvod_vylouceni"),
         ("facts", 10, "value", "nelibi_se", "hodnota má neplatnou hodnotu"),
+        ("facts", 10, "value", "mimo_definici_pilotu", "se už nepoužívá; použij konkrétní kód"),
+        ("investors", 2, "exclusion_reason", "mimo_definici_pilotu", "se už nepoužívá; použij konkrétní kód"),
         ("facts", 10, "investor_id", "inv-0002", "není doložen faktem duvod_vylouceni"),
         ("effort_log", 0, "investor_id", "inv-0999", "neexistujícího investora"),
         ("effort_log", 0, "activity", "pauza", "activity má neplatnou hodnotu"),
@@ -239,5 +241,13 @@ def test_new_fund_within_window_satisfies_z4(dataset: Dataset) -> None:
 def test_decimal_minutes_are_allowed(dataset: Dataset, minutes: str) -> None:
     dataset.effort_log[0]["minutes"] = minutes
     dataset.search_log[0]["minutes"] = minutes
+
+    assert validate_dataset(dataset, TODAY) == []
+
+
+@pytest.mark.parametrize("reason", ["cvc", "fond_fondu", "statni_fond", "dluhovy_fond", "digitalni_aktiva", "otevreny_smiseny_fond"])
+def test_specific_out_of_scope_reasons_are_valid(dataset: Dataset, reason: str) -> None:
+    dataset.investors[2]["exclusion_reason"] = reason
+    dataset.facts[10]["value"] = reason
 
     assert validate_dataset(dataset, TODAY) == []

@@ -15,18 +15,18 @@ Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity an
 
 ## 2. `f-00003` – CVI (status: vyloucen)
 
-**Tvrzení:** CVI je jiný typ investora, než pilot sleduje (korporátní VC s více než 50 % kapitálu od jedné skupiny, fond fondů, státní nebo rozvojová instituce, dluhový fond, fond digitálních aktiv nebo otevřený smíšený fond), proto je vyloučen.
+**Tvrzení:** CVI poskytuje hlavně dluhové financování (úvěry, mezanin, venture debt), ne kapitál za podíl, proto je vyloučen.
 
-**Co hledat ve zdroji:** Zdroj dokládá aspoň jeden z vyjmenovaných znaků. Který to je, zapiš do note.
+**Co hledat ve zdroji:** Zdroj popisuje hlavní strategii jako úvěry, dluh, mezanin nebo venture debt. Pokud zdroj uvádí kapitálové investice jako hlavní strategii, je verdikt chybne.
 
 **Zdroj:** <https://cvca.cz/en/category/full-members/>  
 Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity and Venture Capital Association
 
 ## 3. `f-00021` – Evropský investiční fond (EIF) (status: vyloucen)
 
-**Tvrzení:** Evropský investiční fond (EIF) je jiný typ investora, než pilot sleduje (korporátní VC s více než 50 % kapitálu od jedné skupiny, fond fondů, státní nebo rozvojová instituce, dluhový fond, fond digitálních aktiv nebo otevřený smíšený fond), proto je vyloučen.
+**Tvrzení:** Evropský investiční fond (EIF) je fond fondů: investuje do jiných fondů, ne přímo do firem, proto je vyloučen.
 
-**Co hledat ve zdroji:** Zdroj dokládá aspoň jeden z vyjmenovaných znaků. Který to je, zapiš do note.
+**Co hledat ve zdroji:** Zdroj uvádí, že subjekt vkládá kapitál do jiných fondů, nikoli přímo do podílů ve firmách.
 
 **Zdroj:** <https://en.wikipedia.org/wiki/Venture_capital_in_the_Czech_Republic>  
 Typ zdroje: jiný zdroj (sekundární), vydavatel: Wikipedie
@@ -240,9 +240,9 @@ Typ zdroje: web investora (primární), vydavatel: Soulmates Ventures
 
 ## 27. `f-00164` – 10X (status: vyloucen)
 
-**Tvrzení:** 10X je jiný typ investora, než pilot sleduje (korporátní VC s více než 50 % kapitálu od jedné skupiny, fond fondů, státní nebo rozvojová instituce, dluhový fond, fond digitálních aktiv nebo otevřený smíšený fond), proto je vyloučen.
+**Tvrzení:** 10X je otevřený fond s průběžnou likviditou, který kombinuje podíly ve firmách s kotovanými akciemi, proto není VC fond a je vyloučen.
 
-**Co hledat ve zdroji:** Zdroj dokládá aspoň jeden z vyjmenovaných znaků. Který to je, zapiš do note.
+**Co hledat ve zdroji:** Zdroj uvádí, že fond je otevřený (průběžný vstup a výstup investorů, např. měsíční likvidita) a drží i kotované akcie.
 
 **Zdroj:** <https://cc.cz/koukal-pod-ruce-ppf-jt-i-pente-z-milionu-korun-po-dvaceti-letech-spravuje-miliardu-a-otevira-fond/>  
 Typ zdroje: média (sekundární), vydavatel: CzechCrunch
@@ -285,9 +285,9 @@ Typ zdroje: média (sekundární), vydavatel: AIN.UA
 
 ## 32. `f-00187` – Orbit Capital (status: vyloucen)
 
-**Tvrzení:** Orbit Capital je jiný typ investora, než pilot sleduje (korporátní VC s více než 50 % kapitálu od jedné skupiny, fond fondů, státní nebo rozvojová instituce, dluhový fond, fond digitálních aktiv nebo otevřený smíšený fond), proto je vyloučen.
+**Tvrzení:** Orbit Capital poskytuje hlavně dluhové financování (úvěry, mezanin, venture debt), ne kapitál za podíl, proto je vyloučen.
 
-**Co hledat ve zdroji:** Zdroj dokládá aspoň jeden z vyjmenovaných znaků. Který to je, zapiš do note.
+**Co hledat ve zdroji:** Zdroj popisuje hlavní strategii jako úvěry, dluh, mezanin nebo venture debt. Pokud zdroj uvádí kapitálové investice jako hlavní strategii, je verdikt chybne.
 
 **Zdroj:** <https://tech.eu/2026/07/02/orbit-capital-closes-eur107m-venture-debt-fund-for-cee-scaleups/>  
 Typ zdroje: média (sekundární), vydavatel: Tech.eu

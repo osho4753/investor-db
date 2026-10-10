@@ -167,14 +167,55 @@ EXCLUSION_GUIDES: Final[dict[str, FieldGuide]] = {
             "nebo ho do private equity zařazuje."
         ),
     ),
-    "mimo_definici_pilotu": FieldGuide(
+    "cvc": FieldGuide(
         claim=(
-            "{investor} je jiný typ investora, než pilot sleduje (korporátní VC s více než 50 % kapitálu "
-            "od jedné skupiny, fond fondů, státní nebo rozvojová instituce, dluhový fond, fond digitálních "
-            "aktiv nebo otevřený smíšený fond), proto je vyloučen."
+            "{investor} je korporátní VC (corporate VC): fond je napojen na jednu korporátní skupinu. "
+            "Vyloučit ho lze jen tehdy, když tato skupina dává více než 50 % kapitálu fondu."
         ),
         look_for=(
-            "Zdroj dokládá aspoň jeden z vyjmenovaných znaků. Který to je, zapiš do note."
+            "Zdroj uvádí, že fond patří pod korporátní skupinu nebo investuje její kapitál. "
+            "Do note zapiš, zda zdroj dokládá i podíl skupiny na kapitálu fondu nad 50 %."
+        ),
+    ),
+    "fond_fondu": FieldGuide(
+        claim="{investor} je fond fondů: investuje do jiných fondů, ne přímo do firem, proto je vyloučen.",
+        look_for="Zdroj uvádí, že subjekt vkládá kapitál do jiných fondů, nikoli přímo do podílů ve firmách.",
+    ),
+    "statni_fond": FieldGuide(
+        claim=(
+            "{investor} je státní fond, státní program nebo rozvojová instituce financovaná z veřejných "
+            "prostředků, proto je vyloučen."
+        ),
+        look_for=(
+            "Zdroj uvádí, že subjekt zřizuje nebo financuje stát, ministerstvo, veřejná instituce "
+            "nebo fondy EU."
+        ),
+    ),
+    "dluhovy_fond": FieldGuide(
+        claim=(
+            "{investor} poskytuje hlavně dluhové financování (úvěry, mezanin, venture debt), "
+            "ne kapitál za podíl, proto je vyloučen."
+        ),
+        look_for=(
+            "Zdroj popisuje hlavní strategii jako úvěry, dluh, mezanin nebo venture debt. "
+            "Pokud zdroj uvádí kapitálové investice jako hlavní strategii, je verdikt chybne."
+        ),
+    ),
+    "digitalni_aktiva": FieldGuide(
+        claim=(
+            "{investor} je fond digitálních aktiv: investuje do tokenů, blockchainových protokolů "
+            "nebo kryptoměn, ne do podílů ve firmách, proto je vyloučen."
+        ),
+        look_for="Zdroj uvádí, že fond drží digitální aktiva (tokeny, kryptoměny, protokoly), ne podíly ve firmách.",
+    ),
+    "otevreny_smiseny_fond": FieldGuide(
+        claim=(
+            "{investor} je otevřený fond s průběžnou likviditou, který kombinuje podíly ve firmách "
+            "s kotovanými akciemi, proto není VC fond a je vyloučen."
+        ),
+        look_for=(
+            "Zdroj uvádí, že fond je otevřený (průběžný vstup a výstup investorů, např. měsíční likvidita) "
+            "a drží i kotované akcie."
         ),
     ),
     "zahranicni_subjekt": FieldGuide(

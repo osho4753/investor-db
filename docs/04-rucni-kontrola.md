@@ -60,7 +60,7 @@ Pokud zdroj potvrzuje jen část tvrzení (např. dva ze tří sektorů), verdik
 | `pravni_spravce` | Rejstřík, web fondu | Přesný název správcovské entity a její vztah k fondu. |
 | `registrace_regulator` | Seznam regulátora | Název a IČO entity, typ registrace. |
 | `dolozena_investice` | Článek, tisková zpráva, portfolio | Investovala právě tato značka (nebo její fond) a datum oznámení odpovídá. U data na 1. den měsíce stačí shoda měsíce. |
-| `duvod_vylouceni` | Zdroj ve faktu | Zdroj dokládá důvod uvedený v tvrzení (např. PE strategie, zahraniční sídlo, family office, zánik subjektu). |
+| `duvod_vylouceni` | Zdroj ve faktu | Zdroj dokládá důvod uvedený v tvrzení (např. PE strategie, dluhové financování, fond fondů, zahraniční sídlo, family office, zánik subjektu). Každý kód má vlastní tvrzení. |
 
 ### Typické chyby, kvůli kterým kontrola existuje
 

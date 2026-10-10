@@ -141,3 +141,7 @@ def test_cli_writes_checklist(tmp_path: Path) -> None:
 
 def test_field_guides_cover_only_known_fields() -> None:
     assert set(FIELD_GUIDES) <= set(FACT_FIELDS)
+
+
+def test_debt_fund_reason_names_venture_debt() -> None:
+    assert "venture debt" in guide_for(FACT_EXCLUSION_REASON, value="dluhovy_fond").claim

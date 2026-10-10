@@ -43,11 +43,11 @@ Skutečná dostupnost a užitečnost každého zdroje se ověřuje a zaznamenáv
 | Business angels | Vyloučeny | Jde o fyzické osoby: zpracování jejich údajů naráží na GDPR a veřejná doložitelnost investic je slabá. |
 | Family offices | Vyloučeny | Nemají povinnost zveřejňovat a veřejných dat je málo. |
 | PE fondy | Vyloučeny, **budoucí rozšíření** | Metodicky odlišné (většinové podíly, buyout); smíchání s VC by rozmazalo definici. Evidují se jako vyloučené s důvodem `pe_budouci_rozsireni`. |
-| Corporate VC (více než 50 % kapitálu fondu od jedné korporátní skupiny) | Vyloučeny, budoucí rozšíření | Investují převážně kapitál korporace; hranice vůči strategickým akvizicím je nejasná. Není-li rozložení kapitálu doloženo, zůstávají kandidáty. Důvod `mimo_definici_pilotu`. |
-| Fondy fondů | Vyloučeny, budoucí rozšíření | Investují do fondů, ne přímo do firem; jejich zařazení by vedlo k dvojímu započtení kapitálu. Důvod `mimo_definici_pilotu`. |
-| Státní fondy a rozvojové instituce | Vyloučeny, budoucí rozšíření | Kombinují veřejné politiky, dotace a nástroje fondů fondů; vyžadují vlastní definici. Důvod `mimo_definici_pilotu`. |
-| Dluhové fondy (direct lending, mezanin, venture debt jako hlavní strategie) | Vyloučeny, budoucí rozšíření | Poskytují úvěr, ne kapitál za podíl; patří do jiné kategorie investorů. Důvod `mimo_definici_pilotu`. |
-| Fondy digitálních aktiv a otevřené smíšené fondy | Vyloučeny | Nekupují (výhradně) podíly v nekótovaných firmách; jde o jinou třídu aktiv. Důvod `mimo_definici_pilotu`. |
+| Corporate VC (více než 50 % kapitálu fondu od jedné korporátní skupiny) | Vyloučeny, budoucí rozšíření | Investují převážně kapitál korporace; hranice vůči strategickým akvizicím je nejasná. Není-li rozložení kapitálu doloženo, zůstávají kandidáty. Důvod `cvc`. |
+| Fondy fondů | Vyloučeny, budoucí rozšíření | Investují do fondů, ne přímo do firem; jejich zařazení by vedlo k dvojímu započtení kapitálu. Důvod `fond_fondu`. |
+| Státní fondy a rozvojové instituce | Vyloučeny, budoucí rozšíření | Kombinují veřejné politiky, dotace a nástroje fondů fondů; vyžadují vlastní definici. Důvod `statni_fond`. |
+| Dluhové fondy (direct lending, mezanin, venture debt jako hlavní strategie) | Vyloučeny, budoucí rozšíření | Poskytují úvěr, ne kapitál za podíl; patří do jiné kategorie investorů. Důvod `dluhovy_fond`. |
+| Fondy digitálních aktiv a otevřené smíšené fondy | Vyloučeny | Nekupují (výhradně) podíly v nekótovaných firmách; jde o jinou třídu aktiv. Důvod `digitalni_aktiva`, resp. `otevreny_smiseny_fond`. |
 | Zahraniční VC bez české právnické osoby | Vyloučeny, budoucí rozšíření | Nelze je doložit z českých registrů; patří do pilotu své domovské země. Důvod `zahranicni_subjekt`. |
 
 ## 1.3 Kritéria zařazení
@@ -69,7 +69,12 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 
 | Kód | Význam |
 |---|---|
-| `mimo_definici_pilotu` | Corporate VC, fond fondů, státní fond, rozvojová instituce, dluhový fond, fond digitálních aktiv (tokeny, protokoly), který nekupuje podíly ve firmách, nebo otevřený smíšený fond s průběžnou likviditou, který kombinuje podíly ve firmách s kotovanými akciemi. |
+| `cvc` | Corporate VC: více než 50 % kapitálu fondu pochází od jedné korporátní skupiny (pravidlo viz [02-metodika.md](02-metodika.md)). |
+| `fond_fondu` | Fond fondů: investuje do jiných fondů, ne přímo do firem. |
+| `statni_fond` | Státní fond, státní program nebo rozvojová instituce financovaná z veřejných prostředků. |
+| `dluhovy_fond` | Dluhový fond: hlavní strategií jsou úvěry, mezanin nebo venture debt, ne kapitál za podíl. |
+| `digitalni_aktiva` | Fond digitálních aktiv (tokeny, protokoly, kryptoměny), který nekupuje podíly ve firmách. |
+| `otevreny_smiseny_fond` | Otevřený smíšený fond s průběžnou likviditou, který kombinuje podíly ve firmách s kotovanými akciemi. |
 | `zahranicni_subjekt` | Zahraniční investor bez české právnické osoby. |
 | `pe_budouci_rozsireni` | Private equity s převažujícími většinovými podíly; kandidát pro budoucí rozšíření. |
 | `business_angel` | Business angel nebo angel síť. |
@@ -79,7 +84,7 @@ Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reaso
 | `zanikly_subjekt` | Subjekt zanikl nebo je v likvidaci. |
 | `duplicita` | Duplicitní záznam jiného investora. |
 
-Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno. Důvod vyloučení musí být doložen alespoň jedním faktem `duvod_vylouceni` se zdrojem (např. stránka, ze které plyne, že jde o corporate VC nebo zahraniční subjekt); kontroluje to validátor.
+Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno a proč nebylo zařazeno. Kódy jsou konkrétní, aby hodnotitel u faktu `duvod_vylouceni` věděl, který znak má ve zdroji hledat. Dřívější souhrnný kód `mimo_definici_pilotu` byl rozdělen na kódy `cvc` až `otevreny_smiseny_fond` (viz [02-metodika.md](02-metodika.md), Incidenty a poučení) a validátor ho odmítá. Důvod vyloučení musí být doložen alespoň jedním faktem `duvod_vylouceni` se zdrojem (např. stránka, ze které plyne, že jde o corporate VC nebo zahraniční subjekt); kontroluje to validátor.
 
 ## 1.5 Dvě úrovně zpracování a trychtýř
 
