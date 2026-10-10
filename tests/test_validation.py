@@ -33,7 +33,8 @@ def test_valid_dataset_has_no_issues(dataset: Dataset) -> None:
         ("investors", 0, "website", "fiktivni.example.com", "website není platná URL"),
         ("investors", 0, "investment_sectors", "software;kryptomeny", "neplatnou položku"),
         ("investors", 0, "investment_stages", "seed;seed", "opakované položky"),
-        ("investors", 0, "investment_stages", "", "chybí povinné pole investment_stages"),
+        ("sources", 0, "url", "https://www.caplight.com/investor/fiktivni", "zdroj je agregátor"),
+        ("sources", 0, "url", "https://app.dealroom.co/investors/fiktivni", "zdroj je agregátor"),
         ("investors", 0, "typical_ticket_min", "1 000", "není nezáporné číslo"),
         ("investors", 0, "typical_ticket_min", "3000000", "větší než typical_ticket_max"),
         ("investors", 0, "currency", "", "bez měny"),
@@ -251,3 +252,18 @@ def test_specific_out_of_scope_reasons_are_valid(dataset: Dataset, reason: str) 
     dataset.facts[10]["value"] = reason
 
     assert validate_dataset(dataset, TODAY) == []
+
+
+@pytest.mark.parametrize("column", ["investment_stages", "investment_sectors", "typical_ticket_min", "typical_ticket_max", "website"])
+def test_optional_fields_are_not_required_for_verified_investor(dataset: Dataset, column: str) -> None:
+    dataset.investors[0][column] = ""
+    if column.startswith("typical_ticket"):
+        dataset.investors[0]["typical_ticket_min"] = dataset.investors[0]["typical_ticket_max"] = ""
+
+    assert validate_dataset(dataset, TODAY) == []
+
+
+def test_aggregator_name_inside_other_domain_is_not_flagged(dataset: Dataset) -> None:
+    dataset.sources[0]["url"] = "https://zpravy.example.net/caplight-ziskal-investici"
+
+    assert not any("agregátor" in message for message in messages(dataset))

@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from urllib.parse import urlparse
 
-from investor_db.schema import LIST_SEPARATOR
+from investor_db.schema import AGGREGATOR_NAMES, LIST_SEPARATOR
 
 DATE_PATTERN = re.compile(r"\d{4}-\d{2}-\d{2}")
 MONEY_PATTERN = re.compile(r"\d+(\.\d+)?")
@@ -52,6 +52,11 @@ def is_valid_url(text: str) -> bool:
 def website_domain(url: str) -> str:
     hostname = urlparse(url).hostname or ""
     return hostname.removeprefix("www.")
+
+
+def is_aggregator_url(url: str) -> bool:
+    labels = website_domain(url).split(".")
+    return any(name in labels for name in AGGREGATOR_NAMES)
 
 
 def is_valid_ico(text: str) -> bool:

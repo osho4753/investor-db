@@ -112,6 +112,16 @@ INVESTMENT_SECTORS: Final = (
 PRIMARY_SOURCE_TYPES: Final = ("regulator", "rejstrik", "vyrocni_zprava", "web_investora")
 SECONDARY_SOURCE_TYPES: Final = ("asociace", "media", "jine")
 SOURCE_TYPES: Final = PRIMARY_SOURCE_TYPES + SECONDARY_SOURCE_TYPES
+AGGREGATOR_NAMES: Final = (
+    "altss",
+    "caplight",
+    "cbinsights",
+    "crunchbase",
+    "dealroom",
+    "pitchbook",
+    "seedtable",
+    "superscout",
+)
 
 CURRENCIES: Final = ("CZK", "EUR", "USD", "GBP", "CHF", "PLN")
 

@@ -2,7 +2,7 @@
 
 Vygenerováno příkazem `python -m investor_db review-guide` ze vzorku v `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
 
-Vzorek obsahuje 36 z 205 faktů. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+Vzorek obsahuje 36 z 223 faktů. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
 
 ## 1. `f-00001` – Stratum Partners (status: vyloucen)
 
@@ -211,7 +211,7 @@ Typ zdroje: web investora (primární), vydavatel: Reflex Capital
 **Zdroj:** <https://cc.cz/nova-sila-pro-reflex-capital-ondreje-fryce-ve-tretim-fondu-ma-na-startupy-pres-pul-miliardy/>  
 Typ zdroje: média (sekundární), vydavatel: CzechCrunch
 
-## 24. `f-00148` – Tachles (status: kandidat)
+## 24. `f-00148` – Tachles (status: overeny)
 
 **Tvrzení:** Tachles investuje do těchto sektorů: kybernetická bezpečnost, software, umělá inteligence (AI).
 
@@ -258,12 +258,12 @@ Typ zdroje: web investora (primární), vydavatel: Start Guide
 
 ## 29. `f-00173` – Startguide VC (status: overeny)
 
-**Tvrzení:** Startguide VC investoval do společnosti Carebot (oznámeno 1. 3. 2024).
+**Tvrzení:** Startguide VC investoval do společnosti Carebot (oznámeno 2. 4. 2024).
 
-**Co hledat ve zdroji:** Zdroj uvádí, že do této společnosti investoval právě Startguide VC (nebo jeho fond), a datum oznámení odpovídá. Chybné je, pokud investoval jiný investor s podobným názvem nebo jde o jinou, starší investici. Datum připadá na 1. den měsíce: může jít o údaj s přesností na měsíc, pak stačí shoda měsíce a roku.
+**Co hledat ve zdroji:** Zdroj uvádí, že do této společnosti investoval právě Startguide VC (nebo jeho fond), a datum oznámení odpovídá. Chybné je, pokud investoval jiný investor s podobným názvem nebo jde o jinou, starší investici.
 
-**Zdroj:** <https://www.caplight.com/investor/startguide>  
-Typ zdroje: jiný zdroj (sekundární), vydavatel: Caplight
+**Zdroj:** <https://cc.cz/purple-presto-kaya-a-dalsi-investori-maji-apetit-startupove-fondy-nabiraji-dalsi-miliardy-korun/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
 
 ## 30. `f-00178` – Zaka VC (status: vyloucen)
 

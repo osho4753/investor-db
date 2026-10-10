@@ -105,3 +105,11 @@ inv-0048,overeni,model,0.06,2026-10-09,"Automatické ověření částek a dat p
 inv-0049,overeni,model,0.06,2026-10-09,"Automatické ověření částek a dat proti surovému textu (89 s pro 23 subjektů, rozděleno rovným dílem); ruční posouzení nenalezených hodnot není započteno."
 inv-0050,overeni,model,0.06,2026-10-09,"Automatické ověření částek a dat proti surovému textu (89 s pro 23 subjektů, rozděleno rovným dílem); ruční posouzení nenalezených hodnot není započteno."
 inv-0052,overeni,model,0.06,2026-10-09,"Automatické ověření částek a dat proti surovému textu (89 s pro 23 subjektů, rozděleno rovným dílem); ruční posouzení nenalezených hodnot není započteno."
+inv-0037,overeni,model,12,2026-10-11,"Ověření Z1–Z4 (lhv.vc, ARES, Forbes, Tech.eu); čas odhadnut, neměřen časovými značkami."
+inv-0039,overeni,model,6,2026-10-11,"Pokus o The Recursive (placený obsah), hledání profilu Superscout, oprava pravidla stádií; čas odhadnut."
+inv-0042,overeni,model,3,2026-10-11,Doklad struktury kapitálu (Forbes 2018); čas odhadnut.
+inv-0046,overeni,model,5,2026-10-11,"Web patero.cz a ARES (společníci, sídlo); čas odhadnut."
+inv-0048,overeni,model,3,2026-10-11,"Identifikace subjektu (článek, gainventures.com nedostupný, ARES); čas odhadnut."
+inv-0025,overeni,model,2,2026-10-11,Opětovné otevření Tech.eu a CVCA; čas odhadnut.
+inv-0047,overeni,model,1,2026-10-11,Náhrada zdroje z agregátoru Caplight článkem CzechCrunch; čas odhadnut.
+inv-0008,overeni,model,1,2026-10-11,Náhrada faktu z agregátoru Caplight článkem CzechCrunch; čas odhadnut.

@@ -26,6 +26,10 @@ Používají se pouze bezplatné veřejné zdroje. Placené databáze (Dealroom,
 | `media` | ne | Odborná a zpravodajská média | Potvrzení investic a uzavření fondů |
 | `jine` | ne | Ostatní | Jen jako doplněk |
 
+**Agregátory** (CB Insights, PitchBook, Caplight, Altss, Seedtable, Superscout, Crunchbase, Dealroom) slouží **jen jako vodítko** při hledání kandidátů a investic. Fakt se na ně nesmí odkazovat: každý fakt musí stát na primárním zdroji nebo na spolehlivém médiu, kde byl údaj skutečně nalezen. Validátor zdroj z domény agregátoru odmítne (`AGGREGATOR_NAMES` v `investor_db/schema.py`). Dva dřívější fakty z Caplightu byly nahrazeny články CzechCrunch (Startguide – Carebot, Depo – Flowpay).
+
+**Nejednoznačné názvy** se identifikují podle domény webu a jmen týmu (např. jednatel v ARES = partner na webu). Pokud zdroj subjekt blíže neurčí, záznam zůstává `kandidat` s poznámkou o nejednoznačnosti.
+
 **Primární zdroj** pochází přímo od investora nebo od úřadu, který údaj eviduje. Sekundární zdroje slouží k hledání kandidátů a potvrzení, ale nesmí být jediným důkazem kritéria Z1.
 
 Konkrétní URL se zapisují až při sběru dat a jejich dostupnost se zaznamenává v `data/search_log.csv`.
@@ -90,7 +94,7 @@ Uvádí-li zdroj jen měsíc a rok (např. „duben 2026“), zapíše se `value
 ### Konflikty mezi zdroji
 
 - Všechny protichůdné hodnoty se zapíšou jako samostatné fakty; žádný se nemaže.
-- Do `investors.csv` se přebírá hodnota z novějšího primárního zdroje; konflikt se popíše v `evidence_note`.
+- Do `investors.csv` se přebírá hodnota z novějšího primárního zdroje; konflikt se popíše v `evidence_note` (včetně stáří zdrojů a konfliktu s agregátorem, který slouží jen jako vodítko).
 - Hodnoty se nikdy neprůměrují, nedopočítávají ani nepřevádějí mezi měnami.
 
 ## 2.4 Datové schéma
@@ -108,7 +112,7 @@ Všechny soubory jsou v `data/`, kódování UTF-8, oddělovač čárka, konce �
 | `registry_id` | `overeny` | IČO vlastní české právnické osoby značky – správcovské či poradenské společnosti nebo fondu (8 číslic, kontrolní součet). **Nikdy IČO licencovaného třetího správce**, ten se ukládá jako fakt `pravni_spravce`; jinak by se různé značky jednoho správce jevily jako duplicity. |
 | `website` | ne | URL webu značky |
 | `investment_sectors` | ne | Řízený slovník, viz níže |
-| `investment_stages` | `overeny` | `pre_seed`, `seed`, `serie_a`, `serie_b`, `growth` |
+| `investment_stages` | ne | `pre_seed`, `seed`, `serie_a`, `serie_b`, `growth`. Nepovinné doplňkové pole, není kritériem zařazení. |
 | `typical_ticket_min`, `typical_ticket_max` | ne | Typická velikost **jedné investice** do jedné firmy |
 | `currency` | při částce | ISO 4217; platí pro všechny částky v řádku |
 | `total_fund_size` | ne | Velikost **posledního fondu při final close**. Cílová velikost sem nepatří. |
@@ -257,3 +261,5 @@ Odhad se počítá pro dvě populace: jen ověření investoři a ověření spo
 | **Nesoulad popisu commitu `c2fae0a`.** Popis uvádí rozšíření definice `mimo_definici_pilotu` o fondy digitálních aktiv, ale úprava se neprovedla, protože příkaz byl v řetězci za zápisem, který selhal. | Historie commitu je zavádějící; dokumentace byla do další dávky neúplná. | Úprava provedena a výslovně uvedena v commitu `c94022f`; pushnutá historie se nepřepisuje. | Úpravy dokumentace a dat nespojovat do jednoho řetězce příkazů; před commitem zkontrolovat `git diff` proti popisu. |
 | **Šablona kontroly v nesouvisejícím commitu.** Soubor `data/reviews.csv` z dřívějšího běhu `review-template` se dostal do commitu `b7737ff` s kódem přes `git add -A`. | Commit míchá kód a data. | Popsáno v commitu `e9c570d`. | Přidávat soubory do commitu výslovně, ne `git add -A`. |
 | **Příliš obecný důvod vyloučení.** Kód `mimo_definici_pilotu` slučoval corporate VC, fondy fondů, státní a dluhové fondy, fondy digitálních aktiv a otevřené smíšené fondy. Konkrétní znak byl jen v `evidence_note`. | Hodnotitel nemohl fakt `duvod_vylouceni` ověřit nezávisle, protože kontrolní list `evidence_note` záměrně neukazuje. | Kód rozdělen na `cvc`, `fond_fondu`, `statni_fond`, `dluhovy_fond`, `digitalni_aktiva` a `otevreny_smiseny_fond`. Sedm faktů a šest investorů dostalo kód podle již zapsaného `evidence_note`, nic se nově nedohledávalo. ID faktů ani vzorek kontroly se nezměnily. Validátor starý kód odmítá s nápovědou. | Hodnota faktu musí sama říkat, co se ověřuje; slovníky kódů navrhovat tak, aby každý kód odpovídal jednomu ověřitelnému znaku. |
+| **Nepovinné pole jako podmínka ověření.** Validátor vyžadoval u statusu `overeny` vyplněné `investment_stages`, metodika uváděla stádia jako doklad Z2. | Tachles splňoval Z1–Z4, ale zůstal kandidátem jen kvůli chybějícím stádiím. | Požadavek z validátoru odstraněn a pokryt testem (žádné doplňkové pole není pro `overeny` povinné); Z2 se posuzuje podle popisu strategie ve zdroji. | Kritéria zařazení a doplňková pole oddělovat; validátor má vynucovat jen Z1–Z4. |
+| **Chyba hledání u Lighthouse Ventures.** Poznámka „poslední investice 2019“ vycházela z jediného článku z roku 2019, novější investice se nehledaly. | Ověřitelný investor zůstal kandidátem. | Doplněny investice z let 2025 (Tech.eu) a fondy z webu lhv.vc; poznámka u faktu opravena. | Absenci aktivity tvrdit jen po cíleném hledání novějších zdrojů. |

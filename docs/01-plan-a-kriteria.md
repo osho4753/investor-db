@@ -57,7 +57,7 @@ Záznam může mít status `overeny`, jen pokud platí **všechna** kritéria a 
 | Kód | Kritérium | Jak se dokládá |
 |---|---|---|
 | Z1 | VC značka má **českou právnickou osobu s IČO** – správcovskou společnost, poradenskou společnost nebo samotný fond. | Fakt `registry_id` z primárního zdroje (rejstřík, ARES, ČNB). |
-| Z2 | Převažující strategií je **rizikový kapitál**: menšinové podíly v nekótovaných firmách ve fázích pre-seed až growth. | Fakty `investment_stages` (a `investment_sectors`) z webu investora nebo výroční zprávy. |
+| Z2 | Převažující strategií je **rizikový kapitál**: menšinové podíly v nekótovaných firmách ve fázích pre-seed až growth. | Popis strategie ve zdroji (web investora, výroční zpráva, profil v asociaci, médium) a `investor_type` `vc`. Doplňková pole `investment_stages` a `investment_sectors` nejsou povinná a nejsou podmínkou zařazení. |
 | Z3 | Značka investuje prostřednictvím **alespoň jednoho fondu nebo vehiklu s kapitálem třetích osob**. | Alespoň jeden fakt s vyplněným `fund_name` (např. velikost fondu, právní správce, registrace u regulátora). |
 | Z4 | Značka je **aktivní**: alespoň jedna doložená investice nebo nový fond za posledních 36 měsíců. | Fakt `dolozena_investice`, nebo fondový fakt (`informace_o_fondu`, `total_fund_size`, `cilova_velikost_fondu`) s `value_as_of` nejvýše 36 měsíců před `last_verified_at`. |
 

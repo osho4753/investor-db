@@ -37,6 +37,7 @@ from investor_db.schema import (
     STATUSES,
 )
 from investor_db.values import (
+    is_aggregator_url,
     is_valid_country,
     is_valid_ico,
     is_valid_url,
@@ -196,7 +197,7 @@ def exclusion_issues(row: Row) -> Iterator[Issue]:
 def verified_row_issues(row: Row) -> Iterator[Issue]:
     row_id = row["investor_id"]
     yield from required_issues(
-        "investors", row_id, row, ("registry_id", "investment_stages", "evidence_urls", "last_verified_at")
+        "investors", row_id, row, ("registry_id", "evidence_urls", "last_verified_at")
     )
     if row["investor_type"] != INVESTOR_TYPE_VC:
         yield Issue("investors", row_id, f"ověřený investor musí mít investor_type {INVESTOR_TYPE_VC!r}")
@@ -211,6 +212,8 @@ def check_sources(sources: list[Row]) -> Iterator[Issue]:
         yield from required_issues("sources", row_id, row, ("url", "publisher", "source_type"))
         if row["url"] and not is_valid_url(row["url"]):
             yield Issue("sources", row_id, f"url není platná URL: {row['url']!r}")
+        if is_aggregator_url(row["url"]):
+            yield Issue("sources", row_id, "zdroj je agregátor; slouží jen jako vodítko, fakta musí stát na primárním zdroji nebo médiu")
         yield from vocabulary_issues("sources", row_id, "source_type", row["source_type"], SOURCE_TYPES)
     for url, count in Counter(row["url"] for row in sources if row["url"]).items():
         if count > 1:
