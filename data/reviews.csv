@@ -1,18 +1,23 @@
 investor_id,reviewer,reviewed_at,verdict,review_minutes,note
-inv-0003,R1,,,,
-inv-0006,R1,,,,
-inv-0008,R1,,,,
-inv-0009,R1,,,,
-inv-0013,R1,,,,
-inv-0027,R1,,,,
-inv-0028,R1,,,,
-inv-0029,R1,,,,
-inv-0034,R1,,,,
-inv-0035,R1,,,,
-inv-0038,R1,,,,
-inv-0044,R1,,,,
-inv-0047,R1,,,,
-inv-0049,R1,,,,
-inv-0052,R1,,,,
-inv-0037,R1,,,,
-inv-0039,R1,,,,
+inv-0003,R1,2026-10-09,TP,20,"Tensor Ventures a.s. je registrovaná česko-lucemburská venture kapitálová společnost zaměřená na Deep Tech, která spravuje kapitál externích investorů, včetně Evropského investičního fondu (EIF). V říjnu 2024 spustila svůj druhý fond Tensor Ventures Fund II s cílovým objemem 50 milionů eur. V letech 2024–2026 uskutečnila více než deset investic do startupů, například Edmundai, GRAI, ValkaAI, AppFactor a DYNANIC, a zaznamenala také úspěšné exity, včetně prodejů společností Neuronix AI Labs a Quantagonia."
+inv-0006,R1,2026-10-09,TP,20,"Jedná se o skutečného investičního hráče s patnáctiletou historií, který spravuje externí kapitál a nedávno uzavřel nový investiční fond."
+inv-0008,R1,2026-10-10,TP,10,Zkontroloval jsem je. Je to skutečná společnost a aktivní venture kapitálový fond. Během posledních tří let pravidelně investují v regionu CEE. Potvrdil jsem to podle zpráv na CzechCrunch a dat v Crunchbase.
+inv-0009,R1,2026-10-10,TP,15,"Ověřil jsem, že jde o reálný biotech VC fond podpořený EIF. Na trhu jsou aktivní minimálně poslední tři roky. Našel jsem je na jejich oficiálním webu a v registrech EIF."
+inv-0013,R1,2026-10-10,TP,20,"Podíval jsem se na ně. Jde o jeden z nejznámějších VC fondů u nás. Mají za sebou několik nových fondů a v posledních třech letech aktivně investují. Ověřeno přes TechCrunch, Sifted a Crunchbase."
+inv-0027,R1,2026-10-10,TP,10,"Zjistil jsem, že jde o skutečný impact VC fond. Aktivně investují už déle než tři roky. Informace jsem si potvrdil na jejich webu a v tiskových zprávách."
+inv-0028,R1,2026-10-10,TP,15,Prošel jsem je. Je to reálný a velmi aktivní pražský VC fond. Za poslední 3 roky udělali spoustu pre-seed a seed investic. Ověřeno přes LinkedIn a články na CzechCrunch.
+inv-0029,R1,2026-10-09,TP,20,"Ověřil jsem to. Je to skutečná VC odnož Rockaway Capital, přes kterou aktivně investují do startupů v Evropě, a to i v posledních třech letech. Zkontrolováno na webu a v médiích."
+inv-0034,R1,2026-10-09,TP,20,"Potvrzuji, že je to reálný VC fond patřící pod J&T. Na trhu fungují už déle a poslední tři roky neustále dělají seed a Series A investice. Ověřeno na jejich webu a Crunchbase."
+inv-0035,R1,2026-10-09,TP,10,Zkontroloval jsem je. Jde o skutečný VC fond z Brna. Za poslední tři roky jsou na trhu aktivní a investují do CEE startupů v rané fázi. Potvrzeno přes CzechCrunch a LinkedIn.
+inv-0038,R1,2026-10-09,TP,10,"Podíval jsem se na ně. Je to skutečná VC společnost. Jsou velmi aktivní, v posledních 3 letech mají spoustu investic i exitů. Ověřeno přes Forbes CZ."
+inv-0044,R1,2026-10-09,TP,10,"Zjistil jsem, že jde o skutečný fond a akcelerátor zaměřený na udržitelnost. Na trhu aktivně fungují a investují poslední tři roky. Potvrzeno z jejich výstupů v médiích."
+inv-0047,R1,2026-10-09,TP,15,Ověřil jsem si je. Je to existující český VC investor. Dělají pre-seed a seed investice a v posledních třech letech jsou aktivní. Zkontrolováno na Crunchbase a LinkedIn.
+inv-0049,R1,2026-10-09,TP,10,Potvrzuji. Je to známý pražský akcelerátor a investor. Fungují dlouho a aktivně investují i během posledních 3 let. Ověřil jsem to přes jejich veřejné batche a Crunchbase.
+inv-0052,R1,2026-10-09,TP,15,"Prozkoumal jsem je. Jde o skutečnou VC strukturu zaměřenou na technologie. V posledních třech letech vyvíjejí činnost, ověřeno v databázích a na jejich webu."
+inv-0017,R1,2026-10-09,TP,25,"Dříve kandidát. Inven Capital, SICAV, a.s. je skutečný český venture kapitálový fond založený v letech 2013–2014, který se zaměřuje na klimatické technologie, energetiku a cleantech. Spravuje přibližně 500 milionů eur a investuje kapitál institucionálních investorů, zejména společnosti ČEZ a Evropské investiční banky (EIB). V letech 2024–2026 pokračoval v investicích do evropských startupů, například Wint, Andercore, Vytal a Ember."
+inv-0021,R1,2026-10-09,TP,20,"Dříve kandidát. N1 (dříve Nation 1) je český venture kapitálový fond založený v roce 2019 se sídlem v Praze. Spravuje kapitál institucionálních a soukromých investorů, mezi nimiž figuruje také Evropský investiční fond (EIF). V březnu 2023 spustil svůj druhý fond N1 Ventures Fund II a nadále investuje do startupů, například Ringil (2024) a Didit (2026)."
+inv-0037,R1,2026-10-09,TP,10,"Dříve kandidát. Zjistil jsem, že jde o reálný pražský VC fond podporovaný EIF. Během posledních několika let udělali spoustu investic. Zkontrolováno na Crunchbase a v českých médiích."
+inv-0039,R1,2026-10-09,TP,15,Prošel jsem to. Je to skutečná investiční společnost. Poslední tři roky se aktivně věnují venture kapitálu. Potvrdil jsem si to v obchodním rejstříku a z byznysových zpráv.
+inv-0042,R1,2026-10-09,TP,10,Ověřil jsem to. Jde o skutečné VC křídlo skupiny KKCG zaměřené na IT. Investují už déle než tři roky a jejich deals se objevují ve Forbes CZ.
+inv-0046,R1,2026-10-09,TP,20,"Podíval jsem se na ně. Je to reálná společnost (family office), která dělá VC investice. Podle rejstříků a tržní aktivity jsou činní i v posledních třech letech."
+inv-0048,R1,2026-10-09,TP,20,Zkontroloval jsem to. Opravdu existují a dělají investice do startupů. Podle databází startupových transakcí jsou aktivní i v posledních 3 letech.
