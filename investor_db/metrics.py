@@ -7,6 +7,13 @@ from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    AMOUNT_INVESTED,
+    APPROX_YES,
+    FUND_AMOUNT_TYPES,
+    LOWER_BOUND_AMOUNT_TYPES,
+    SEARCH_TARGET_CAPITAL,
+    SEARCH_TARGET_TICKET,
+    SEARCH_TARGETS,
     EFFORT_TRIAGE,
     EFFORT_VERIFICATION,
     EXCLUSION_DUPLICATE,
@@ -353,4 +360,125 @@ def review_efforts(rows: list[Row]) -> list[ReviewEffort]:
             total_parsed_minutes([row["review_minutes"] for row in completed if row["reviewer"] == reviewer]),
         )
         for reviewer in reviewers
+    ]
+
+
+CAPITAL_AUM = "assets_under_management"
+CAPITAL_INVESTED = "invested_capital"
+CAPITAL_KINDS = (*FUND_AMOUNT_TYPES, CAPITAL_AUM, CAPITAL_INVESTED)
+
+
+def funds_by_investor(funds: list[Row]) -> dict[str, list[Row]]:
+    grouped: dict[str, list[Row]] = defaultdict(list)
+    for row in funds:
+        grouped[row["investor_id"]].append(row)
+    return grouped
+
+
+def capital_kinds(investor: Row, funds: list[Row]) -> set[str]:
+    kinds = {row["amount_type"] for row in funds if row["amount"]}
+    kinds |= {column for column in (CAPITAL_AUM, CAPITAL_INVESTED) if investor[column]}
+    return kinds
+
+
+def has_ticket(investor: Row) -> bool:
+    return bool(investor["typical_ticket_min"] or investor["typical_ticket_max"])
+
+
+def requirement_met(target: str, investor: Row, funds: list[Row]) -> bool:
+    if target == SEARCH_TARGET_TICKET:
+        return has_ticket(investor)
+    if target == SEARCH_TARGET_CAPITAL:
+        return bool(capital_kinds(investor, funds))
+    return bool(investor[target])
+
+
+@dataclass(frozen=True)
+class RequirementCompleteness:
+    filled: dict[str, Proportion]
+    searched_not_found: dict[str, int]
+    tickets_both: Proportion
+    capital_by_kind: dict[str, Proportion]
+    sources: Proportion
+
+
+def searched_targets(search_log: list[Row]) -> set[tuple[str, str]]:
+    return {(row["investor_id"], row["target_field"]) for row in search_log if row["investor_id"]}
+
+
+def requirement_completeness(dataset: Dataset) -> RequirementCompleteness:
+    verified = verified_investors(dataset.investors)
+    funds = funds_by_investor(dataset.funds)
+    searched = searched_targets(dataset.search_log)
+    total = len(verified)
+    filled: dict[str, Proportion] = {}
+    not_found: dict[str, int] = {}
+    for target in SEARCH_TARGETS:
+        present = [requirement_met(target, row, funds.get(row["investor_id"], [])) for row in verified]
+        filled[target] = Proportion(sum(present), total)
+        not_found[target] = sum(
+            not is_present and (row["investor_id"], target) in searched
+            for row, is_present in zip(verified, present)
+        )
+    kinds = [capital_kinds(row, funds.get(row["investor_id"], [])) for row in verified]
+    return RequirementCompleteness(
+        filled=filled,
+        searched_not_found=not_found,
+        tickets_both=Proportion(
+            sum(bool(row["typical_ticket_min"] and row["typical_ticket_max"]) for row in verified), total
+        ),
+        capital_by_kind={kind: Proportion(sum(kind in found for found in kinds), total) for kind in CAPITAL_KINDS},
+        sources=Proportion(sum(bool(row["evidence_urls"]) for row in verified), total),
+    )
+
+
+@dataclass(frozen=True)
+class CapitalSummary:
+    investor_id: str
+    name: str
+    totals: dict[str, Decimal]
+    lower_bound: bool
+    fund_count: int
+    funds_with_amount: int
+    amount_types: tuple[str, ...]
+    aum: str
+    aum_currency: str
+
+
+def is_lower_bound_fund(fund: Row) -> bool:
+    return (
+        not fund["amount"]
+        or fund["approx"] == APPROX_YES
+        or fund["amount_type"] in LOWER_BOUND_AMOUNT_TYPES
+        or fund["amount_type"] == AMOUNT_INVESTED
+    )
+
+
+def capital_totals(funds: list[Row]) -> dict[str, Decimal]:
+    totals: dict[str, Decimal] = defaultdict(Decimal)
+    for fund in funds:
+        if fund["amount"]:
+            totals[fund["currency"]] += Decimal(fund["amount"])
+    return dict(sorted(totals.items()))
+
+
+def capital_summary(investor: Row, funds: list[Row]) -> CapitalSummary:
+    return CapitalSummary(
+        investor_id=investor["investor_id"],
+        name=investor["name"],
+        totals=capital_totals(funds),
+        lower_bound=any(is_lower_bound_fund(fund) for fund in funds),
+        fund_count=len(funds),
+        funds_with_amount=sum(bool(fund["amount"]) for fund in funds),
+        amount_types=tuple(sorted({fund["amount_type"] for fund in funds if fund["amount"]})),
+        aum=investor[CAPITAL_AUM],
+        aum_currency=investor["currency"] if investor[CAPITAL_AUM] else "",
+    )
+
+
+def investor_capital(dataset: Dataset) -> list[CapitalSummary]:
+    funds = funds_by_investor(dataset.funds)
+    return [
+        capital_summary(investor, funds.get(investor["investor_id"], []))
+        for investor in verified_investors(dataset.investors)
     ]

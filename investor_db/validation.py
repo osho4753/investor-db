@@ -7,6 +7,11 @@ from datetime import date, timedelta
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
     ACTIVITY_WINDOW_DAYS,
+    APPROX_VALUES,
+    APPROX_YES,
+    FACT_FIELDS_BY_AMOUNT_TYPE,
+    FUND_AMOUNT_TYPES,
+    SEARCH_TARGETS,
     CURRENCIES,
     EFFORT_ACTIVITIES,
     EFFORT_ACTORS,
@@ -74,7 +79,8 @@ def validate_dataset(dataset: Dataset, today: date) -> list[Issue]:
         *check_facts(dataset, today),
         *check_investor_evidence(dataset),
         *check_duplicate_investors(dataset.investors),
-        *check_search_log(dataset.search_log, today),
+        *check_search_log(dataset, today),
+        *check_funds(dataset, today),
         *check_reviews(dataset, today),
         *check_fact_reviews(dataset, today),
         *check_effort_log(dataset, today),
@@ -411,9 +417,10 @@ def check_duplicate_investors(investors: list[Row]) -> Iterator[Issue]:
         yield Issue("investors", ",".join(group.investor_ids), f"možná duplicita podle kritéria {group.criterion}: {group.key!r}")
 
 
-def check_search_log(search_log: list[Row], today: date) -> Iterator[Issue]:
-    yield from check_identifiers("search_log", search_log, "search_id")
-    for row in search_log:
+def check_search_log(dataset: Dataset, today: date) -> Iterator[Issue]:
+    investor_ids = {row["investor_id"] for row in dataset.investors}
+    yield from check_identifiers("search_log", dataset.search_log, "search_id")
+    for row in dataset.search_log:
         row_id = row["search_id"]
         yield from required_issues("search_log", row_id, row, ("source_url", "query", "results_count", "minutes"))
         yield from date_issues("search_log", row_id, "searched_at", row["searched_at"], today, required=True)
@@ -422,6 +429,73 @@ def check_search_log(search_log: list[Row], today: date) -> Iterator[Issue]:
         if row["results_count"] and not row["results_count"].isdigit():
             yield Issue("search_log", row_id, f"results_count není nezáporné celé číslo: {row['results_count']!r}")
         yield from minutes_issues("search_log", row_id, row["minutes"])
+        yield from search_target_issues(row, investor_ids)
+
+
+def search_target_issues(row: Row, investor_ids: set[str]) -> Iterator[Issue]:
+    row_id = row["search_id"]
+    if row["investor_id"] and row["investor_id"] not in investor_ids:
+        yield Issue("search_log", row_id, f"odkaz na neexistujícího investora {row['investor_id']!r}")
+    if bool(row["investor_id"]) != bool(row["target_field"]):
+        yield Issue("search_log", row_id, "investor_id a target_field se vyplňují jen společně")
+    yield from vocabulary_issues("search_log", row_id, "target_field", row["target_field"], SEARCH_TARGETS)
+
+
+def check_funds(dataset: Dataset, today: date) -> Iterator[Issue]:
+    investor_ids = {row["investor_id"] for row in dataset.investors}
+    facts_by_id = {row["fact_id"]: row for row in dataset.facts}
+    yield from check_identifiers("funds", dataset.funds, "fund_id")
+    for row in dataset.funds:
+        row_id = row["fund_id"]
+        yield from required_issues("funds", row_id, row, ("investor_id", "fund_name", "fact_id"))
+        if row["investor_id"] and row["investor_id"] not in investor_ids:
+            yield Issue("funds", row_id, f"odkaz na neexistujícího investora {row['investor_id']!r}")
+        if row["vintage"] and not (row["vintage"].isdigit() and len(row["vintage"]) == 4):
+            yield Issue("funds", row_id, f"vintage není rok RRRR: {row['vintage']!r}")
+        yield from date_issues("funds", row_id, "value_as_of", row["value_as_of"], today, required=False)
+        yield from fund_amount_issues(row)
+        if row["fact_id"]:
+            yield from fund_fact_issues(row, facts_by_id.get(row["fact_id"]))
+    for (investor_id, fund_name), count in Counter((row["investor_id"], row["fund_name"]) for row in dataset.funds).items():
+        if count > 1:
+            yield Issue("funds", investor_id, f"fond {fund_name!r} je zapsán vícekrát ({count}×)")
+
+
+def fund_amount_issues(row: Row) -> Iterator[Issue]:
+    row_id = row["fund_id"]
+    if not row["amount"]:
+        for column in ("currency", "amount_type", "approx", "amount_wording"):
+            if row[column]:
+                yield Issue("funds", row_id, f"fond bez částky nesmí mít vyplněné {column}")
+        return
+    if parse_money(row["amount"]) is None:
+        yield Issue("funds", row_id, f"amount není nezáporné číslo s desetinnou tečkou: {row['amount']!r}")
+    yield from required_issues("funds", row_id, row, ("currency", "amount_type", "approx"))
+    yield from vocabulary_issues("funds", row_id, "currency", row["currency"], CURRENCIES)
+    yield from vocabulary_issues("funds", row_id, "amount_type", row["amount_type"], FUND_AMOUNT_TYPES)
+    yield from vocabulary_issues("funds", row_id, "approx", row["approx"], APPROX_VALUES)
+    if row["approx"] == APPROX_YES and not row["amount_wording"]:
+        yield Issue("funds", row_id, "přibližná částka musí mít amount_wording (doslovnou formulaci ze zdroje)")
+
+
+def fund_fact_issues(row: Row, fact: Row | None) -> Iterator[Issue]:
+    row_id = row["fund_id"]
+    if fact is None:
+        yield Issue("funds", row_id, f"odkaz na neexistující fakt {row['fact_id']!r}")
+        return
+    if fact["investor_id"] != row["investor_id"]:
+        yield Issue("funds", row_id, "fakt patří jinému investorovi")
+    if fact["fund_name"] != row["fund_name"]:
+        yield Issue("funds", row_id, "fund_name faktu se neshoduje s fund_name fondu")
+    if not row["amount"]:
+        if fact["field"] not in FUND_SCOPED_FACT_FIELDS:
+            yield Issue("funds", row_id, f"fakt {fact['field']} nedokládá existenci fondu")
+        return
+    expected_fields = FACT_FIELDS_BY_AMOUNT_TYPE.get(row["amount_type"], ())
+    if expected_fields and fact["field"] not in expected_fields:
+        yield Issue("funds", row_id, f"typ {row['amount_type']} musí dokládat fakt {' nebo '.join(expected_fields)}, ne {fact['field']}")
+    if parse_money(fact["value"]) != parse_money(row["amount"]) or fact["currency"] != row["currency"]:
+        yield Issue("funds", row_id, "částka nebo měna fondu se neshoduje s faktem")
 
 
 def minutes_issues(table: str, row_id: str, text: str) -> Iterator[Issue]:

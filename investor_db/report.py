@@ -11,8 +11,13 @@ from investor_db.metrics import (
     effort_summaries,
     exclusion_reason_counts,
     excluded_duplicate_count,
+    CAPITAL_AUM,
+    CAPITAL_INVESTED,
+    CapitalSummary,
     fact_accuracy,
     field_completeness,
+    investor_capital,
+    requirement_completeness,
     freshness_share,
     funnel,
     investment_activity_share,
@@ -27,6 +32,9 @@ from investor_db.metrics import (
     values_only_in_facts_due_to_currency,
 )
 from investor_db.schema import (
+    EFFORT_COMPLETION,
+    SEARCH_TARGET_CAPITAL,
+    SEARCH_TARGET_TICKET,
     EFFORT_ACTOR_MODEL,
     EFFORT_TRIAGE,
     EFFORT_VERIFICATION,
@@ -39,6 +47,25 @@ PROCESSING_LABELS = {
     "": "nezpracováno",
     EFFORT_TRIAGE: "rychlá triáž",
     EFFORT_VERIFICATION: "plné ověření",
+    EFFORT_COMPLETION: "doplňování",
+}
+
+REQUIREMENT_LABELS = {
+    "investment_sectors": "Sektor (`investment_sectors`)",
+    "investment_stages": "Do čeho investuje – fáze (`investment_stages`)",
+    SEARCH_TARGET_TICKET: "Výše investice – ticket (alespoň jedna mez)",
+    SEARCH_TARGET_CAPITAL: "Kapitál (fond s částkou, AUM nebo investovaný kapitál)",
+}
+
+CAPITAL_LABELS = {
+    "final_close": "fond – final close",
+    "uzavren_bez_upresneni": "fond – uzavřen bez upřesnění",
+    "first_close": "fond – first close",
+    "cil": "fond – cílová velikost",
+    "zavazek_jednoho_lp": "fond – závazek jednoho LP (jen část fondu)",
+    "investovano": "fond – investováno",
+    CAPITAL_AUM: "AUM správce",
+    CAPITAL_INVESTED: "investovaný kapitál (`invested_capital`)",
 }
 
 
@@ -64,6 +91,8 @@ def render_report(dataset: Dataset, today: date) -> str:
         precision_section(dataset),
         agreement_section(dataset),
         fact_accuracy_section(dataset),
+        requirement_section(dataset),
+        capital_section(dataset),
         completeness_section(dataset),
         evidence_section(dataset, today),
         effort_section(dataset),
@@ -136,6 +165,65 @@ def fact_accuracy_section(dataset: Dataset) -> list[str]:
             continue
         lines.append(
             f"- {reviewer}: {format_proportion(result.accuracy)}; nelze ověřit: {result.unverifiable}"
+        )
+    return lines
+
+
+def format_share(proportion: Proportion) -> str:
+    share = "–" if proportion.value is None else format_percent(proportion.value)
+    return f"{proportion.numerator}/{proportion.denominator} ({share})"
+
+
+def requirement_section(dataset: Dataset) -> list[str]:
+    result = requirement_completeness(dataset)
+    lines = [
+        "## Úplnost podle požadavků zadání (ověření investoři)",
+        "",
+        "| Požadavek | Vyplněno | Chybí, hledáno a nenalezeno |",
+        "|---|---|---|",
+    ]
+    lines += [
+        f"| {label} | {format_share(result.filled[target])} | {result.searched_not_found[target]} |"
+        for target, label in REQUIREMENT_LABELS.items()
+    ]
+    lines += [
+        f"| Ticket – obě meze | {format_share(result.tickets_both)} | |",
+        f"| Zdroj (`evidence_urls`) | {format_share(result.sources)} | |",
+        "",
+        "| Typ kapitálu | Investorů s údajem |",
+        "|---|---|",
+    ]
+    lines += [f"| {CAPITAL_LABELS[kind]} | {format_share(share)} |" for kind, share in result.capital_by_kind.items()]
+    return lines
+
+
+def format_amount(amount: Decimal) -> str:
+    return f"{amount:,.0f}".replace(",", " ")
+
+
+def format_capital_total(summary: CapitalSummary) -> str:
+    if not summary.totals:
+        return "neznámý"
+    amounts = " + ".join(f"{format_amount(amount)} {currency}" for currency, amount in summary.totals.items())
+    return f"{amounts} (dolní mez)" if summary.lower_bound else amounts
+
+
+def capital_section(dataset: Dataset) -> list[str]:
+    lines = [
+        "## Celkový investiční kapitál (odvozený z funds.csv)",
+        "",
+        "Součet velikostí fondů investora po měnách; měny se nesčítají. „Dolní mez“: některý fond nemá částku, "
+        "částka je přibližná nebo jde o závazek jednoho LP či investovanou částku. AUM je uvedeno zvlášť.",
+        "",
+        "| Investor | Fondů (s částkou) | Typy částek | Celkový kapitál | AUM |",
+        "|---|---|---|---|---|",
+    ]
+    for summary in investor_capital(dataset):
+        aum = f"{format_amount(Decimal(summary.aum))} {summary.aum_currency}" if summary.aum else "–"
+        types = ", ".join(summary.amount_types) or "–"
+        lines.append(
+            f"| {summary.name} | {summary.fund_count} ({summary.funds_with_amount}) | {types} "
+            f"| {format_capital_total(summary)} | {aum} |"
         )
     return lines
 

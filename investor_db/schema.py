@@ -33,11 +33,34 @@ FACT_COLUMNS: Final = (
     "evidence_note",
 )
 SOURCE_COLUMNS: Final = ("source_id", "url", "publisher", "source_type")
-SEARCH_LOG_COLUMNS: Final = ("search_id", "searched_at", "source_url", "query", "results_count", "minutes", "note")
+SEARCH_LOG_COLUMNS: Final = (
+    "search_id",
+    "searched_at",
+    "source_url",
+    "query",
+    "results_count",
+    "minutes",
+    "note",
+    "investor_id",
+    "target_field",
+)
 REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
 FACT_REVIEW_COLUMNS: Final = ("fact_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
 CANDIDATE_SOURCE_COLUMNS: Final = ("investor_id", "search_id")
 EFFORT_COLUMNS: Final = ("investor_id", "activity", "actor", "minutes", "logged_at", "note")
+FUND_COLUMNS: Final = (
+    "fund_id",
+    "investor_id",
+    "fund_name",
+    "vintage",
+    "amount",
+    "currency",
+    "amount_type",
+    "approx",
+    "amount_wording",
+    "value_as_of",
+    "fact_id",
+)
 
 STATUS_VERIFIED: Final = "overeny"
 STATUS_CANDIDATE: Final = "kandidat"
@@ -141,7 +164,8 @@ FACT_VERDICTS: Final = (VERDICT_FACT_CORRECT, VERDICT_FACT_WRONG, VERDICT_FACT_U
 
 EFFORT_TRIAGE: Final = "triaz"
 EFFORT_VERIFICATION: Final = "overeni"
-EFFORT_ACTIVITIES: Final = (EFFORT_TRIAGE, EFFORT_VERIFICATION)
+EFFORT_COMPLETION: Final = "doplneni"
+EFFORT_ACTIVITIES: Final = (EFFORT_TRIAGE, EFFORT_VERIFICATION, EFFORT_COMPLETION)
 EFFORT_ACTOR_MODEL: Final = "model"
 EFFORT_ACTORS: Final = (EFFORT_ACTOR_MODEL, *REVIEWERS)
 
@@ -171,24 +195,76 @@ FACT_REGULATOR_REGISTRATION: Final = "registrace_regulator"
 FACT_DOCUMENTED_INVESTMENT: Final = "dolozena_investice"
 FACT_EXCLUSION_REASON: Final = "duvod_vylouceni"
 FACT_FUND_INFO: Final = "informace_o_fondu"
+FACT_FUND_FINAL_CLOSE: Final = "fond_final_close"
+FACT_FUND_CLOSED: Final = "fond_uzavren"
+FACT_FUND_FIRST_CLOSE: Final = "fond_first_close"
+FACT_FUND_LP_COMMITMENT: Final = "fond_zavazek_lp"
+FACT_FUND_INVESTED: Final = "fond_investovano"
+FUND_AMOUNT_FACT_FIELDS: Final = (
+    FACT_FUND_FINAL_CLOSE,
+    FACT_FUND_CLOSED,
+    FACT_FUND_FIRST_CLOSE,
+    FACT_FUND_LP_COMMITMENT,
+    FACT_FUND_INVESTED,
+)
 SUPPLEMENTARY_FACT_FIELDS: Final = (
     FACT_FUND_INFO,
     FACT_LEGAL_MANAGER,
     FACT_TARGET_FUND_SIZE,
+    *FUND_AMOUNT_FACT_FIELDS,
     FACT_REGULATOR_REGISTRATION,
     FACT_DOCUMENTED_INVESTMENT,
     FACT_EXCLUSION_REASON,
 )
 FACT_FIELDS: Final = EVIDENCED_FIELDS + SUPPLEMENTARY_FACT_FIELDS
-MONEY_FACT_FIELDS: Final = MONEY_FIELDS + (FACT_TARGET_FUND_SIZE,)
-FUND_ACTIVITY_FACT_FIELDS: Final = ("total_fund_size", FACT_TARGET_FUND_SIZE, FACT_FUND_INFO)
-FUND_SCOPED_FACT_FIELDS: Final = ("total_fund_size", FACT_TARGET_FUND_SIZE, FACT_LEGAL_MANAGER, FACT_FUND_INFO)
+MONEY_FACT_FIELDS: Final = MONEY_FIELDS + (FACT_TARGET_FUND_SIZE, *FUND_AMOUNT_FACT_FIELDS)
+FUND_ACTIVITY_FACT_FIELDS: Final = (
+    "total_fund_size",
+    FACT_TARGET_FUND_SIZE,
+    FACT_FUND_INFO,
+    FACT_FUND_FINAL_CLOSE,
+    FACT_FUND_CLOSED,
+    FACT_FUND_FIRST_CLOSE,
+)
+FUND_SCOPED_FACT_FIELDS: Final = (
+    "total_fund_size",
+    FACT_TARGET_FUND_SIZE,
+    FACT_LEGAL_MANAGER,
+    FACT_FUND_INFO,
+    *FUND_AMOUNT_FACT_FIELDS,
+)
+
+AMOUNT_FINAL_CLOSE: Final = "final_close"
+AMOUNT_CLOSED: Final = "uzavren_bez_upresneni"
+AMOUNT_FIRST_CLOSE: Final = "first_close"
+AMOUNT_TARGET: Final = "cil"
+AMOUNT_LP_COMMITMENT: Final = "zavazek_jednoho_lp"
+AMOUNT_INVESTED: Final = "investovano"
+FUND_SIZE_PRIORITY: Final = (AMOUNT_FINAL_CLOSE, AMOUNT_CLOSED, AMOUNT_FIRST_CLOSE, AMOUNT_TARGET)
+LOWER_BOUND_AMOUNT_TYPES: Final = (AMOUNT_LP_COMMITMENT,)
+FUND_AMOUNT_TYPES: Final = (*FUND_SIZE_PRIORITY, AMOUNT_LP_COMMITMENT, AMOUNT_INVESTED)
+FACT_FIELDS_BY_AMOUNT_TYPE: Final = {
+    AMOUNT_FINAL_CLOSE: (FACT_FUND_FINAL_CLOSE, "total_fund_size"),
+    AMOUNT_CLOSED: (FACT_FUND_CLOSED, "total_fund_size"),
+    AMOUNT_FIRST_CLOSE: (FACT_FUND_FIRST_CLOSE,),
+    AMOUNT_TARGET: (FACT_TARGET_FUND_SIZE,),
+    AMOUNT_LP_COMMITMENT: (FACT_FUND_LP_COMMITMENT,),
+    AMOUNT_INVESTED: (FACT_FUND_INVESTED,),
+}
+APPROX_YES: Final = "ano"
+APPROX_NO: Final = "ne"
+APPROX_VALUES: Final = (APPROX_YES, APPROX_NO)
+
+SEARCH_TARGET_TICKET: Final = "typical_ticket"
+SEARCH_TARGET_CAPITAL: Final = "kapital"
+SEARCH_TARGETS: Final = ("investment_sectors", "investment_stages", SEARCH_TARGET_TICKET, SEARCH_TARGET_CAPITAL)
 
 ID_PATTERNS: Final = {
     "investor_id": r"inv-\d{4}",
     "fact_id": r"f-\d{5}",
     "source_id": r"src-\d{4}",
     "search_id": r"s-\d{3}",
+    "fund_id": r"fd-\d{4}",
 }
 
 LIST_SEPARATOR: Final = ";"

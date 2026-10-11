@@ -127,6 +127,8 @@ def build_valid_dataset() -> Dataset:
                 "results_count": "3",
                 "minutes": "15",
                 "note": "",
+                "investor_id": "",
+                "target_field": "",
             }
         ],
         reviews=[
@@ -144,6 +146,21 @@ def build_valid_dataset() -> Dataset:
             {"investor_id": "inv-0001", "search_id": "s-001"},
             {"investor_id": "inv-0002", "search_id": "s-001"},
             {"investor_id": "inv-0003", "search_id": "s-001"},
+        ],
+        funds=[
+            {
+                "fund_id": "fd-0001",
+                "investor_id": "inv-0001",
+                "fund_name": FUND_NAME,
+                "vintage": "2025",
+                "amount": "30000000",
+                "currency": "EUR",
+                "amount_type": "final_close",
+                "approx": "ne",
+                "amount_wording": "",
+                "value_as_of": "2025-06-30",
+                "fact_id": "f-00008",
+            }
         ],
     )
 

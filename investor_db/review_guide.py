@@ -40,6 +40,10 @@ class FactGuide:
 AMOUNT_CHECK: Final = (
     "Najdi ve zdroji částku {money}: musí sedět číslo i měna (bez přepočtu na jinou měnu)."
 )
+APPROX_AMOUNT_CHECK: Final = (
+    "Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, "
+    "když částka odpovídá číslu v této formulaci."
+)
 
 FIELD_GUIDES: Final[dict[str, FieldGuide]] = {
     "name": FieldGuide(
@@ -115,6 +119,48 @@ FIELD_GUIDES: Final[dict[str, FieldGuide]] = {
         look_for=(
             AMOUNT_CHECK
             + " Musí jít o skutečně investovaný kapitál, ne o velikost fondu ani o spravovaná aktiva."
+        ),
+    ),
+    "fond_final_close": FieldGuide(
+        claim="Fond {fund} investora {investor} byl konečně uzavřen (final close) s velikostí {money}{as_of_clause}.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí výslovně uvádět konečné uzavření (final close, „definitivně uzavřel“). "
+            + APPROX_AMOUNT_CHECK
+        ),
+    ),
+    "fond_uzavren": FieldGuide(
+        claim="Fond {fund} investora {investor} byl uzavřen s velikostí {money}{as_of_clause}; zdroj neupřesňuje, zda šlo o final close.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. "
+            "Chybné je, pokud jde o cíl, plán nebo first close. "
+            + APPROX_AMOUNT_CHECK
+        ),
+    ),
+    "fond_first_close": FieldGuide(
+        claim="Fond {fund} investora {investor} dosáhl prvního uzavření (first close) ve výši {money}{as_of_clause}.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí uvádět first close (první uzavření), ne konečnou nebo cílovou velikost. "
+            + APPROX_AMOUNT_CHECK
+        ),
+    ),
+    "fond_zavazek_lp": FieldGuide(
+        claim="Jeden investor (LP) se zavázal vložit do fondu {fund} investora {investor} {money}{as_of_clause}; jde jen o část fondu.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), "
+            "ne celkovou velikost fondu. "
+            + APPROX_AMOUNT_CHECK
+        ),
+    ),
+    "fond_investovano": FieldGuide(
+        claim="Z fondu {fund} investora {investor} bylo investováno {money}{as_of_clause}.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí uvádět, kolik fond už investoval (proinvestovaný kapitál), ne velikost fondu. "
+            + APPROX_AMOUNT_CHECK
         ),
     ),
     "informace_o_fondu": FieldGuide(
