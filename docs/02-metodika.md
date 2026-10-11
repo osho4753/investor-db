@@ -151,11 +151,13 @@ Doplňkové typy faktů:
 | `pravni_spravce` | Právní správce či administrátor fondu | `fund_name` povinné |
 | `informace_o_fondu` | Doložená existence fondu a jeho stav, který nepatří do jiného pole (např. first close, ročník, spuštění) | `fund_name` povinné; hodnota je stručný popis |
 | `cilova_velikost_fondu` | Cílová velikost fondu (nikdy se nepřebírá do `total_fund_size`) | částka, `currency` a `fund_name` povinné |
+| `oznamena_velikost_fondu` | Velikost fondu, u které zdroj nerozlišuje cíl a získanou částku (např. „launched a €40 million fund“, velikost uvedená při oznámení závazku LP). Nezapočítává se do kapitálu ani do cíle. | částka, `currency` a `fund_name` povinné |
 | `fond_final_close` | Konečné uzavření fondu (final close) | částka, `currency` a `fund_name` povinné |
 | `fond_uzavren` | Zdroj píše, že fond byl uzavřen, ale neupřesňuje, zda šlo o final close | částka, `currency` a `fund_name` povinné |
 | `fond_first_close` | První uzavření fondu (first close) | částka, `currency` a `fund_name` povinné |
 | `fond_zavazek_lp` | Vklad nebo závazek jednoho investora (LP) do fondu, např. EIF nebo NRI; jen část fondu | částka, `currency` a `fund_name` povinné |
 | `fond_investovano` | Kolik fond už investoval | částka, `currency` a `fund_name` povinné |
+| `fond_investovano_za_obdobi` | Kolik fond investoval jen za vymezené období (např. „během minulého roku“); dolní mez celkové investované částky | částka, `currency` a `fund_name` povinné |
 | `pocet_fondu` | Kolik fondů investor má (výslovně, nebo pořadím posledního fondu, např. „pátý fond“) | kladné celé číslo; `value_as_of` = datum zdroje |
 | `registrace_regulator` | Registrace správce či fondu u regulátora | — |
 | `dolozena_investice` | Doložená investice; hodnota je název portfoliové firmy | `value_as_of` = datum investice, povinné |
@@ -198,7 +200,7 @@ Cílené hledání chybějícího údaje se zapisuje i tehdy, když nic nenajde 
 | `vintage` | ne | Rok založení nebo prvního uzavření (RRRR) |
 | `amount` | ne | Částka fondu; prázdná, pokud zdroj doloží jen existenci fondu |
 | `currency` | u částky | ISO 4217 |
-| `amount_type` | u částky | `final_close`, `uzavren_bez_upresneni`, `first_close`, `cil`, `zavazek_jednoho_lp`, `investovano` |
+| `amount_type` | u částky | `final_close`, `uzavren_bez_upresneni`, `first_close`, `cil`, `zavazek_jednoho_lp`, `investovano`, `investovano_za_obdobi` |
 | `approx` | u částky | `ano` u přibližných formulací („téměř“, „přes“, „zhruba“), jinak `ne` |
 | `amount_wording` | u `approx` = `ano` | Doslovná formulace ze zdroje, např. „téměř 55 mil. EUR“ |
 | `value_as_of` | ne | Datum, ke kterému částka platí (datum uzavření, oznámení) |
@@ -206,7 +208,7 @@ Cílené hledání chybějícího údaje se zapisuje i tehdy, když nic nenajde 
 | `fundraising_open` | ne | `ano`, pokud zdroje uvádějí, že fundraising fondu pokračuje (plánované navýšení, další close); `ne` nebo prázdné jinak |
 | `conflict_note` | ne | Nevyřešený rozpor zdrojů u částky, měny nebo typu uzavření: verze, zdroje (fakty) a která verze je zapsána. Primární zdroj, který by rozpor rozhodl, nebyl nalezen. |
 
-Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří stejnému investorovi a fondu, má stejnou částku a měnu a odpovídající typ: `final_close` dokládá `fond_final_close` nebo `total_fund_size`, `uzavren_bez_upresneni` dokládá `fond_uzavren` nebo `total_fund_size`, `first_close` dokládá `fond_first_close`, `cil` dokládá `cilova_velikost_fondu`, `zavazek_jednoho_lp` dokládá `fond_zavazek_lp` a `investovano` dokládá `fond_investovano`. Fond bez částky dokládá libovolný fondový fakt (např. `informace_o_fondu`). Fond má nejvýše jeden řádek s velikostí (`final_close`, `uzavren_bez_upresneni`, `first_close`, `cil` nebo `zavazek_jednoho_lp`) a nejvýše jeden řádek `investovano`. Má-li fond doloženo více velikostí (např. first close a později final close), řádek nese nejlepší dostupný typ podle pořadí v definici získaného kapitálu; ostatní částky zůstávají jako fakty. Přibližné hodnoty se nevynechávají: číslo z formulace se zapíše s `approx` = `ano` a doslovnou formulací. Pravidlo pro `total_fund_size` v `investors.csv` (2.3) se tím nemění.
+Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří stejnému investorovi a fondu, má stejnou částku a měnu a odpovídající typ: `final_close` dokládá `fond_final_close` nebo `total_fund_size`, `uzavren_bez_upresneni` dokládá `fond_uzavren` nebo `total_fund_size`, `first_close` dokládá `fond_first_close`, `cil` dokládá `cilova_velikost_fondu`, `zavazek_jednoho_lp` dokládá `fond_zavazek_lp` `investovano` dokládá `fond_investovano` a `investovano_za_obdobi` dokládá `fond_investovano_za_obdobi`. Fond bez částky dokládá libovolný fondový fakt (např. `informace_o_fondu`). Fond má nejvýše jeden řádek s velikostí (`final_close`, `uzavren_bez_upresneni`, `first_close`, `cil` nebo `zavazek_jednoho_lp`) a nejvýše jeden řádek s investovanou částkou (`investovano` nebo `investovano_za_obdobi`). Má-li fond doloženo více velikostí (např. first close a později final close), řádek nese nejlepší dostupný typ podle pořadí v definici získaného kapitálu; ostatní částky zůstávají jako fakty. Přibližné hodnoty se nevynechávají: číslo z formulace se zapíše s `approx` = `ano` a doslovnou formulací. Pravidlo pro `total_fund_size` v `investors.csv` (2.3) se tím nemění.
 
 **Proč samostatná tabulka.** Správci mají více fondů (Lighthouse tři, Presto dva) a o každém zdroje uvádějí jiný typ částky. Dosud se to ztrácelo ve volném textu `informace_o_fondu` a do `investors.csv` se vešel jen jeden uzavřený fond. Tabulka fondů drží každou částku strukturovaně s typem a přesností, takže lze spočítat celkový kapitál a úplnost podle typu.
 
@@ -223,8 +225,9 @@ Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří s
   - u žádného fondu není nevyřešený konflikt zdrojů (`conflict_note`).
 
   `first_close` a `zavazek_jednoho_lp` jsou vždy dolní mez. Pokud součet obsahuje závazek jednoho LP, ukazuje se zvlášť, jakou částku závazek tvoří. Konflikty zdrojů jsou v tabulce kapitálu ve zvláštním sloupci.
-- **Investováno** (`investovano` ve `funds.csv` a `invested_capital` v `investors.csv`) a **AUM** se uvádějí zvlášť a do získaného kapitálu se nepřičítají. AUM může zahrnovat i jiné než vlastní fondy. U `invested_capital` za celého správce odkazuje tabulka kapitálu na fakt s doslovnou formulací. Pokud zdroj neuvádí, co částka zahrnuje (např. vlastní kapitál zakladatelů nebo spoluinvestice), je to uvedeno v poznámce faktu.
+- **Investováno** (`investovano` ve `funds.csv` a `invested_capital` v `investors.csv`) a **AUM** se uvádějí zvlášť a do získaného kapitálu se nepřičítají. AUM může zahrnovat i jiné než vlastní fondy. U `invested_capital` za celého správce odkazuje tabulka kapitálu na fakt s doslovnou formulací. Pokud zdroj neuvádí, co částka zahrnuje (např. vlastní kapitál zakladatelů nebo spoluinvestice), je to uvedeno v poznámce faktu. Částka investovaná jen za určité období (`investovano_za_obdobi`) je v tabulce označena jako dolní mez investovaného kapitálu a do `invested_capital` se nezapisuje.
 - **Měny se nesčítají.** Má-li investor fondy v různých měnách, uvádějí se součty zvlášť.
+- **Typ částky podle formulace zdroje.** Typ se určuje jen z toho, co říká zdroj samotný, ne z kontextu ani z pozdějšího zdroje. „První kolo jsme uzavřeli na X“ je first close, „plánujeme investovat X“ je plán investic (`informace_o_fondu`), ne cíl fondu, a velikost bez rozlišení cíle a získané částky je `oznamena_velikost_fondu`. Pravidlo přibylo po kontrole kola `po_doplneni` (12. 10. 2026), kde šest ze sedmi nálezů bylo chybným typem částky.
 - Pro požadavek zadání „celkový investiční kapitál“ se investor počítá jako vyplněný, pokud má získaný kapitál nebo AUM. Investoři jen s cílem se vykazují zvlášť.
 
 Hodnoty počítá `python -m investor_db metrics`.

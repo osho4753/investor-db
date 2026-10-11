@@ -342,7 +342,7 @@ Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do
 
 ### Úplnost podle požadavků zadání – před a po
 
-„Před“ je stav dat v commitu `25fff4c` (nový kód, data beze změny). „Po“ je stav po opravě definice kapitálu a třetím kole oprav (`ab775d8`). Kapitál se počítá podle opravené definice v [02-metodika.md](02-metodika.md): získaná částka fondu nebo AUM, cíl se nezapočítává.
+„Před“ je stav dat v commitu `25fff4c` (nový kód, data beze změny). „Po“ je stav po opravě definice kapitálu, třetím kole oprav (`ab775d8`) a opravách po kontrole kola `po_doplneni` (12. 10. 2026). Opravy po kontrole čísla úplnosti nezměnily. Kapitál se počítá podle opravené definice v [02-metodika.md](02-metodika.md): získaná částka fondu nebo AUM, cíl se nezapočítává.
 
 | Požadavek (ověření investoři, n = 16) | Před | Po | Chybí, hledáno a nenalezeno |
 |---|---|---|---|
@@ -356,28 +356,28 @@ Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do
 
 **Oprava definice (11. 10. 2026).** První verze této tabulky uváděla u kapitálu 15/16, protože cílovou velikost fondu počítala jako kapitál a přičítala ji k získaným částkám. Cíl ale není kapitál. Podle opravené definice jsou Startguide a IP Lab vedeni zvlášť jako „jen cíl“ a u Presto a Depo se cíl k získanému kapitálu nepřičítá.
 
-Částky podle typu: uzavřený fond bez upřesnění 11, cílová velikost 4, first close 2, final close 1, závazek jednoho LP 1, investováno ve `funds.csv` 2 (Purple, i&i), AUM 2, `invested_capital` v `investors.csv` 3 (Depo, Tachles, Reflex).
+Investorů podle typu částky (po opravách po kontrole): uzavřený fond bez upřesnění 11, cílová velikost 4, first close 3, final close 2, závazek jednoho LP 1, investováno ve `funds.csv` 2 (Purple, i&i), investováno jen za období 1 (Tachles), AUM 2, `invested_capital` v `investors.csv` 2 (Depo, Reflex).
 
 ### Přehled po investorech
 
-Po zpřísnění pravidla (11. 10. 2026) je získaný kapitál u všech investorů dolní mez. Tensor má doložené oba fondy, ale fundraising druhého fondu pokračuje (plán navýšení na 1,5 mld. Kč). Credo má doloženo všech pět fondů, ale Stage 5 je first close a u Stage 3 a Stage 5 jsou nevyřešené konflikty zdrojů.
+Po zpřísnění pravidla (11. 10. 2026) je získaný kapitál u všech investorů dolní mez. Tensor má doložené oba fondy, ale fundraising druhého fondu pokračuje (plán navýšení na 1,5 mld. Kč). Credo má doloženo všech pět fondů, ale u Stage 3 zůstává nevyřešený konflikt měny. Stage 5 je po kontrole final close (Wikipedie vyřazena jako zdroj typu uzavření).
 
 | Investor | Sektor | Ticket před → po | Získaný kapitál | Cíl (nezapočten) | Investováno / AUM | Hledáno, nenalezeno |
 |---|---|---|---|---|---|---|
 | Tensor Ventures | ✓ | beze změny | 20 mil. EUR + 1 mld. Kč, dolní mez (2 ze 2 fondů, fundraising Co-investment Fund pokračuje) | – | – | – |
 | KAYA VC | – → ✓ | beze změny | 142 mil. EUR, dolní mez (ET3 bez částky, počet fondů nedoložen) | – | AUM 500 mil. USD | – |
 | Depo Ventures | ✓ | beze změny | 129 mil. Kč, dolní mez; **z toho 94 mil. Kč závazek jednoho LP (NRI)**, uzavřený Grouport 35 mil. Kč | 545 mil. Kč | investováno 9 mil. EUR | – |
-| i&i Biotech | ✓ | beze změny | 47 mil. EUR, dolní mez (přibližně) | – | investováno asi 7,4 mil. EUR | – |
-| Credo Ventures | ✓ | beze změny | 146 mil. EUR + 188 mil. USD, dolní mez (5 z 5 fondů; Stage 5 first close; **konflikt**: měna Stage 3, typ uzavření Stage 5) | – | – | primární zdroj ke Stage 3 |
-| Tilia Impact | ✓ | beze změny | 26 mil. EUR + 43 mil. Kč, dolní mez | – | – | – |
+| i&i Biotech | ✓ | beze změny | 47 mil. EUR, dolní mez (přibližně; **konflikt** s 50 mil. EUR v oznámení EIF) | – | investováno asi 7,4 mil. EUR | – |
+| Credo Ventures | ✓ | beze změny | 146 mil. EUR + 188 mil. USD, dolní mez (5 z 5 fondů; **konflikt**: měna Stage 3; Stage 5 final close) | – | – | primární zdroj ke Stage 3 |
+| Tilia Impact | ✓ | beze změny | 26 mil. EUR + 43 mil. Kč, dolní mez (první fond jen first close) | – | – | druhé kolo prvního fondu |
 | Presto Ventures | ✓ | beze změny | 30 mil. EUR, dolní mez | 150 mil. EUR (Tech Horizons) | – | uzavření Tech Horizons |
 | Rockaway Ventures | ✓ | – → – | 55 mil. EUR, dolní mez („necelých“) | – | – | ticket |
 | Purple Ventures | – → ✓ | beze změny | 700 mil. Kč, dolní mez („přes“) | – | investováno čtvrt mld. Kč | – |
 | Lighthouse Ventures | ✓ | beze změny | 23 mil. EUR, dolní mez (Fund II bez částky) | – | – | velikost Fund II |
 | Reflex Capital | – → – | beze změny | 22 mil. EUR, dolní mez (fondy 1–2 neznámé) | – | investováno 150 mil. EUR za celého správce, **rozsah neznámý** (web: „€150M již investováno“) | sektor, rozsah 150 mil. EUR |
-| Tachles | ✓ | – → – | 500 mil. Kč, dolní mez (first close, přibližně) | – | investováno 30 mil. Kč | ticket |
+| Tachles | ✓ | – → – | 500 mil. Kč, dolní mez (first close, přibližně) | – | investováno 30 mil. Kč jen za rok 2024 (dolní mez) | ticket |
 | Soulmates Ventures | ✓ | ?–3 mil. EUR beze změny | 50 mil. EUR, dolní mez (počet fondů nedoložen) | – | AUM 62 mil. EUR | dolní mez ticketu |
-| Startguide VC | ✓ | – → ?–2 mil. EUR | neznámý | 26 mil. EUR (SG One a SG Two) | – | dolní mez ticketu |
+| Startguide VC | ✓ | – → ?–2 mil. EUR | neznámý | 6 mil. EUR (SG One; SG Two má jen plán investic 20 mil. EUR) | – | dolní mez ticketu |
 | StartupYard | ✓ | beze změny | neznámý | – | – | kapitál |
 | IP Lab Ventures | ✓ | – → ?–1 mil. EUR | neznámý | 1,2 mld. Kč | – | dolní mez ticketu |
 
@@ -386,18 +386,18 @@ Po zpřísnění pravidla (11. 10. 2026) je získaný kapitál u všech investor
 - **KAYA – AUM 500 mil. USD.** Web neuvádí, co AUM zahrnuje. Vestbee (2025) uvádí hodnotu portfolia 350 mil. EUR, což je jiná veličina. AUM zůstává jako údaj správce a k získanému kapitálu se nepřičítá. Web dál uvádí „$85M Current Fund“, kdežto Vestbee first close Fund V 70 mil. EUR. Ticket je na webu v USD, ve Vestbee v EUR.
 - **Tensor – druhý fond.** Ověřeno znovu: „více než miliardou korun“ v CzechCrunch (15. 5. 2024) je plán před získáním peněz, tedy cíl, vedle cíle „až 50 mil. EUR“. Forbes (18. 9. 2025) uvádí closing 1 mld. Kč („dokázal naraisovat miliardu korun během pěti měsíců“) s plánem navýšení na 1,5 mld. Kč. 1 mld. Kč je tedy získaný kapitál typu „uzavřen bez upřesnění“, ne final close. Fond Forbes nejmenuje, ztotožnění proběhlo podle pořadí („druhý fond“).
 - **Credo – fondy 1–3.** Credo 1 má 18 mil. EUR, ale CzechCrunch (2019) uvádí start v roce 2011 a TechCrunch (2015) v roce 2010. Credo 2 mělo podle TechCrunch při uzavření v roce 2015 34 mil. EUR s cílem 40 mil. EUR, CzechCrunch (2019) uvádí 53 mil. EUR. Zapsán je pozdější údaj. Credo Stage 3 má podle money.pl (2020) 100 mil. USD, CzechCrunch a Vestbee uvádějí 100 mil. EUR. Zapsáno je USD, protože money.pl píše o získaných penězích, kdežto CzechCrunch o otevření fondu. Počet fondů 5 dokládá Tech.eu („their 5th fund“).
-- **Credo Stage 5 – typ uzavření (konflikt).** Wikipedie (f-00030, f-00295) uvádí „first closing“ 88 mil. USD, ale zdroj, který cituje (Tech.eu, f-00266), first close neuvádí. TNW (23. 3. 2026, f-00296) píše o fondu „raised in a single closing“, tedy o jediném uzavření. Podle tvého rozhodnutí je ve `funds.csv` zapsán first close (konzervativní varianta). Rozpor je v `conflict_note` a ve sloupci Konflikt zdrojů v tabulce kapitálu.
+- **Credo Stage 5 – typ uzavření.** Wikipedie (f-00030, f-00295) uvádí „first closing“ 88 mil. USD, ale zdroj, který cituje (Tech.eu, f-00266), first close neuvádí. TNW (23. 3. 2026, f-00296) píše o fondu „raised in a single closing“, tedy o jediném uzavření. Zadavatel nejdřív rozhodl zapsat first close jako konzervativní variantu s konfliktem. Po kontrole R1 (12. 10. 2026) je Wikipedie pro tento údaj vyřazena a fond je zapsán jako final close podle TNW (viz Opravy po kontrole kola `po_doplneni`).
 - **Credo Stage 3 – měna (konflikt).** USD uvádějí money.pl (10. 3. 2020, f-00291; partner Habermann v citované tiskové zprávě „blisko 100 mln USD“) a Silicon Canals. EUR uvádějí CzechCrunch (8. 11. 2019), partner Andrej Kiska v rozhovoru (11. 11. 2019, f-00297) a Vestbee (2. 4. 2020). Primární zdroj (web Credo, newsroom, EIF) se nenašel a vyhledávání vrátilo jen norský Credo III, což je jiný subjekt (s-030). Rozpor je ve `funds.csv` označený a zapsána je nižší varianta 100 mil. USD. Součet Creda proto obsahuje sporný fond.
 - **Lighthouse – první fond.** Článek uvádí 23 mil. EUR, rozpis vkladů ve stejném článku ale dává 20 mil. EUR.
 - **IP Lab – velikost fondu.** CzechCrunch a MPO uvádějí cíl 1,2 mld. Kč, Lupa „až 40 mil. EUR (necelá miliarda Kč)“.
-- **i&i – 50 mil. EUR.** EIF fond popisuje jako „€50 million fund“, ÚOCHB uvádí start s více než 45 mil. EUR a později přibližně 47 mil. EUR. 50 mil. EUR je proto vedeno jako cílová velikost.
+- **i&i – 50 mil. EUR.** EIF fond popisuje jako „€50 million fund“, ÚOCHB uvádí start s více než 45 mil. EUR a později přibližně 47 mil. EUR. 50 mil. EUR bylo původně vedeno jako cílová velikost. Po kontrole R1 je to oznámená velikost bez rozlišení cíle a rozpor je označen jako konflikt.
 - **Investovaný kapitál Purple** (čtvrt miliardy Kč) je ve `funds.csv` jako `investovano` v CZK, protože tam má měnu každá částka. V `investors.csv` zůstává prázdný, protože řádek je v EUR. Stejně je zapsána investovaná částka i&i (přibližně 7,4 mil. EUR).
 - **Sektory Purple** jsou mapované na slovník: creator economy → `media`, security → `kyberbezpecnost`. Mapování je v `evidence_note`.
 - **Reflex – sektory.** Sektory byly hledány přímo na reflexcapital.com (úvodní stránka cs i en, portfolio, kontakt). Web je neuvádí a píše jen „Investujeme zejména do lidí“. Sektorovou neomezenost výslovně neuvádí, proto se `sektorove_agnosticky` nezapisuje a hledání je v `search_log` (s-029). Na úvodní stránce je doslovně „€150M již investováno“ (anglicky „€150M invested“), doplněno jako `invested_capital` (f-00294). Žádný zdroj neuvádí, co částka zahrnuje (s-031). Forbes uvádí, že Reflex začal jako family office, kde Ondřej Fryc investoval vlastní prostředky. Částka je řádově vyšší než získaný kapitál známých fondů (třetí fond 22 mil. EUR, druhý „podobný“), takže pravděpodobně nejde jen o fondy. Zdroj to ale neříká, proto je v tabulce kapitálu uvedena jako údaj za celého správce s nejasným rozsahem.
 
 ### Pracnost
 
-Doplňování trvalo modelu 13,0 min běhu nástrojů v první fázi (16 investorů, medián 0,8 min) 7,6 min ve druhé fázi (Credo, Tensor, Reflex, Purple, i&i; společný čas rozdělen rovnoměrně po 1,51 min) a 3,3 min ve třetí fázi (Tensor, Credo, Reflex; po 1,10 min). Je evidováno v `effort_log` jako činnost `doplneni`, odděleně od původního ověření (80,1 min). Cílená hledání bez výsledku jsou v `search_log` jako s-018 až s-031.
+Doplňování trvalo modelu 13,0 min běhu nástrojů v první fázi (16 investorů, medián 0,8 min) 7,6 min ve druhé fázi (Credo, Tensor, Reflex, Purple, i&i; společný čas rozdělen rovnoměrně po 1,51 min) a 3,3 min ve třetí fázi (Tensor, Credo, Reflex; po 1,10 min). Je evidováno v `effort_log` jako činnost `doplneni`, odděleně od původního ověření (80,1 min). Cílená hledání bez výsledku jsou v `search_log` jako s-018 až s-032 (s-032 po kontrole).
 
 ### Nové fakty ke kontrole
 
@@ -425,3 +425,28 @@ Pro srovnání kolo `vzorek`: 94,1 %, v přísné variantě 88,9 %. R1 potřebov
 | f-00285 | Startguide VC | `cilova_velikost_fondu` 20 mil. EUR (SG Two) | `nelze_overit` | „Plánujeme investovat 20 M EUR do 15 projektů“ je plánovaný objem investic, ne cílová velikost fondu. |
 
 **Co z kontroly plyne.** Šest ze sedmi nálezů se netýká částky, ale jejího **typu**: cíl, získaná částka, first close, investice za období. Částky samotné odpovídaly zdrojům. Doplňování tedy chybovalo hlavně v klasifikaci. Agent přiřadil typ podle kontextu nebo pozdějšího zdroje („je vedeno jako cíl, protože…“), ne podle formulace zdroje. Jen f-00267 je `nelze_overit` kvůli nedostupnému zdroji. U zbylých čtyř R1 zdroj otevřel, ale zdroj typ údaje nedokládá. Proto je pro toto kolo výstižnější přísná varianta (85,7 %). Verdikty zůstávají, jak je R1 zapsal. Opravy, které R1 navrhl, jsou v oddílu „Opravy po kontrole kola `po_doplneni`“. Metrika výše platí pro data v době kontroly.
+
+### Opravy po kontrole kola `po_doplneni`
+
+Opravy navrhl R1 a schválil je zadavatel 12. 10. 2026. Provedly se až po kontrole, takže **přesnost kola `po_doplneni` výše se nemění** a platí pro data v době kontroly (`5fdc535`). Opravené fakty si ponechávají `fact_id`. Verdikty R1 se vztahují k původní hodnotě (historie v Gitu). Všechny dotčené zdroje sběrač 12. 10. 2026 znovu otevřel a ověřil proti surovému textu.
+
+| Fakt | Před opravou | Po opravě | Zdroj a důvod |
+|---|---|---|---|
+| f-00270 Tilia | `fond_uzavren` 43 mil. Kč, přibližně | `fond_first_close` 43 mil. Kč; `funds.csv` `first_close` | Rozhovor 28. 11. 2018: „První kolo jsme uzavřeli na 43 milionech korun“, druhé kolo mělo fond navýšit na necelých 60 mil. Kč. Druhé kolo **nedoloženo**: CzechCrunch 21. 9. 2023 píše jen „přes 43 milionů“, Newstream 15. 9. 2023 popisuje až druhý fond (search_log s-032). |
+| f-00262 i&i | `cilova_velikost_fondu` 50 mil. EUR | `oznamena_velikost_fondu` 50 mil. EUR; `conflict_note` u fondu | EIF 24. 9. 2021: „a €50 million tech transfer fund“, velikost v době závazku EIF, ne cíl. Rozpor s ÚOCHB (přibližně 47 mil. EUR, f-00264) je vidět v tabulce kapitálu. Zapsán zůstává pozdější údaj o získaném kapitálu. |
+| f-00267 Credo | zdroj Sifted, fond „Credo Stage 4“ | zdroj AIN.UA 11. 10. 2022, fond „CS4“; nový fakt f-00298 (Podim) | AIN.UA: „closed its €75 million fourth fund“. Název „Credo Stage 4“ žádný zdroj neuvádí. Podim uvádí „fourth flagship fund, CS4, at €75 million“ a first close dříve v roce 2022. Sifted (src-0122) už žádný fakt nedokládá. |
+| f-00273 Purple | `cilova_velikost_fondu` 40 mil. EUR | `oznamena_velikost_fondu` 40 mil. EUR | Tech.eu: „has launched a €40 million fund“ nerozlišuje cíl a získanou částku. Kapitál Purple se nemění (700 mil. Kč, f-00275). |
+| f-00282 Tachles | `invested_capital` 30 mil. Kč v `investors.csv` | `fond_investovano_za_obdobi` 30 mil. Kč v `funds.csv`; `invested_capital` prázdné | „Jen během minulého roku podpořili sedm startupů dohromady částkou třicet milionů korun“. Jde o rok 2024, ne o celkovou částku, proto je to v tabulce kapitálu dolní mez. |
+| f-00285 Startguide | `cilova_velikost_fondu` 20 mil. EUR (SG Two) | `informace_o_fondu` „plánovaný objem investic 20 mil. EUR do 15 projektů“; SG Two ve `funds.csv` bez částky | „Plánujeme investovat 20 M EUR do 15 projektů“ je plán investic, ne cílová velikost fondu. Cíl Startguide klesá z 26 na 6 mil. EUR (jen SG One). |
+| f-00295, f-00030 Credo | Wikipedie jako zdroj first close Stage 5; `funds.csv` `first_close` s konfliktem | Wikipedie označena v `evidence_note` jako **vyřazený zdroj pro typ uzavření**; `funds.csv` `final_close` podle TNW (f-00296), konflikt odstraněn | Citovaný Tech.eu typ uzavření neuvádí a TNW píše „raised in a single closing“. Po vyřazení Wikipedie žádný zdroj first close nedokládá, proto řádek fondu nese typ podle TNW. f-00030 (kolo `vzorek`, verdikt `spravne`) zůstává beze změny verdiktu. |
+
+**Dopad na metriky.** Úplnost podle požadavků zadání se nemění: kapitál 13/16, jen cíl 2/16 (Startguide, IP Lab). Získaný kapitál zůstává u všech investorů dolní mezí. U Creda je to už jen kvůli konfliktu měny Stage 3. Změnilo se:
+
+- cíl Startguide z 26 na 6 mil. EUR,
+- Tachles: investovaný kapitál je dolní mez za období,
+- i&i: konflikt zdrojů je vidět v tabulce kapitálu,
+- Tilia: první fond je first close.
+
+**Nové typy faktů.** Kvůli opravám přibyly `oznamena_velikost_fondu` a `fond_investovano_za_obdobi` (s typem částky `investovano_za_obdobi`), viz [02-metodika.md](02-metodika.md). Metodika nově výslovně říká, že typ částky se určuje jen z formulace zdroje.
+
+**Opakovaná kontrola.** Fakty f-00262, f-00267, f-00270, f-00273, f-00282, f-00285 a nový f-00298 mají po opravě jiný typ, zdroj nebo hodnotu. Zatím je nikdo znovu nezkontroloval. Hodnotitel je může projít v kontrolním listu. Jejich verdikty v kole `po_doplneni` se vztahují k původnímu stavu.
