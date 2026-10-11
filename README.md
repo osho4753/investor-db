@@ -99,6 +99,16 @@ Agent pokyn provedl, protože first close je konzervativní varianta. Rozpor ale
 
 Autor rozhodl, že zápis zůstává. Credo je dolní mezí tak jako tak kvůli nevyřešenému konfliktu měny u Credo Stage 3 (100 mil. USD podle money.pl, 100 mil. EUR podle CzechCrunch, Vestbee a partnera Creda; primární zdroj se nenašel). Typ uzavření Stage 5 tedy výsledek nemění. Rozbor je v [docs/04](docs/04-rucni-kontrola.md), 4.7.
 
+### Příklad chyby: agent zapsal odhadnutý čas jako měření
+
+U 18 cílených hledání (`search_log.csv`, s-018 až s-035) agent při zápisu vyplnil sloupec `minutes` kulatými hodnotami 0,5–2 min. Ty nebyly změřené, byly odhadnuté. Sloupec přitom podle metodiky obsahuje změřený čas a report je sčítal do času hledání: 27,6 min místo změřených 5,6 min.
+
+Chybu agent sám odhalil, když autor chtěl sjednotit definici času modelu pro VC a PE. Změřené časy ze záznamů začátku a konce mají dvě desetinná místa, kdežto odhady byly kulaté.
+
+Oprava: hodnoty jsou smazané a v poznámce řádku je uvedeno, že čas nebyl měřen. Validace teď vyžaduje `minutes` jen u hledání kandidátů. Čas modelu se počítá jen ze změřených dat (sjednocená definice v [docs/03](docs/03-globalni-odhad.md), 3.8).
+
+**Poučení:** u každého čísla v datech musí být jasné, zda je změřené, převzaté ze zdroje, nebo odhadnuté. Platí to i pro údaje o vlastní práci agenta.
+
 ## Struktura
 
 ```

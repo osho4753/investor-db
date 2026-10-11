@@ -234,7 +234,7 @@ Pole zadání [M]: sektor 15/16, ticket 14/16, kapitál 13/16.
 | Pravost (skutečný PE investor) potvrzená R1 | 5/5 (u vyloučených R1 výslovně: „Skutečný PE investor: ano“) |
 | V rámci země pilotu (česká právnická osoba) | 2/5 |
 
-Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v procentech. Čas R1 nebyl zapsán (`review_minutes` prázdné), čas člověka u PE tedy zůstává **[P]** 15,5 min jako u VC.
+Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v procentech. Čas kontroly R1 [M]: 45 min za 5 záznamů, tedy **9 min na záznam** (5–15 min). Vyloučené zahraniční subjekty trvaly 5–15 min, ověřené 5–10 min.
 
 **Pole zadání [M]:**
 
@@ -309,7 +309,7 @@ Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpo�
 | Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | Člověk na kontrolu záznamu |
 |---|---|---|---|---|---|---|
 | VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision 15/15 [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 15,5 min [M] |
-| PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 15,5 min [P] |
+| PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 9 min [M, n = 5] |
 | Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 15–30 min [P] |
 | Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
 | Velký soukromý investor | 21 (11–42) [Z: E8 × P] | 62 600 (31 300–125 200) [Z: E7 × P] | 20 % (10–30 %) [P] | 70–90 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
