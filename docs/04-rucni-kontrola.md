@@ -451,3 +451,27 @@ Opravy navrhl R1 a schválil je zadavatel 12. 10. 2026. Provedly se až po kontr
 **Nové typy faktů.** Kvůli opravám přibyly `oznamena_velikost_fondu` a `fond_investovano_za_obdobi` (s typem částky `investovano_za_obdobi`), viz [02-metodika.md](02-metodika.md). Metodika nově výslovně říká, že typ částky se určuje jen z formulace zdroje.
 
 **Opakovaná kontrola (kolo `po_oprave`).** Fakty f-00262, f-00267, f-00270, f-00273, f-00282, f-00285 a nový f-00298 mají po opravě jiný typ, zdroj nebo hodnotu. Jsou v `fact_reviews.csv` jako samostatné kolo `po_oprave` a v kontrolním listu jako třetí oddíl. Jejich verdikty v kole `po_doplneni` se vztahují k původnímu stavu a zůstávají. Přesnost kola `po_oprave` se vykazuje zvlášť a do přesnosti ostatních kol se nezapočítává.
+
+## 4.8 Kontrola mini-pilotu PE
+
+Mini-pilot PE ([01](01-plan-a-kriteria.md), 1.11) má vlastní řádky v `reviews.csv` se sloupcem `category` = `pe`. Založil je příkaz `python -m investor_db review-template --reviewer R1 --category pe`. Posuzuje se **status podle pravidel PE** (P1–P4 v [01](01-plan-a-kriteria.md), 1.10), ne podle pravidel VC. Precision PE se počítá jen z řádků `pe` u subjektů se statusem PE `overeny`. VC precision se nemění.
+
+| Verdikt | Význam v kategorii PE |
+|---|---|
+| `TP` | Subjekt je skutečný PE investor, který splňuje P1–P4 (u `overeny`), nebo je správně vyloučen (u `vyloucen`). |
+| `FP` | Status je chybný: ověřený subjekt P1–P4 nesplňuje nebo nejde o PE, případně vyloučený subjekt kritéria splňuje. |
+| `nejiste` | Zdroje nestačí k rozhodnutí. |
+
+Do precision vstupují jen `overeny` (2 subjekty). Verdikt u vyloučených slouží jako kontrola false negatives, stejně jako u VC.
+
+### Záznamy ke kontrole
+
+| # | Investor | Status PE | Co ověřit | Klíčové fakty |
+|---|---|---|---|---|
+| 1 | EVERITA Capital (inv-0007) | `overeny` | IČO 19067097 v ARES; growth a většinové podíly; Everita Fund I; investice za 36 měsíců | f-00299 (ARES), f-00303 (fáze), f-00306 (cíl fondu 40 mil. EUR), f-00307 (EIF schválil 20 mil. EUR), f-00308 Clintrial 31. 8. 2026, f-00309 Pekarna Hrstić 31. 3. 2026 |
+| 2 | Enterprise Investors (inv-0015) | `vyloucen`, `zahranicni_subjekt` | že nemá českou právnickou osobu | f-00311 (CVCA: Varšava; ARES 0 výsledků), s-033 |
+| 3 | Innova Capital (inv-0018) | `vyloucen`, `zahranicni_subjekt` | že nemá českou právnickou osobu | f-00319 (kontakt: Varšava, Lucemburk; ARES 0), s-034 |
+| 4 | Versute Investments (inv-0023) | `overeny` | IČO 03965953; růstový kapitál a LBO; podfond VERSUTE Private Equity Fund Otevřený; Unipap | f-00326 (ARES), f-00329 (fáze), f-00332 (cílová hodnota aktiv 1,5–2 mld. Kč), f-00333 Unipap 24. 9. 2025 |
+| 5 | Value4Capital (inv-0024) | `vyloucen`, `zahranicni_subjekt` | že nemá českou právnickou osobu; že V4C, s.r.o. v ARES nesouvisí | f-00336 (kontakt; ARES), s-035 |
+
+Doplňková pole (sektor, ticket, kapitál) jsou fakty f-00299–f-00343. Mapování sektorů na slovník je u každého faktu v `evidence_note` a je přibližné (1.11). Čas kontroly zapište do `review_minutes`.

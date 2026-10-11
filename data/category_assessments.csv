@@ -1,1 +1,6 @@
 investor_id,category,verification_status,exclusion_reason,last_verified_at,note
+inv-0007,pe,overeny,,2026-10-12,"P1 ARES 19067097; P2 growth/většinové podíly (Clintrial, Hrstić 51 %); P3 Everita Fund I; P4 investice 2026."
+inv-0015,pe,vyloucen,zahranicni_subjekt,2026-10-12,"P1 nesplněno: bez české právnické osoby (ARES 0 výsledků), sídlo Varšava."
+inv-0018,pe,vyloucen,zahranicni_subjekt,2026-10-12,"P1 nesplněno: bez české právnické osoby (ARES 0 výsledků), Varšava a Lucemburk."
+inv-0023,pe,overeny,,2026-10-12,P1 ARES 03965953; P2 růstový kapitál a LBO v MSP; P3 VERSUTE Private Equity Fund Otevřený; P4 Unipap 9/2025.
+inv-0024,pe,vyloucen,zahranicni_subjekt,2026-10-12,"P1 nesplněno: bez české právnické osoby; Lucemburk, Varšava, Bukurešť."

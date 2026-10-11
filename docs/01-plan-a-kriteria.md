@@ -312,3 +312,54 @@ Angel investoři a velcí soukromí investoři jsou fyzické osoby, takže jejic
   - podíly ve firmách, které osoba sama jako investici neuvádí;
   - zvláštní kategorie údajů.
 - **Pilot osobní údaje nesbírá.** Studie proveditelnosti pro angely a velké soukromé investory pracuje jen se souhrnnými počty (např. kolik profilů zveřejňuje asociace) a jména neukládá.
+
+## 1.11 Mini-pilot PE
+
+**Cíl.** Ověřit, zda pravidla PE z 1.10 (P1–P4) fungují na skutečných subjektech, a změřit čas a úplnost polí zadání. Data se sbírají stejnou metodikou jako u VC: jen otevřené stránky, primární zdroje přednostně, každý údaj jako fakt se zdrojem a datem přístupu.
+
+**Výběr.** VC pilot vyřadil 17 PE členů CVCA s důvodem `pe_budouci_rozsireni`. Z nich bylo náhodně vybráno 5 příkazem `random.Random(2026).sample(sorted(ids), 5)`. Seed 2026 je stejný jako u vzorku faktů. Vybráni byli EVERITA Capital (inv-0007), Enterprise Investors (inv-0015), Innova Capital (inv-0018), Versute Investments (inv-0023) a V4C / Value4Capital (inv-0024).
+
+### Jak je PE uloženo, aby se nerozbil VC pilot
+
+| Volba | Proč ne / proč ano |
+|---|---|
+| Změnit status v `investors.csv` na `overeny` | **Ne.** Status v `investors.csv` je status VC pilotu. Změna by posunula trychtýř, precision i úplnost VC a přepsala historii, ke které se váže kontrola R1. Tyto subjekty do VC pilotu opravdu nepatří. |
+| Samostatná kopie tabulek pro PE | **Ne.** Zdvojila by schéma a validaci, fakta a zdroje by se rozdělily. |
+| **Samostatné hodnocení v kategorii: tabulka `category_assessments.csv`** | **Ano.** Řádek určuje investora, kategorii (`pe`), status podle pravidel kategorie, důvod vyloučení, datum a poznámku. Fakta, zdroje a fondy zůstávají ve společných tabulkách, takže platí stejná validace dokladů. VC status v `investors.csv` zůstává (`vyloucen`, `pe_budouci_rozsireni`). |
+
+Co k tomu patří:
+
+- **Validace kategorie `pe`:**
+  - `investor_type` musí odpovídat kategorii;
+  - u `overeny` platí P1 (IČO z primárního zdroje), P3 (fakt s fondem) a P4 (aktivita za 36 měsíců vůči datu hodnocení);
+  - u `vyloucen` musí být důvod doložen faktem `duvod_vylouceni`;
+  - slovník důvodů je rozšířený o `vc_ne_pe` a `realitni_fond`.
+- **Ruční kontrola:** sloupec `category` v `reviews.csv` (`vc`, `pe`), precision se počítá pro každou kategorii zvlášť. Řádky zakládá `python -m investor_db review-template --reviewer R1 --category pe`.
+- **Pracnost:** činnost `overeni_kategorie` v `effort_log.csv`, oddělená od `overeni` VC.
+- **Metriky:** VC metriky počítají jen VC pilot. U investorů hodnocených v jiné kategorii se do VC počítá jen jejich původní fakt `duvod_vylouceni` z triáže. Report má oddíl „Hodnocení v dalších kategoriích“. Kontrola, že se VC čísla nezměnila: výstup `metrics` před a po zápisu PE se liší jen novým oddílem.
+- **Pole `investors.csv`** (sektor, ticket, kapitál, země) se u hodnocených subjektů vyplňují. VC metriky je nečtou, protože počítají jen ověřené VC.
+
+### Výsledek
+
+| Investor | Status PE | Důvod | IČO | Sektor | Ticket | Kapitál podle zdroje | Aktivita |
+|---|---|---|---|---|---|---|---|
+| EVERITA Capital | `overeny` | – | 19067097 (ARES) | ✓ web | 2–5 mil. EUR (CVCA) | jen cíl Everita Fund I 40 mil. EUR | Clintrial 8/2026, Pekarna Hrstić 3/2026 (51 %) |
+| Versute Investments | `overeny` | – | 03965953 (ARES) | ✓ web („všechna odvětví“) | 1–5 mil. EUR equity (CVCA) | jen cílová hodnota aktiv podfondu 1,5–2 mld. Kč | Unipap 9/2025 (50 %) |
+| Enterprise Investors | `vyloucen` | `zahranicni_subjekt` | v ARES nenalezeno | ✓ web | 20–75 mil. EUR (web) | investováno 2,5 mld. EUR za celou historii, 10 fondů | – |
+| Innova Capital | `vyloucen` | `zahranicni_subjekt` | v ARES nenalezeno | ✓ CVCA (2020) | 25–40 mil. EUR (web) | Innova/7 uzavřen 407 mil. EUR (4/2024), 7 fondů | – |
+| Value4Capital (V4C) | `vyloucen` | `zahranicni_subjekt` | v ARES jen nesouvisející V4C, s.r.o. | ✓ web | 7–15 mil. EUR (web) | velikosti fondů 91 mil. a „128M+“ EUR bez typu | – |
+
+**Zjištění:**
+
+- **P1 vyřadilo 3 z 5.** Regionální PE fondy jsou členy CVCA a uvádějí Česko jako cílový trh, ale nemají českou právnickou osobu (Varšava, Lucemburk). Pro databázi světa to znamená, že se mají evidovat v zemi sídla. Česká mutace webu (ei.com.pl/cz) neexistuje (HTTP 404).
+- **Pole zadání jsou u PE dostupnější než u VC:**
+  - sektor 5/5, ticket 5/5 (obě meze);
+  - nějaký údaj o kapitálu 5/5;
+  - získaný kapitál podle přísné definice ale jen 1/5 (Innova). Ostatní zdroje uvádějí cíl, „size“ bez typu nebo investovanou částku za celou historii.
+- **Konflikty ticketu web × CVCA** u 3 z 5 (EI, Innova, V4C). Profily CVCA jsou starší a vyplňuje je člen. Zapsán je web.
+- **Mapování sektorů.** Slovník sektorů je stavěný na VC. Tradiční odvětví PE (služby, stavebnictví, zdravotnictví) se mapují přibližně na `jine`, `prumysl` a `healthtech`. Pro rozšíření na PE by slovník potřeboval kategorie jako služby nebo zdravotnictví.
+- **Fáze.** Slovník fází má pro PE jen `growth`; buyout a growth nerozlišuje.
+- **Čas modelu:** 5,0 min celkem, průměr 1,0 min a medián 1,1 min na subjekt. VC pilot měl 5,4 min na ověřeného investora. Vyloučení podle P1 je rychlé (0,5–1,3 min), ověřené PE trvalo 1,1–1,6 min.
+- Hledání bez výsledku (česká entita) je v `search_log` jako s-033 až s-035.
+
+Ruční kontrolu PE záznamů dělá zadavatel, viz [04-rucni-kontrola.md](04-rucni-kontrola.md), 4.8.

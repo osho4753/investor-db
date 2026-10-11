@@ -140,3 +140,8 @@ inv-0009,doplneni,model,1.51,2026-10-11,"Investovaná částka fondu (asi 7,4 mi
 inv-0003,doplneni,model,1.10,2026-10-11,"Fond Co-investment označen jako fundraising pokračuje (Forbes: plán navýšení na 1,5 mld. Kč). Společný čas dávky 3,30 min (3 investoři) rozdělen rovnoměrně."
 inv-0013,doplneni,model,1.10,2026-10-11,"Credo Stage 5 přeřazen na first close s konfliktem; konflikt měny Credo Stage 3 označen. Společný čas dávky 3,30 min (3 investoři) rozdělen rovnoměrně."
 inv-0038,doplneni,model,1.10,2026-10-11,"Rozsah investovaného kapitálu 150 mil. EUR – doslovná formulace a nejasný rozsah v poznámce. Společný čas dávky 3,30 min (3 investoři) rozdělen rovnoměrně."
+inv-0007,overeni_kategorie,model,1.61,2026-10-12,"Ověření podle pravidel PE (mini-pilot): ARES, web, CVCA, 3 zprávy na webu."
+inv-0015,overeni_kategorie,model,1.26,2026-10-12,"Ověření podle pravidel PE (mini-pilot): CVCA, web (about, contact), ARES vyhledávání."
+inv-0018,overeni_kategorie,model,0.47,2026-10-12,"Ověření podle pravidel PE (mini-pilot): CVCA, web (contact, funds, strategy), ARES vyhledávání."
+inv-0023,overeni_kategorie,model,1.10,2026-10-12,"Ověření podle pravidel PE (mini-pilot): ARES, web (kontakt, PE, podfond), CVCA, Forbes."
+inv-0024,overeni_kategorie,model,0.59,2026-10-12,"Ověření podle pravidel PE (mini-pilot): CVCA, web (contact, funds, strategy), ARES vyhledávání."

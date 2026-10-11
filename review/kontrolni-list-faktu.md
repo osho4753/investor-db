@@ -2,7 +2,7 @@
 
 Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
 
-Kontrola obsahuje 86 z 274 faktů v 3 kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` a kolem (`review_round`) v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+Kontrola obsahuje 86 z 319 faktů v 3 kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` a kolem (`review_round`) v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
 
 # Původní kontrola – náhodný vzorek (36 faktů)
 

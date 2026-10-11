@@ -260,6 +260,21 @@ Jeden subjekt může být nalezen ve více průchodech. Každý subjekt v `inves
 
 Čas modelu se měří časovými značkami začátku a konce práce na investorovi a zahrnuje čekání na načtení stránek. Není přímo srovnatelný s časem člověka, proto se čas modelu a čas člověka vykazují zvlášť. Čas ruční kontroly zapisují hodnotitelé do sloupce `review_minutes` v `reviews.csv` a `fact_reviews.csv`.
 
+### `category_assessments.csv` – hodnocení v dalších kategoriích
+
+Jeden řádek = hodnocení jednoho investora podle pravidel jiné kategorie než VC (zatím `pe`, mini-pilot v [01](01-plan-a-kriteria.md), 1.11). Status VC pilotu v `investors.csv` se tím nemění.
+
+| Sloupec | Povinný | Popis |
+|---|---|---|
+| `investor_id` | ano | Odkaz do `investors.csv`; `investor_type` musí odpovídat kategorii |
+| `category` | ano | `pe` |
+| `verification_status` | ano | `overeny`, `kandidat`, `vyloucen` podle pravidel kategorie (u PE P1–P4) |
+| `exclusion_reason` | u `vyloucen` | Kód z 1.4 nebo `vc_ne_pe`, `realitni_fond`; doložený faktem `duvod_vylouceni` |
+| `last_verified_at` | ano | Datum hodnocení; vůči němu se počítá aktivita P4 |
+| `note` | ne | Stručné zdůvodnění podle kritérií |
+
+Čas hodnocení se zapisuje do `effort_log.csv` jako činnost `overeni_kategorie`. Kontrola investorů v `reviews.csv` má sloupec `category` (`vc`, `pe`).
+
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
 Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`. `po_oprave` obsahuje fakty změněné nebo přidané při opravách po kontrole (`--round po_oprave --facts …`). Fakt má v každém kole vlastní řádek a přesnost se počítá pro každé kolo zvlášť.
