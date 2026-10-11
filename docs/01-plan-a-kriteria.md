@@ -353,7 +353,7 @@ Co k tomu patří:
 
 | Otázka | Výsledek | Poznámka |
 |---|---|---|
-| (a) Ověřená pravost: skutečný PE investor podle zdrojů | **5/5** | Enterprise Investors, Innova a V4C mají doložené PE fondy a buyout strategii. Nejsou to „ne-investoři“. |
+| (a) Ověřená pravost: skutečný PE investor podle zdrojů | **5/5** (hodnocení sběrače; potvrzeno kontrolou R1 5/5, [04](04-rucni-kontrola.md), 4.8) | Enterprise Investors, Innova a V4C mají doložené PE fondy a buyout strategii. Nejsou to „ne-investoři“. |
 | (b) V rámci země pilotu: česká právnická osoba a P1–P4 | **2/5** | EVERITA, Versute |
 | Mimo zemi pilotu, v globální databázi by patřili do země sídla | 3/5 | Polsko (Enterprise Investors, Innova), Lucembursko a Polsko (V4C) |
 
@@ -382,7 +382,7 @@ Co k tomu patří:
 | `potravinarstvi` | Výroba potravin | „food production“ (EVERITA v CVCA; nezapsáno) |
 
 U fází by PE potřebovalo `buyout` (MBO, MBI, LBO) a `growth_equity` místo jediného `growth`, případně `rekapitalizace`. Rozšíření by znamenalo nové kódy v `schema.py`, popis v [02-metodika.md](02-metodika.md) a nové namapování 5 záznamů z pilotu. Stávající VC kódy zůstávají beze změny.
-- **Čas modelu:** 5,0 min celkem, průměr 1,0 min a medián 1,1 min na subjekt. VC pilot měl 5,4 min na ověřeného investora. Vyloučení podle P1 je rychlé (0,5–1,3 min), ověřené PE trvalo 1,1–1,6 min.
+- **Čas modelu:** 5,0 min celkem, průměr 1,0 min a medián 1,1 min na subjekt. Vyloučení podle P1 je rychlé (0,5–1,3 min), ověřené PE trvalo 1,1–1,6 min. Srovnání s VC podle sjednocené definice (hledání, triáž, ověření, doplnění) je v [03](03-globalni-odhad.md), 3.8: VC 6,9 min na ověřený záznam, PE 1,15 min na pravého investora.
 - Hledání bez výsledku (česká entita) je v `search_log` jako s-033 až s-035.
 
 Ruční kontrolu PE záznamů dělá zadavatel, viz [04-rucni-kontrola.md](04-rucni-kontrola.md), 4.8.

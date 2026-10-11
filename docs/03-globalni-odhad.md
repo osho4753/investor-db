@@ -65,7 +65,7 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pi
 
 | Vstup | Hodnota | Zdroj |
 |---|---|---|
-| Čas modelu na ověřeného investora (hledání, triáž, ověření) | (5,6 + 0,7 + 80,1) min / 16 = **5,4 min** | `effort_log.csv`, `search_log.csv` |
+| Čas modelu na ověřeného investora (hledání, triáž, ověření, doplnění; sjednocená definice v 3.8) | (5,55 + 0,66 + 80,1 + 23,9) min / 16 = **6,9 min** | `effort_log.csv`, `search_log.csv` |
 | Čas člověka na kontrolu investora | **15,5 min** | `reviews.csv` (první kontrola) |
 | Čas člověka na kontrolu faktu | **0,96 min** | `fact_reviews.csv` |
 | Vzorek na region | 25 investorů a 36 faktů (±15 p. b.) | Cochran, viz [04-rucni-kontrola.md](04-rucni-kontrola.md) |
@@ -74,13 +74,13 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pi
 
 ### Výpočet
 
-**Model.** Počet investorů × 5,4 min × koeficient regionu (USA 1,0–1,3, Evropa 1,0–1,5, zbytek světa 2,0–3,0):
+**Model.** Počet investorů × 6,9 min × koeficient regionu (USA 1,0–1,3, Evropa 1,0–1,5, zbytek světa 2,0–3,0):
 
 | Scénář | Investorů | Čas modelu, první sběr | Roční aktualizace (**předpoklad** 50–100 % prvního sběru) |
 |---|---|---|---|
-| Nízký | 5 235 | 562–790 h | 281–790 h |
-| Základní | 7 251 | 897–1 292 h | 449–1 292 h |
-| Vysoký | 9 682 | 1 307–1 907 h | 654–1 907 h |
+| Nízký | 5 235 | 716–1 007 h | 358–1 007 h |
+| Základní | 7 251 | 1 143–1 646 h | 572–1 646 h |
+| Vysoký | 9 682 | 1 665–2 430 h | 833–2 430 h |
 
 Čas běhu jde paralelizovat mezi domény. Omezení rychlosti platí pro každou doménu zvlášť, celková doba sběru tedy závisí na počtu souběžných pracovníků, ne na součtu hodin.
 
@@ -151,121 +151,182 @@ Zdroje byly otevřeny 12. 10. 2026. Čísla, která se nepodařilo otevřít ve 
 
 ## 3.8 Odhad pro jednotlivé kategorie
 
-Každé číslo je buď ze zdroje (E1–E10, G1–G7, P1–P2), nebo je označeno jako **předpoklad**. „Získatelné z veřejných zdrojů“ znamená záznam, který lze doložit podle pravidel kategorie ([01](01-plan-a-kriteria.md), 1.10). Neznamená to, že bude mít vyplněná všechna pole zadání.
+Typ každého údaje je uveden přímo u čísla:
 
-### VC (změřeno v pilotu)
+- **[M]** změřeno v pilotu nebo mini-pilotu (data v repozitáři, ruční kontrola R1);
+- **[Z]** převzato ze zdroje (E1–E10, G1–G7, P1–P2);
+- **[P]** předpoklad.
 
-| | Nízký | Základní | Vysoký | Zdroj |
-|---|---|---|---|---|
-| Svět, počet firem | 5 235 | 7 251 | 9 682 | 3.3 |
-| ČR | 16 | 20 | 25 | 16 ověřených, 16 + 4 kandidáti, horní mez Chapmanova intervalu (P1) |
-| Získatelné z veřejných zdrojů | 80 % | 80 % | 80 % | pilot: 16 ověřených z 20 VC subjektů, 4 kandidáti |
+Hodnocení sběrače (status, který přidělil model) není měření. Měřením je až ruční kontrola R1.
 
-**Spolehlivost (změřeno):**
+„Získatelné z veřejných zdrojů“ znamená záznam, který lze doložit podle pravidel kategorie ([01](01-plan-a-kriteria.md), 1.10). Neznamená to, že bude mít vyplněná všechna pole zadání.
+
+### Sjednocená definice času modelu
+
+Čas modelu se dělí na fáze. Všechny se berou z `effort_log.csv` (časové značky začátku a konce) a z průchodů hledání kandidátů v `search_log.csv`.
+
+| Fáze | Co obsahuje | VC (pilot) | PE (mini-pilot) |
+|---|---|---|---|
+| Hledání kandidátů | průchody seznamů a registrů (`search_log` bez `investor_id`) | 5,55 min / 52 nalezených = **0,11 min** na nalezený subjekt [M] | vlastní hledání 0. Seznam převzat z průchodu s-002 VC pilotu, počítá se stejně 0,11 min [M] |
+| Triáž | rychlé vyloučení podle zdroje hledání | 0,66 min / 22 = **0,03 min** [M] | proběhla ve VC pilotu, 0,03 min [M] |
+| Ověření | doložení kritérií kategorie (Z1–Z4, resp. P1–P4) | 80,1 min / 30 posouzených = **2,67 min** na posouzený subjekt [M] | 5,03 min / 5 = **1,01 min** na posouzený subjekt [M]; pole zadání zapsána už při ověření |
+| Doplnění | sektor, ticket a kapitál podle zadání | 23,9 min / 16 = **1,49 min** na ověřený záznam [M] | 0, je součástí ověření |
+| **Celkem na záznam v databázi** | všechny fáze / počet záznamů, které se do databáze dostanou | (5,55 + 0,66 + 80,1 + 23,9) / 16 = **6,9 min** na ověřený VC [M] | 0,11 + 0,03 + 1,01 = **1,15 min** na pravého PE investora (5/5 podle R1) [M] |
+
+Na 30 posouzených VC připadá 16 ověřených, protože ověřování kandidátů a vyloučených také stojí čas. U PE se záznam vede v zemi sídla, takže se do databáze dostane každý pravý investor.
+
+**Proč se dřívější hodnoty liší.** Dřívější hodnota 5,4 min u VC zahrnovala hledání, triáž a ověření, ale ne doplnění. Hodnota 1,0 min u PE zahrnovala jen ověření. Nově se obě kategorie počítají stejně.
+
+**Proč je PE rychlejší:**
+
+- weby PE fondů a profily CVCA uvádějí strategii, ticket a fondy přehledně;
+- 3 z 5 subjektů rozhodlo P1 (zahraniční sídlo) už v první fázi;
+- ve VC pilotu byly složité případy (CVC, kandidáti, konflikty zdrojů).
+
+Při n = 5 je rozdíl orientační.
+
+**Minuty cílených hledání** v `search_log.csv` (s-018 až s-035) se nezapočítávají. Nejsou změřené: jde o kulaté hodnoty, které při zápisu odhadl sběrač. Čas těchto hledání je obsažen ve změřeném čase ověření a doplnění.
+
+### VC
+
+| | Nízký | Základní | Vysoký |
+|---|---|---|---|
+| Svět, počet firem | 5 235 [Z+P] | 7 251 [Z+P] | 9 682 [Z+P] |
+| ČR | 16 [M] | 20 [M] | 25 [M] |
+| Získatelné z veřejných zdrojů | 80 % [M] | 80 % [M] | 80 % [M] |
+
+Svět: USA 2 984 [Z: G1], Evropa = 3 095 [Z: G3] × podíl VC 0,4–0,6 [P], zbytek světa [P] (3.3). ČR: 16 ověřených, 16 + 4 kandidáti a horní mez Chapmanova intervalu. Získatelné: 16 ověřených z 20 VC subjektů.
+
+**Spolehlivost [M]:**
 
 - precision 15/15;
-- přesnost faktů – vzorek 32/34, přísně 88,9 %;
-- přesnost faktů – doplňování 42/44, přísně 85,7 %;
+- přesnost faktů – vzorek 32/34, přísně 32/36;
+- přesnost faktů – doplňování 42/44, přísně 42/49;
 - opravy 7/7.
 
-Pole zadání: sektor 15/16, ticket 14/16, kapitál 13/16.
+Pole zadání [M]: sektor 15/16, ticket 14/16, kapitál 13/16.
 
-**Náklady (změřeno):** model 5,4 min na ověřeného investora. Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
+**Náklady [M]:** model 6,9 min na ověřený záznam (sjednocená definice). Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
 
-### PE (změřeno v mini-pilotu, n = 5)
+### PE
 
-| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
-|---|---|---|---|---|
-| USA | 6 000 | 6 000 | 6 000 | E1 |
-| Evropa: firmy PE a VC × podíl PE | 3 095 × 0,4 = 1 238 | × 0,5 = 1 548 | × 0,6 = 1 857 | G3; podíl PE = 1 − podíl VC (3.3, **předpoklad** z pilotu) |
-| Zbytek světa | – | 0,3 × (USA + Evropa) | 0,6 × (USA + Evropa) | **předpoklad**, bez zdroje |
-| **Svět celkem** | **7 000** | **9 812** | **12 571** | Nízký = celosvětové číslo z E1. Je menší než součet USA a Evropy, protože definice zdrojů se liší. |
-| ČR – skuteční PE investoři aktivní v ČR | 17 | 22 | 27 | 17 PE členů CVCA (E2), pravost 5/5; základní a vysoký scénář přičítají nečleny CVCA +30 %, resp. +60 % (**předpoklad**) |
-| ČR – s českou právnickou osobou | 3 | 9 | 16 | 17 × podíl s českou entitou 0,2 / 0,4 / 0,6 (pilot 2/5, malý vzorek), × 1,0 / 1,3 / 1,6 za nečleny (**předpoklad**) |
-| Získatelné z veřejných zdrojů | pravost 5/5, v zemi pilotu 2/5 | | | E2 |
+| | Nízký | Základní | Vysoký |
+|---|---|---|---|
+| USA | 6 000 [Z: E1] | 6 000 [Z: E1] | 6 000 [Z: E1] |
+| Evropa | 1 238 [Z: G3 × P] | 1 548 [Z: G3 × P] | 1 857 [Z: G3 × P] |
+| Zbytek světa | – | 0,3 × (USA + Evropa) [P] | 0,6 × (USA + Evropa) [P] |
+| **Svět celkem** | **7 000** [Z: E1] | **9 812** [Z+P] | **12 571** [Z+P] |
+| ČR – skuteční PE investoři aktivní v ČR | 17 [M] | 22 [M+P] | 27 [M+P] |
+| ČR – s českou právnickou osobou | 3 [M+P] | 9 [M+P] | 16 [M+P] |
 
-**Spolehlivost:**
+- **Evropa:** G3 × podíl PE 0,4 / 0,5 / 0,6. Podíl PE = 1 − podíl VC z 3.3 a je to předpoklad.
+- **Svět, nízký scénář:** číslo E1. Je menší než součet USA a Evropy, protože definice zdrojů se liší.
+- **ČR, aktivní:** 17 PE členů CVCA (pravost 5/5 podle R1, viz níže). Nečlenové +30 % / +60 % jsou předpoklad.
+- **ČR, s českou entitou:** 17 × podíl 0,2 / 0,4 / 0,6 (pilot 2/5 [M], rozpětí [P]) × nečlenové 1,0 / 1,3 / 1,6 [P].
 
-- Pravost 5/5.
-- Ruční kontrola PE od R1 v době zápisu ještě není v `reviews.csv`, výsledek proto chybí.
-- Přesnost faktů se očekává jako u VC, 85–95 % (**předpoklad**: stejná metodika).
-- Ticket se mezi webem a CVCA rozchází u 3/5, takže u pole „typická výše“ je spolehlivost nižší.
-- Pole zadání: sektor 5/5 a ticket 5/5. Získaný kapitál podle přísné definice má jen 1/5, nějaký údaj o kapitálu 5/5.
+**Kontrola R1 [M]** (`reviews.csv`, `category=pe`, 12. 10. 2026):
 
-**Náklady:** model **1,0 min** na subjekt (změřeno, n = 5, bez hledání kandidátů, seznam pochází z CVCA). Pro hledání se přičítá 0,4 min jako u VC ((5,6 + 0,7) / 16). Čas člověka zatím změřen není, počítá se jako u VC 15,5 min (**předpoklad**).
+| | Počet |
+|---|---|
+| Verdikt TP celkem | 5/5 |
+| Ověření v zemi pilotu potvrzeni | 2/2 |
+| Správně vyloučeni z rámce země (zahraniční subjekt) | 3/3 |
+| Pravost (skutečný PE investor) potvrzená R1 | 5/5 (u vyloučených R1 výslovně: „Skutečný PE investor: ano“) |
+| V rámci země pilotu (česká právnická osoba) | 2/5 |
+
+Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v procentech. Čas R1 nebyl zapsán (`review_minutes` prázdné), čas člověka u PE tedy zůstává **[P]** 15,5 min jako u VC.
+
+**Pole zadání [M]:**
+
+- sektor 5/5, ticket 5/5;
+- získaný kapitál podle přísné definice 1/5, nějaký údaj o kapitálu 5/5;
+- ticket se mezi webem a CVCA rozchází ve 3/5.
+
+**Přesnost faktů:** kontrolou faktů neměřena. Očekává se 85–95 % jako u VC [P], protože jde o stejnou metodiku.
+
+**Náklady [M]:** model 1,15 min na pravého PE investora (sjednocená definice, n = 5).
 
 ### Family office
 
-| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
-|---|---|---|---|---|
-| Svět, single-family office | 8 030 | 8 030 | 10 720 | E3; vysoký scénář = projekce Deloitte pro rok 2030 jako horní mez |
-| z toho Evropa | 2 020 | 2 020 | – | E4 |
-| Svět – přímí investoři do firem (v rozsahu databáze) | 8 030 × 0,3 = 2 409 | 8 030 × 0,5 = 4 015 | 10 720 × 0,7 = 7 504 | Podíl přímých investorů je **předpoklad**. Sonda ukázala investice přes fondy jako LP (1/5) i poskytovatele služeb (2/5). |
-| ČR – family office celkem | 10 | 30 | 60 | **předpoklad**; žádný zdroj počet neuvádí |
-| ČR – přímí investoři | 3 | 15 | 42 | ČR × stejný podíl |
-| Získatelné z veřejných zdrojů | 0 % | 15 % | 30 % | Sonda 0/5 `overeny`, 3/5 kandidáti; **předpoklad**, že část kandidátů doloží hlubší hledání |
+| | Nízký | Základní | Vysoký |
+|---|---|---|---|
+| Svět, single-family office | 8 030 [Z: E3] | 8 030 [Z: E3] | 10 720 [Z: E3, projekce 2030] |
+| z toho Evropa | 2 020 [Z: E4] | 2 020 [Z: E4] | – |
+| Svět – přímí investoři do firem | 2 409 [Z × P 0,3] | 4 015 [Z × P 0,5] | 7 504 [Z × P 0,7] |
+| ČR – family office celkem | 10 [P] | 30 [P] | 60 [P] |
+| ČR – přímí investoři | 3 [P] | 15 [P] | 42 [P] |
+| Získatelné z veřejných zdrojů | 0 % [M: sonda 0/5] | 15 % [P] | 30 % [P] |
 
-**Spolehlivost (předpoklad):** přesnost faktů 70–90 %. Hlavním rizikem je klasifikace (vlastní, nebo cizí kapitál; přímá investice, nebo LP). Stejný typ chyby převažoval v kole `po_doplneni` (6/7 nálezů). Pole zadání: kapitál 0/5 v sondě, sektor a výše zřídka.
+**Proč základní scénář 15 %, když sonda dala 0/5.**
 
-**Náklady (předpoklad):** model 2–4× VC, tedy 11–22 min na záznam, protože chybí registr a seznam kandidátů. Člověk 15–30 min.
+- 0/5 při tak malém vzorku nevylučuje ani poměrně vysoký skutečný podíl. 95% Wilsonův interval pro 0/5 je **0–43,4 %**.
+- Nízký scénář bere bodový odhad sondy (0 %). Základní a vysoký leží uvnitř intervalu a jsou to předpoklady. 15 % je zhruba třetina horní meze. 30 % předpokládá, že hlubší hledání doloží část ze 3/5 kandidátů.
+- Sonda četla jen jeden mediální článek na případ. Hledání tiskových zpráv o přímých investicích by mohlo F3 doložit u části kandidátů, ale doložitelnost by zůstala nízká.
+- Hodnotu je potřeba nahradit sondou o 25 záznamech.
+
+**Spolehlivost [P]:** 70–90 %. Hlavním rizikem je klasifikace: vlastní, nebo cizí kapitál; přímá investice, nebo LP. Stejný typ chyby převažoval v kole `po_doplneni` (6/7 nálezů [M]). Pole zadání: kapitál 0/5 [M], sektor a výše zřídka.
+
+**Náklady [P]:** model 2–4× čas ověření a doplnění u VC, tedy 14–28 min na záznam (střed 21 min). Chybí registr i seznam kandidátů. Člověk 15–30 min.
 
 ### Angel investoři
 
-| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
-|---|---|---|---|---|
-| Evropa – aktivní angelé v sítích | 39 400 | 39 400 | 39 400 | E5 (jen organizovaní v sítích, skutečný počet je vyšší) |
-| Svět | 118 200 | 197 000 | 394 000 | **Předpoklad**: Evropa × 3 / 5 / 10. Údaj za USA nebyl ověřen (3.7). |
-| ČR – angelé celkem | 100 | 300 | 1 000 | **předpoklad**; žádný zdroj počet neuvádí, Světová banka (2018) popisuje málo sítí a koncentraci u „super angels“ |
-| ČR – sami se veřejně prezentují (A1) | 7 | 30 | 100 | Nízký = 7 fyzických osob v databázi CBAA (E6); ostatní **předpoklad** |
-| Svět – získatelné z veřejných zdrojů | 5 % | 10 % | 20 % | **předpoklad**; jen osoby s vlastním zveřejněním a doloženou investicí |
+| | Nízký | Základní | Vysoký |
+|---|---|---|---|
+| Evropa – aktivní angelé v sítích | 39 400 [Z: E5] | 39 400 [Z: E5] | 39 400 [Z: E5] |
+| Svět | 118 200 [P: Evropa × 3] | 197 000 [P: Evropa × 5] | 394 000 [P: Evropa × 10] |
+| ČR – angelé celkem | 100 [P] | 300 [P] | 1 000 [P] |
+| ČR – sami se veřejně prezentují (A1) | 7 [M: CBAA, E6] | 30 [P] | 100 [P] |
+| Získatelné z veřejných zdrojů | 5 % [P] | 10 % [P] | 20 % [P] |
 
-**Spolehlivost (předpoklad):** 80–95 % u identity a investice, pokud stojí na vlastním zveřejnění. Pole zadání: sektor a ticket 2/11 profilů v CBAA, kapitál se neukládá.
+Údaj za USA nebyl ověřen (3.7), proto je světový počet předpokladem, ne zdrojem.
 
-**Náklady (předpoklad):** model 11–22 min na záznam. Člověk 15–30 min. Navíc informační povinnost podle čl. 14 GDPR: 5–10 min na osobu na oznámení a evidenci námitek.
+**Spolehlivost [P]:** 80–95 % u identity a investice, pokud stojí na vlastním zveřejnění. Pole zadání [M]: sektor a ticket 2/11 profilů v CBAA, kapitál se neukládá.
 
-**Omezení:** CBAA záměrně brání indexaci seznamu členů (1.12). Sběr proto vyžaduje dohodu nebo souhlas a odhad počítá s nízkým podílem.
+**Náklady [P]:** model 14–28 min na záznam. Navíc informační povinnost podle čl. 14 GDPR, 5–10 min na osobu. Člověk 15–30 min.
+
+**Omezení:** CBAA záměrně brání indexaci seznamu členů (1.12).
 
 ### Velcí soukromí investoři
 
-| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
-|---|---|---|---|---|
-| Svět – UHNWI (majetek nad 30 mil. USD) | 626 000 | 626 000 | 626 000 | E7 |
-| Svět – přímí investoři do firem | 31 300 | 62 600 | 125 200 | Podíl 5 / 10 / 20 % je **předpoklad** |
-| ČR – UHNWI | 210 | 210 | 210 | E8 (odvozený odhad z roku 2015); dolaroví milionáři 32 200 (E9) |
-| ČR – přímí investoři | 11 | 21 | 42 | stejný podíl (**předpoklad**) |
-| Získatelné z veřejných zdrojů (holding s doloženými investicemi) | 10 % | 20 % | 30 % | **předpoklad**; evidence skutečných majitelů je uzavřena, Sbírka listin jen ručně |
+| | Nízký | Základní | Vysoký |
+|---|---|---|---|
+| Svět – UHNWI (majetek nad 30 mil. USD) | 626 000 [Z: E7] | 626 000 [Z: E7] | 626 000 [Z: E7] |
+| Svět – přímí investoři do firem | 31 300 [Z × P 5 %] | 62 600 [Z × P 10 %] | 125 200 [Z × P 20 %] |
+| ČR – UHNWI | 210 [Z: E8, 2015] | 210 [Z: E8] | 210 [Z: E8] |
+| ČR – přímí investoři | 11 [Z × P] | 21 [Z × P] | 42 [Z × P] |
+| Získatelné z veřejných zdrojů | 10 % [P] | 20 % [P] | 30 % [P] |
 
-Kategorie se částečně překrývá s family office. Část UHNWI investuje přes vlastní kanceláře, takže součet obou kategorií by počítal některé subjekty dvakrát.
+Kategorie se částečně překrývá s family office.
 
-**Spolehlivost (předpoklad):** 70–90 %. Vazba osoby na holding se dokládá jen vlastním zveřejněním.
+**Spolehlivost [P]:** 70–90 %.
 
-**Náklady (předpoklad):** model 11–22 min, člověk 15–30 min a GDPR jako u angelů.
+**Náklady [P]:** model 14–28 min a GDPR 5–10 min jako u angelů. Člověk 15–30 min.
 
 ### Souhrnná tabulka (základní scénář, v závorce nízký – vysoký)
 
+Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpočet z obou.
+
 | Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | Člověk na kontrolu záznamu |
 |---|---|---|---|---|---|---|
-| VC | 20 (16–25) | 7 251 (5 235–9 682) | 80 % (změřeno) | precision 15/15; fakta 94,1 %, přísně 85,7–88,9 % (změřeno) | 5,4 min (změřeno) | 15,5 min (změřeno) |
-| PE | 9 (3–16) s českou entitou; 22 (17–27) aktivních v ČR | 9 812 (7 000–12 571) | pravost 5/5, v zemi pilotu 2/5 (změřeno, n = 5) | kontrola R1 chybí; fakta 85–95 % (předpoklad) | 1,0 min + 0,4 min hledání (změřeno, n = 5) | 15,5 min (předpoklad) |
-| Family office | 15 (3–42) přímých investorů | 4 015 (2 409–7 504) přímých investorů | 15 % (0–30 %; sonda 0/5) | 70–90 % (předpoklad) | 11–22 min (předpoklad) | 15–30 min (předpoklad) |
-| Angel investor | 30 (7–100) s vlastním zveřejněním | 197 000 (118 200–394 000), z toho získatelné 10 % (5–20 %) | 10 % (předpoklad) | 80–95 % (předpoklad) | 11–22 min + GDPR 5–10 min (předpoklad) | 15–30 min (předpoklad) |
-| Velký soukromý investor | 21 (11–42) | 62 600 (31 300–125 200) | 20 % (10–30 %) | 70–90 % (předpoklad) | 11–22 min + GDPR 5–10 min (předpoklad) | 15–30 min (předpoklad) |
+| VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision 15/15 [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 15,5 min [M] |
+| PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 15,5 min [P] |
+| Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 15–30 min [P] |
+| Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
+| Velký soukromý investor | 21 (11–42) [Z: E8 × P] | 62 600 (31 300–125 200) [Z: E7 × P] | 20 % (10–30 %) [P] | 70–90 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
 
-**Čas modelu na získatelné záznamy ve světě, základní scénář** (počet × čas na záznam, bez koeficientů regionů z 3.4):
+**Čas modelu na získatelné záznamy ve světě, základní scénář** (bez koeficientů regionů z 3.4):
 
 | Kategorie | Výpočet | Hodin |
 |---|---|---|
-| VC | 7 251 × 0,8 × 5,4 min | 522 |
-| PE | 9 812 × 1,4 min | 229 |
-| Family office | 4 015 × 0,15 × 16,5 min | 166 |
-| Angel investor | 197 000 × 0,1 × (16,5 + 7,5) min | 7 880 |
-| Velký soukromý investor | 62 600 × 0,2 × (16,5 + 7,5) min | 5 008 |
-
-U PE je celý počet, protože pravost byla 5/5 a záznam se vede v zemi sídla.
+| VC | 7 251 × 0,8 × 6,9 min [M] | 665 |
+| PE | 9 812 × 1,15 min [M] | 188 |
+| Family office | 4 015 × 0,15 × 21 min [P] | 211 |
+| Angel investor | 197 000 × 0,1 × (21 + 7,5) min [P] | 9 358 |
+| Velký soukromý investor | 62 600 × 0,2 × (21 + 7,5) min [P] | 5 947 |
 
 **Jak číst výsledek:**
 
-- **VC a PE** jsou dobře proveditelné: existují seznamy a registry a pole zadání jsou dostupná. Rozdíl mezi nízkým a vysokým scénářem je do dvojnásobku.
-- **Family office, angelé a velcí soukromí investoři** mají rozpětí v řádech. Většina vstupů je předpoklad a podíl získatelných záznamů je nízký.
+- **VC a PE** stojí na měření a zdrojích. Rozdíl mezi nízkým a vysokým scénářem je do dvojnásobku.
+- **Family office, angelé a velcí soukromí investoři** mají rozpětí v řádech. Většina vstupů je předpoklad [P].
 - U fyzických osob převažují náklady na GDPR a ruční kontrolu nad časem modelu.
-- Před rozšířením na tyto kategorie je potřeba nejdřív ověřit předpoklady **sondou o 25 záznamech na kategorii**, stejně velkou jako regionální vzorek v 3.5.
+- Před rozšířením na tyto kategorie je potřeba nejdřív ověřit předpoklady sondou o 25 záznamech na kategorii.

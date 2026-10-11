@@ -21,8 +21,8 @@ inv-0039,R1,2026-10-09,TP,15,Prošel jsem to. Je to skutečná investiční spol
 inv-0042,R1,2026-10-11,FP,5,"Původně TP. Opraveno: CVC – fond nemá cizí kapitál, investuje jen peníze skupiny KKCG (Forbes).",vc
 inv-0046,R1,2026-10-11,FP,5,"Původně TP. Opraveno: investuje vlastní kapitál společníků bez fondu, nespadá do definice VC.",vc
 inv-0048,R1,2026-10-11,nejiste,5,"Původně TP. Opraveno: doloženo jen agregátory, Z1 a Z3 nejsou doloženy primárním zdrojem.",vc
-inv-0007,R1,,,,,pe
-inv-0015,R1,,,,,pe
-inv-0018,R1,,,,,pe
-inv-0023,R1,,,,,pe
-inv-0024,R1,,,,,pe
+inv-0007,R1,2026-10-12,TP,,"IČO 19067097 v ARES sedí (EVERITA Capital s.r.o., Na Florenci 2116/15, Praha 1), IČO i v patičce webu. PE growth, menšinové i většinové podíly 2–5 mil. EUR. Z3: EIF schválil 20 mil. EUR do EVERITA Fund (27. 12. 2024), fond podpořily RSJ a fond J&T (12. 10. 2025). Z4: 51% podíl v Pekarna Hrstić (31. 3. 2026), většinový podíl v Clintrial (Investors in Healthcare, 1. 9. 2026; na webu jen karta portfolia).",pe
+inv-0015,R1,2026-10-12,TP,,"CVCA i web uvádějí jen Varšavu (Varso Tower) a New York, českou kancelář ani entitu ne. Vyhledávání ARES podle názvu jsem nespouštěl, vycházím z f-00311. Skutečný PE investor: ano (buyout a expanze, 10 fondů, 2,5 mld. EUR).",pe
+inv-0018,R1,2026-10-12,TP,,"Kontakt na webu: poradenská kancelář Varšava a general partner Lucemburk; CVCA jen Varšava. Česká entita nenalezena (ARES podle názvu jsem nespouštěl, vycházím z f-00319). Skutečný PE investor: ano (mid-market buyouty, Innova/7 407 mil. EUR).",pe
+inv-0023,R1,2026-10-12,TP,,"IČO 03965953 v ARES sedí (VERSUTE INVESTMENTS a.s., Vodičkova 709/33, Praha 1). CVCA: growth capital, LBO, MBO/MBI. Z4: Unipap 24. 9. 2025 – Deloitte M&A: BHS Private Equity Fund (poradce Versute, aktiva 1,5 mld. Kč) získává polovinu. versute.cz zakazuje robotům přístup, stránku podfondu ani článek Forbes jsem neotevřel; Z3 opírám o fondovou strukturu BHS.",pe
+inv-0024,R1,2026-10-12,TP,,"Kontakt: V4C General Partner II Sarl (Lucemburk), V4C Advisers Sp. z o.o. (Varšava), kancelář Bukurešť; česká entita neuvedena. V4C, s.r.o. (IČO 27657981, Praha 9) má předmět hostinská činnost a prodej lihovin, jediná společnice Diana Suchá – se značkou nesouvisí. Skutečný PE investor: ano (buyout fondy V4C Poland Plus).",pe

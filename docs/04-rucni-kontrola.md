@@ -484,3 +484,23 @@ Verdikt u vyloučených slouží jako kontrola false negatives, stejně jako u V
 | 5 | Value4Capital (inv-0024) | `vyloucen`, `zahranicni_subjekt` | že nemá českou právnickou osobu; že V4C, s.r.o. v ARES nesouvisí | f-00336 (kontakt; ARES), s-035 |
 
 Doplňková pole (sektor, ticket, kapitál) jsou fakty f-00299–f-00343. Mapování sektorů na slovník je u každého faktu v `evidence_note` a je přibližné (1.11). Čas kontroly zapište do `review_minutes`.
+
+### Výsledek kontroly PE (R1, 12. 10. 2026)
+
+| Otázka | Výsledek |
+|---|---|
+| Verdikt TP | **5/5** |
+| Ověření (`overeny`) potvrzeni | 2/2 (EVERITA, Versute) |
+| Vyloučení jako zahraniční subjekt potvrzeni | 3/3 (Enterprise Investors, Innova, V4C) |
+| (a) Pravost: skutečný PE investor | **5/5**. U všech tří vyloučených R1 uvádí „Skutečný PE investor: ano“. |
+| (b) V rámci země pilotu: česká právnická osoba | **2/5** |
+
+Výsledky jsou v počtech, protože při 5 záznamech jde o studii proveditelnosti. Pravost 5/5 je teď **měření** (kontrola R1), ne jen hodnocení sběrače. Čas kontroly R1 nezapsal (`review_minutes` prázdné), takže čas člověka u PE změřen není.
+
+**Poznámky R1 a zjištění sběrače:**
+
+- U Enterprise Investors a Innova R1 vyhledávání v ARES nespouštěl a vycházel z faktů f-00311 a f-00319. U V4C nesouvislost s V4C, s.r.o. ověřil sám v ARES.
+- U EVERITA R1 dohledal zprávu o Clintrial s datem 1. 9. 2026 (Investors in Healthcare). Fakt f-00308 uvádí 31. 8. 2026 podle data zveřejnění na webu EVERITA. Rozdíl jednoho dne není chyba faktu.
+- **Versute – robots.txt.** R1 uvádí, že „versute.cz zakazuje robotům přístup“, a stránku podfondu ani článek Forbes neotevřel. Sběrač 12. 10. 2026 ověřil, že `https://versute.cz/robots.txt` obsahuje `User-agent: *` a prázdné `Disallow:`, tedy přístup povoluje. Odpověď nese hlavičku `X-Robots-Tag: noindex, follow`, která zakazuje jen indexování samotného souboru vyhledávači. Verdikt R1 zůstává. Jde o zjištění sběrače pro čtenáře, stejně jako v 4.6 („Možná přísnost hodnotitele“).
+- **Osobní údaj v poznámce.** Poznámka R1 u V4C uvádí jméno fyzické osoby (společnice nesouvisející V4C, s.r.o.). Podle zásady minimalizace (1.10) navrhuji jméno z poznámky odstranit. Poznámky R1 sběrač sám nemění.
+
