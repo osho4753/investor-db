@@ -220,7 +220,7 @@ Původní verdikty a poznámky jsou v historii Gitu (commit `18877a1`). V `revie
 | správně / (správně + chybně) | 32/34 = 94,1 % | 80,9 % – 98,4 % |
 | `nelze_overit` počítáno jako chybně | 32/36 = 88,9 % | 74,7 % – 95,6 % |
 
-Jde o kolo `vzorek`: 36 faktů z 205 (Cochran, ±15 p. b.). Kolo `po_doplneni` (46 faktů, viz 4.7) se vykazuje zvlášť. Fakty s verdiktem `chybne` a `nelze_overit`:
+Jde o kolo `vzorek`: 36 faktů z 205 (Cochran, ±15 p. b.). Kolo `po_doplneni` (49 faktů, viz 4.7) se vykazuje zvlášť. Fakty s verdiktem `chybne` a `nelze_overit`:
 
 | Fakt | Investor | Pole a hodnota | Verdikt | Poznámka R1 |
 |---|---|---|---|---|
