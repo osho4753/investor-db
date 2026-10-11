@@ -386,3 +386,64 @@ U fází by PE potřebovalo `buyout` (MBO, MBI, LBO) a `growth_equity` místo je
 - Hledání bez výsledku (česká entita) je v `search_log` jako s-033 až s-035.
 
 Ruční kontrolu PE záznamů dělá zadavatel, viz [04-rucni-kontrola.md](04-rucni-kontrola.md), 4.8.
+
+## 1.12 Studie proveditelnosti: family office, angel investoři, velcí soukromí investoři
+
+Studie ověřuje, zda pravidla z 1.10 (F1–F4, A1–A3, S1–S4) jde na veřejných zdrojích splnit. Do dat se nic neukládá. Výsledky sondy jsou jen **počty**, bez jmen fyzických osob a bez názvů subjektů, které by je identifikovaly. Zdroje byly otevřeny 12. 10. 2026. Odhady počtů a nákladů jsou v [03-globalni-odhad.md](03-globalni-odhad.md), 3.7–3.8.
+
+### Sonda: family office (5 případů z médií)
+
+Vzorek tvoří pět subjektů označených v českých médiích jako family office. Zdroje: e15 (31. 10. 2024), CzechCrunch (6. 10. 2026, článek typu „Native“), Forbes, Newstream a Seznam Zprávy. Každý se posuzoval podle F1–F4 jen z otevřeného článku, bez dalšího dohledávání.
+
+| Výsledek podle pravidel 1.10 | Počet |
+|---|---|
+| Lze doložit jako `overeny` (F1–F4) | **0/5** |
+| `vyloucen`: poskytovatel služeb správy majetku pro cizí rodiny, sám neinvestuje vlastní kapitál (F2) | 2/5 |
+| `kandidat`: rodinný kapitál doložen, přímá investice do firmy za 36 měsíců (F3, F4) ne | 2/5 |
+| `kandidat`: rodinný kapitál doložen, ale investice jde **do fondu jako LP**, ne přímo do firmy | 1/5 |
+| Zveřejněná hodnota spravovaných aktiv | 0/5 (u největšího případu médium uvádí, že „nebyla zveřejněna“, a dává jen vlastní odhad jmění rodiny) |
+| Zveřejněný sektor nebo typická výše investice | 0/5 |
+
+**Co sonda ukázala:**
+
+- Mediálně známé family office jsou často **investoři do fondů** (LP), ne přímí investoři do firem. Článek CzechCrunch to uvádí přímo v podtitulu („Proč family office sází na fondy?“). Pro databázi přímých investorů do firem by se takový subjekt vedl spíše jako LP a nespadal by do rozsahu, podobně jako `fond_fondu`.
+- Označení „family office“ používají i **poradenské firmy**, které spravují majetek klientů. Bez pravidla F2 by se do databáze dostaly subjekty, které samy neinvestují.
+- **Kapitál a výše investic se nezveřejňují.** Pole zadání „celkový kapitál“ a „typická výše investice“ budou u family office prázdná i u ověřených záznamů.
+
+### Sonda: angel investoři (databáze členů CBAA)
+
+CBAA zveřejňuje na stránce Členství [databázi členů](https://www.cbaa.cz/clenstvi). Sonda prošla její strukturu a zapsala jen počty:
+
+| Ukazatel | Počet |
+|---|---|
+| Zveřejněných členů | 11 (7 „Plný člen“, 4 „Organizace“) |
+| Profil se strukturovanými poli „Sektory“ a „Typický ticket“ | 2/11 |
+| Profil se sekcí „Investice“ (doložené investice) | 1/11 |
+| Profil s „Lokalita“ a „Členem od“ | 11/11 |
+
+**Co sonda ukázala:**
+
+- **Vlastní zveřejnění (A1) existuje,** protože členové se v databázi sami prezentují. Je ho ale málo: 7 fyzických osob v národní asociaci.
+- **Vydavatel nechce strojové zpracování.** Skript stránky uvádí, že seznam se načítá až po kliknutí, „aby ho neindexovaly vyhledávače“. Robots.txt to nezakazuje, ale úmysl vydavatele je zřejmý. Automatický sběr do databáze by proto měl stát na **dohodě s asociací nebo na souhlasu členů**, ne na scrapování.
+- **Pole zadání:** sektor a ticket má 2/11 profilů, kapitál žádný. Kapitál se u fyzických osob podle 1.10 neukládá.
+- **Další sítě.** Přehled [co-investin.eu](https://co-investin.eu/?p=5855) uvádí v ČR Keiretsu Forum Prague, Business Angels Czech a další sítě. Jejich veřejné seznamy členů sonda neověřovala, protože ve zdroji nebyl odkaz na jejich web a domény se neodhadují.
+- Světová banka (2018) popisuje český trh jako soustředěný u malého počtu „super angels“ s „very little business angel networks or syndication“ ([blog](https://blogs.worldbank.org/en/psd/how-can-czech-republic-activate-its-business-angels-market)).
+
+### Velcí soukromí investoři
+
+Samostatná sonda neproběhla. Studie vychází ze stavu zdrojů:
+
+- **Evidence skutečných majitelů** se veřejnosti uzavírá ([epravo.cz, 23. 12. 2025](https://www.epravo.cz/top/clanky/evidence-skutecnych-majitelu-se-uzavira-verejnosti-120450.html)), vazbu osoby na holding z ní nelze doložit.
+- **Výroční zprávy holdingů** (vlastní kapitál) jsou ve Sbírce listin. Ta je v `robots.txt` or.justice.cz zakázaná pro automatizovaný přístup a dostupná jen ručně.
+- **Žebříčky bohatství** (Forbes, Knight Frank) jsou odhady třetí strany. Podle 1.10 slouží jen jako vodítko k hledání holdingů a nezapisují se.
+- Sonda family office ukázala stejný vzorec, jaký se dá čekat u velkých soukromých investorů: média popisují majetek, ne jednotlivé přímé investice s daty.
+
+### Souhrn proveditelnosti
+
+| Kategorie | Veřejné zdroje (ČR) | Doložitelnost podle pravidel 1.10 | Sektor | Typická výše | Celkový kapitál | Zdroj | Doporučení |
+|---|---|---|---|---|---|---|---|
+| Family office | média, vlastní weby, ARES; žádný registr ani asociace | nízká: sonda 0/5 `overeny`, 3/5 `kandidat` | zřídka | zřídka | téměř nikdy (0/5) | ano | Evidovat jen při doložené přímé investici. FO jako LP do fondů vést zvlášť. |
+| Angel investor | CBAA (11 členů, záměrně neindexováno), tiskové zprávy o kolech | nízká až střední, závisí na vlastním zveřejnění | 2/11 | 2/11 | neukládá se | ano | Jen se souhlasem nebo přes asociaci; osobní údaje podle GDPR v 1.10 |
+| Velký soukromý investor | ARES, tiskové zprávy, ručně Sbírka listin | nízká (**předpoklad**, bez sondy) | částečně | zřídka | jen vlastní kapitál holdingu, ručně | ano | Záznamem je holding, ne osoba. Žebříčky slouží jen k hledání. |
+
+**Závěr.** U VC a PE stojí databáze na registrech a vlastních webech fondů. Pole zadání jsou tam dostupná (VC 13/16 kapitál, PE 5/5 sektor a ticket). U family office, angelů a velkých soukromých investorů veřejné zdroje doloží **existenci** subjektu častěji než pole zadání. Kapitál a výše investic chybí téměř vždy. U fyzických osob navíc GDPR a vůle vydavatelů omezují automatický sběr. Tyto kategorie proto doporučuji v globální databázi vést jako **doplňkové s nižší úplností**, ne se stejnými cíli úplnosti jako VC a PE.
