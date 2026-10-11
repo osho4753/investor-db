@@ -1,6 +1,6 @@
 import pytest
 
-from investor_db.review import add_pending_reviews, fact_sample_size, sample_fact_ids
+from investor_db.review import add_pending_reviews, fact_sample_size, sample_excluded_ids, sample_fact_ids
 from investor_db.schema import REVIEW_COLUMNS
 
 
@@ -36,3 +36,13 @@ def test_add_pending_reviews_is_per_reviewer() -> None:
     rows = add_pending_reviews(existing, REVIEW_COLUMNS, "investor_id", ["inv-0001"], "R2")
 
     assert [row["reviewer"] for row in rows] == ["R1", "R2"]
+
+
+def test_excluded_sample_is_reproducible_and_bounded() -> None:
+    ids = [f"inv-{number:04d}" for number in range(1, 33)]
+
+    sample = sample_excluded_ids(ids, 10)
+
+    assert sample == sample_excluded_ids(list(reversed(ids)), 10)
+    assert len(sample) == 10 and set(sample) <= set(ids)
+    assert sample_excluded_ids(ids[:3], 10) == ids[:3]

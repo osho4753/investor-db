@@ -13,6 +13,7 @@ from investor_db.schema import (
     PRIMARY_SOURCE_TYPES,
     REVIEW_ROUND_COMPLETION,
     REVIEW_ROUND_CORRECTION,
+    CATEGORY_VC_EXCLUDED,
     REVIEW_ROUND_SAMPLE,
     REVIEW_ROUNDS,
     SOURCE_TYPES,
@@ -562,6 +563,50 @@ def render_round(dataset: Dataset, review_round: str, first_index: int) -> tuple
     return lines, first_index + len(guides)
 
 
+EXCLUSION_REVIEW_INTRO: Final = (
+    "Náhodný vzorek 10 z vyloučených VC subjektů (seed 2026). U každého subjektu odpověz na dvě otázky: "
+    "1) Dokládá uvedený zdroj důvod vyloučení? 2) Je subjekt opravdu mimo definici VC pilotu (Z1–Z4 v docs/01, 1.3), "
+    "nebo měl být ověřen či veden jako kandidát? Verdikt zapiš do `data/reviews.csv` do řádku s `category` = `vc_vyloucene`: "
+    "`TP` = vyloučení je správné, `FP` = subjekt patří do VC pilotu (false negative), `nejiste` = zdroje nestačí. "
+    "Do poznámky napiš, co rozhodlo; nepiš jména fyzických osob."
+)
+
+
+def exclusion_review_ids(dataset: Dataset) -> list[str]:
+    return sorted({row["investor_id"] for row in dataset.reviews if row["category"] == CATEGORY_VC_EXCLUDED})
+
+
+def render_exclusion_review(dataset: Dataset) -> list[str]:
+    investor_ids = exclusion_review_ids(dataset)
+    if not investor_ids:
+        return []
+    investors = {row["investor_id"]: row for row in dataset.investors}
+    sources = {row["source_id"]: row for row in dataset.sources}
+    lines = [f"# Kontrola vyloučených VC ({len(investor_ids)} subjektů)", "", EXCLUSION_REVIEW_INTRO, ""]
+    for index, investor_id in enumerate(investor_ids, start=1):
+        investor = investors[investor_id]
+        reason = investor["exclusion_reason"]
+        facts = [
+            row for row in dataset.facts
+            if row["investor_id"] == investor_id and row["field"] == FACT_EXCLUSION_REASON and row["value"] == reason
+        ]
+        lines += [f"## V{index}. `{investor_id}` – {investor['name']} (důvod vyloučení: `{reason}`)", ""]
+        for fact in facts:
+            guide = build_fact_guide(fact, investor, sources[fact["source_id"]])
+            lines += [
+                f"**Fakt `{guide.fact_id}`:** {guide.claim}",
+                "",
+                f"**Co hledat ve zdroji:** {guide.look_for}",
+                "",
+                f"**Poznámka sběrače:** {fact['evidence_note']}",
+                "",
+                f"**Zdroj:** <{guide.source_url}>  ",
+                f"Typ zdroje: {guide.source_label}",
+                "",
+            ]
+    return lines
+
+
 def render_checklist(dataset: Dataset) -> str:
     header = [
         "# Kontrolní list faktů",
@@ -581,4 +626,5 @@ def render_checklist(dataset: Dataset) -> str:
     for review_round in REVIEW_ROUNDS:
         lines, next_index = render_round(dataset, review_round, next_index)
         body += lines
+    body += render_exclusion_review(dataset)
     return "\n".join(header + body)

@@ -115,3 +115,15 @@ def test_correction_round_requires_facts(data_dir: Path) -> None:
     arguments = ["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1", "--round", "po_oprave"]
 
     assert main(arguments) == 1
+
+
+def test_excluded_review_template_samples_excluded_once(data_dir: Path) -> None:
+    arguments = ["--data-dir", str(data_dir), "review-template", "--reviewer", "R1", "--category", "vc_vyloucene"]
+
+    assert main(arguments) == 0
+    first = [row for row in load_dataset(data_dir).reviews if row["category"] == "vc_vyloucene"]
+    assert main(arguments) == 0
+
+    assert [row["investor_id"] for row in first] == ["inv-0003"]
+    assert [row for row in load_dataset(data_dir).reviews if row["category"] == "vc_vyloucene"] == first
+    assert main(["--data-dir", str(data_dir), "validate"]) == 0

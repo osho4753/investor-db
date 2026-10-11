@@ -17,6 +17,7 @@ from investor_db.metrics import (
     RequirementCompleteness,
     category_investors,
     category_scope,
+    exclusion_review,
     category_verdicts,
     fact_accuracy,
     field_completeness,
@@ -113,6 +114,7 @@ def render_report(dataset: Dataset, today: date) -> str:
         status_section(dataset),
         funnel_section(dataset),
         precision_section(dataset),
+        exclusion_review_section(dataset),
         agreement_section(dataset),
         fact_accuracy_section(dataset),
         requirement_section(dataset),
@@ -165,6 +167,21 @@ def precision_section(dataset: Dataset) -> list[str]:
         f"- TP = {result.true_positives}, FP = {result.false_positives}, nejisté = {result.unsure}",
         f"- Precision TP / (TP + FP): {format_proportion(result.strict)}",
         f"- Pesimistická varianta (nejisté jako FP): {format_proportion(result.pessimistic)}",
+    ]
+
+
+def exclusion_review_section(dataset: Dataset) -> list[str]:
+    result = exclusion_review(dataset, REVIEWER_PRIMARY)
+    lines = ["## Kontrola vyloučených VC (odhad false negatives, hodnotitel R1)", ""]
+    if not result.reviewed:
+        return lines + ["Ruční kontrola vyloučených zatím není vyplněna."]
+    false_negatives = result.wrong + result.unsure
+    return lines + [
+        f"- Zkontrolováno {result.reviewed} z {result.excluded} vyloučených (náhodný vzorek, seed 2026)",
+        f"- Vyloučení správně (TP) = {result.correct}, chybně – subjekt patří do VC pilotu (FP) = {result.wrong}, nejisté = {result.unsure}",
+        f"- Podíl správných vyloučení: {format_proportion(result.correct_share)}",
+        f"- Pesimistická varianta (nejisté jako chybné): {format_proportion(result.pessimistic_share)}",
+        f"- Možné false negatives ve vzorku: {false_negatives} z {result.reviewed}",
     ]
 
 

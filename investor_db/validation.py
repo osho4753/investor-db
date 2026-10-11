@@ -8,6 +8,7 @@ from investor_db.io import Dataset, Row
 from investor_db.schema import (
     ASSESSED_CATEGORIES,
     CATEGORY_EXCLUSION_REASONS,
+    CATEGORY_VC_EXCLUDED,
     REVIEW_CATEGORIES,
     ACTIVITY_WINDOW_DAYS,
     APPROX_VALUES,
@@ -534,10 +535,14 @@ def check_effort_log(dataset: Dataset, today: date) -> Iterator[Issue]:
 def check_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
     investor_ids = {row["investor_id"] for row in dataset.investors}
     yield from check_review_rows("reviews", dataset.reviews, "investor_id", investor_ids, INVESTOR_VERDICTS, today)
+    investors_by_id = {row["investor_id"]: row for row in dataset.investors}
     for row in dataset.reviews:
         row_id = f"{row['investor_id']}/{row['reviewer']}"
         yield from required_issues("reviews", row_id, row, ("category",))
         yield from vocabulary_issues("reviews", row_id, "category", row["category"], REVIEW_CATEGORIES)
+        investor = investors_by_id.get(row["investor_id"])
+        if row["category"] == CATEGORY_VC_EXCLUDED and investor and investor["verification_status"] != STATUS_EXCLUDED:
+            yield Issue("reviews", row_id, "kontrola vyloučených se týká jen subjektů se statusem vyloucen")
 
 
 def check_fact_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:

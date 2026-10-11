@@ -138,3 +138,35 @@ def test_unknown_pe_stage_is_reported(dataset: Dataset) -> None:
     dataset.investors[0]["investment_stages"] = "seed;mbo"
 
     assert any("mbo" in message for message in messages(dataset))
+
+
+def excluded_review(verdict: str, investor_id: str = "inv-0003") -> Row:
+    return {"investor_id": investor_id, "reviewer": "R1", "reviewed_at": "2026-10-05" if verdict else "", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc_vyloucene"}
+
+
+def test_exclusion_review_counts_correct_exclusions(dataset: Dataset) -> None:
+    dataset.reviews.append(excluded_review("TP"))
+
+    report = render_report(dataset, TODAY)
+
+    assert messages(dataset) == []
+    assert "- Vyloučení správně (TP) = 1, chybně – subjekt patří do VC pilotu (FP) = 0, nejisté = 0" in report
+    assert "- Možné false negatives ve vzorku: 0 z 1" in report
+
+
+def test_exclusion_review_is_only_for_excluded_investors(dataset: Dataset) -> None:
+    dataset.reviews.append(excluded_review("", investor_id="inv-0001"))
+
+    assert any("jen subjektů se statusem vyloucen" in message for message in messages(dataset))
+
+
+def test_checklist_lists_exclusion_review_with_reason_fact(dataset: Dataset) -> None:
+    from investor_db.review_guide import render_checklist
+
+    dataset.reviews.append(excluded_review(""))
+
+    checklist = render_checklist(dataset)
+
+    assert "# Kontrola vyloučených VC (1 subjektů)" in checklist
+    assert "## V1. `inv-0003` – Fiktivní Anděl (důvod vyloučení: `business_angel`)" in checklist
+    assert "**Fakt `f-00011`:**" in checklist

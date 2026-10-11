@@ -23,6 +23,11 @@ def sample_fact_ids(fact_ids: list[str], seed: int = FACT_SAMPLE_SEED) -> list[s
     return sorted(random.Random(seed).sample(population, fact_sample_size(len(population))))
 
 
+def sample_excluded_ids(investor_ids: list[str], size: int, seed: int = FACT_SAMPLE_SEED) -> list[str]:
+    population = sorted(set(investor_ids))
+    return sorted(random.Random(seed).sample(population, min(size, len(population))))
+
+
 def facts_from(fact_ids: list[str], first_fact_id: str) -> list[str]:
     return sorted(fact_id for fact_id in set(fact_ids) if fact_id >= first_fact_id)
 

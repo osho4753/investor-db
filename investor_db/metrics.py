@@ -10,6 +10,8 @@ from investor_db.schema import (
     EXCLUSION_FOREIGN,
     FACT_EXCLUSION_REASON,
     CATEGORY_VC,
+    CATEGORY_VC_EXCLUDED,
+    STATUS_EXCLUDED,
     AMOUNT_INVESTED_PERIOD,
     AMOUNT_TARGET,
     APPROX_YES,
@@ -149,6 +151,39 @@ def category_verdicts(dataset: Dataset, reviewer: str, category: str) -> dict[st
         if row["reviewer"] == reviewer and row["category"] == category and row["verdict"] and row["investor_id"] in statuses:
             grouped[statuses[row["investor_id"]]][row["verdict"]] += 1
     return dict(grouped)
+
+
+@dataclass(frozen=True)
+class ExclusionReview:
+    excluded: int
+    reviewed: int
+    correct: int
+    wrong: int
+    unsure: int
+
+    @property
+    def correct_share(self) -> Proportion:
+        return Proportion(self.correct, self.correct + self.wrong)
+
+    @property
+    def pessimistic_share(self) -> Proportion:
+        return Proportion(self.correct, self.reviewed)
+
+
+def exclusion_review(dataset: Dataset, reviewer: str = REVIEWER_PRIMARY) -> ExclusionReview:
+    excluded = {row["investor_id"] for row in dataset.investors if row["verification_status"] == STATUS_EXCLUDED}
+    verdicts = Counter(
+        row["verdict"]
+        for row in dataset.reviews
+        if row["reviewer"] == reviewer and row["category"] == CATEGORY_VC_EXCLUDED and row["verdict"] and row["investor_id"] in excluded
+    )
+    return ExclusionReview(
+        excluded=len(excluded),
+        reviewed=sum(verdicts.values()),
+        correct=verdicts[VERDICT_TRUE_POSITIVE],
+        wrong=verdicts[VERDICT_FALSE_POSITIVE],
+        unsure=verdicts[VERDICT_UNSURE],
+    )
 
 
 def eligible_for_precision(dataset: Dataset, category: str) -> set[str]:

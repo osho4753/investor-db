@@ -9,9 +9,12 @@ from investor_db.io import Dataset, SchemaError, load_dataset, table_path, write
 from investor_db.metrics import verified_ids
 from investor_db.rawtext import fetch_raw_text, find_first
 from investor_db.report import render_report
-from investor_db.review import add_pending_reviews, facts_from, has_round, sample_fact_ids
+from investor_db.review import add_pending_reviews, facts_from, has_round, sample_excluded_ids, sample_fact_ids
 from investor_db.review_guide import GuideTemplateError, render_checklist, sampled_fact_ids
 from investor_db.schema import (
+    CATEGORY_VC_EXCLUDED,
+    EXCLUDED_SAMPLE_SIZE,
+    STATUS_EXCLUDED,
     CATEGORY_VC,
     REVIEW_CATEGORIES,
     FACT_REVIEW_COLUMNS,
@@ -85,6 +88,11 @@ def run_metrics(args: argparse.Namespace) -> int:
 def review_targets(dataset: Dataset, category: str) -> list[str]:
     if category == CATEGORY_VC:
         return sorted(verified_ids(dataset.investors))
+    if category == CATEGORY_VC_EXCLUDED:
+        if any(row["category"] == CATEGORY_VC_EXCLUDED for row in dataset.reviews):
+            return []
+        excluded = [row["investor_id"] for row in dataset.investors if row["verification_status"] == STATUS_EXCLUDED]
+        return sample_excluded_ids(excluded, EXCLUDED_SAMPLE_SIZE)
     return sorted({row["investor_id"] for row in dataset.category_assessments if row["category"] == category})
 
 
