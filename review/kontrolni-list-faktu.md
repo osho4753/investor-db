@@ -843,3 +843,117 @@ Typ zdroje: web investora (primární), vydavatel: Start Guide
 
 **Zdroj:** <https://podim.org/credo-ventures-closes-4th-fund-at-e75m/>  
 Typ zdroje: jiný zdroj (sekundární), vydavatel: Podim
+
+# Kontrola vyloučených VC (10 subjektů)
+
+Náhodný vzorek 10 z vyloučených VC subjektů (seed 2026). U každého subjektu odpověz na dvě otázky: 1) Dokládá uvedený zdroj důvod vyloučení? 2) Je subjekt opravdu mimo definici VC pilotu (Z1–Z4 v docs/01, 1.3), nebo měl být ověřen či veden jako kandidát? Verdikt zapiš do `data/reviews.csv` do řádku s `category` = `vc_vyloucene`: `TP` = vyloučení je správné, `FP` = subjekt patří do VC pilotu (false negative), `nejiste` = zdroje nestačí. Do poznámky napiš, co rozhodlo; nepiš jména fyzických osob.
+
+## V1. `inv-0005` – Espira Investments (důvod vyloučení: `pe_budouci_rozsireni`)
+
+**Fakt `f-00004`:** Espira Investments investuje hlavně formou buyoutů a většinových podílů (PE), proto není VC a je odložen pro budoucí rozšíření.
+
+**Co hledat ve zdroji:** Zdroj popisuje subjekt jako private equity (buyout, většinové podíly, zralé firmy), nebo ho do private equity zařazuje.
+
+**Poznámka sběrače:** Seznam řádných členů CVCA uvádí u člena typ investic: růstové financování, akvizice, restrukturalizace vlastnictví a management buyout.
+
+**Zdroj:** <https://cvca.cz/en/category/full-members/>  
+Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity and Venture Capital Association
+
+## V2. `inv-0012` – Integral Capital Group (důvod vyloučení: `pe_budouci_rozsireni`)
+
+**Fakt `f-00008`:** Integral Capital Group investuje hlavně formou buyoutů a většinových podílů (PE), proto není VC a je odložen pro budoucí rozšíření.
+
+**Co hledat ve zdroji:** Zdroj popisuje subjekt jako private equity (buyout, většinové podíly, zralé firmy), nebo ho do private equity zařazuje.
+
+**Poznámka sběrače:** Seznam řádných členů CVCA uvádí u člena typ investic: private equity.
+
+**Zdroj:** <https://cvca.cz/en/category/full-members/>  
+Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity and Venture Capital Association
+
+## V3. `inv-0016` – Genesis Capital Equity s.r.o. (důvod vyloučení: `pe_budouci_rozsireni`)
+
+**Fakt `f-00011`:** Genesis Capital Equity s.r.o. investuje hlavně formou buyoutů a většinových podílů (PE), proto není VC a je odložen pro budoucí rozšíření.
+
+**Co hledat ve zdroji:** Zdroj popisuje subjekt jako private equity (buyout, většinové podíly, zralé firmy), nebo ho do private equity zařazuje.
+
+**Poznámka sběrače:** Seznam řádných členů CVCA uvádí u člena typ investic: akvizice firem, management buyouty, konsolidace sektoru, růstový kapitál a sekundární buyouty.
+
+**Zdroj:** <https://cvca.cz/en/category/full-members/>  
+Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity and Venture Capital Association
+
+## V4. `inv-0024` – V4C Investment Advisers Limited (důvod vyloučení: `pe_budouci_rozsireni`)
+
+**Fakt `f-00017`:** V4C Investment Advisers Limited investuje hlavně formou buyoutů a většinových podílů (PE), proto není VC a je odložen pro budoucí rozšíření.
+
+**Co hledat ve zdroji:** Zdroj popisuje subjekt jako private equity (buyout, většinové podíly, zralé firmy), nebo ho do private equity zařazuje.
+
+**Poznámka sběrače:** Seznam řádných členů CVCA uvádí u člena typ investic: buyouty a expanzní kapitál.
+
+**Zdroj:** <https://cvca.cz/en/category/full-members/>  
+Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity and Venture Capital Association
+
+## V5. `inv-0025` – Orbit Capital (důvod vyloučení: `dluhovy_fond`)
+
+**Fakt `f-00187`:** Orbit Capital poskytuje hlavně dluhové financování (úvěry, mezanin, venture debt), ne kapitál za podíl, proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj popisuje hlavní strategii jako úvěry, dluh, mezanin nebo venture debt. Pokud zdroj uvádí kapitálové investice jako hlavní strategii, je verdikt chybne.
+
+**Poznámka sběrače:** Primární doklad: článek Tech.eu z 2. 7. 2026 uvádí second closing dluhového fondu Growth Debt Fund II ve výši 107 mil. EUR s nezřeďujícím financováním 3–15 mil. EUR a více než 20 firem podpořených přes venture debt platformy. Konflikt: profil CVCA uvádí growth equity i venture debt (growth equity fond škálovaný na 200 mil. EUR, venture debt 30 mil. EUR). Rozhodnutím zadavatele vyloučen jako dluhový fond, protože podle nejnovějšího zdroje převažuje dluhová strategie.
+
+**Zdroj:** <https://tech.eu/2026/07/02/orbit-capital-closes-eur107m-venture-debt-fund-for-cee-scaleups/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## V6. `inv-0030` – Miton (důvod vyloučení: `bez_fondu`)
+
+**Fakt `f-00019`:** Miton neinvestuje z vlastního fondu (např. poradce, investiční platforma nebo akcelerátor bez investičního vehiklu), proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj popisuje činnost subjektu tak, že z ní nevyplývá žádný vlastní investiční fond nebo vehikl.
+
+**Poznámka sběrače:** Článek o VC v ČR uvádí, že Miton investuje výhradně vlastní kapitál bez externích investorů (LP); chybí fond s kapitálem třetích osob.
+
+**Zdroj:** <https://en.wikipedia.org/wiki/Venture_capital_in_the_Czech_Republic>  
+Typ zdroje: jiný zdroj (sekundární), vydavatel: Wikipedie
+
+## V7. `inv-0031` – Fond rizikového kapitálu, s.r.o. (důvod vyloučení: `zanikly_subjekt`)
+
+**Fakt `f-00218`:** Právnická osoba investora Fond rizikového kapitálu, s.r.o. zanikla nebo už neexistuje, proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj (rejstřík) uvádí datum zániku subjektu, nebo subjekt tohoto jména nevrací. Odkaz vede na vyhledávací rozhraní ARES, které nejde otevřít přímo v prohlížeči. Vyhledej název ve webovém vyhledávání na https://ares.gov.cz.
+
+**Poznámka sběrače:** Vyhledávací API ARES (POST, obchodní jméno „Fond rizikového kapitálu“) vrátilo 9. 10. 2026 nula subjektů – žádný existující subjekt tohoto jména; Wikipedie zmiňuje fond jen historicky (výnosy do roku 2000). Nahrazuje doklad z or.justice.cz, jehož robots.txt zakazuje cestu /ias/.
+
+**Zdroj:** <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/vyhledat>  
+Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí ČR – ARES
+
+## V8. `inv-0040` – IVBF (důvod vyloučení: `digitalni_aktiva`)
+
+**Fakt `f-00150`:** IVBF je fond digitálních aktiv: investuje do tokenů, blockchainových protokolů nebo kryptoměn, ne do podílů ve firmách, proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj uvádí, že fond drží digitální aktiva (tokeny, kryptoměny, protokoly), ne podíly ve firmách.
+
+**Poznámka sběrače:** Článek z 22. 11. 2023 uvádí, že IVBF investuje do smartkontraktových blockchainů a decentralizovaných aplikací (např. zastakovaný ether), ne do podílů ve firmách; jde o fond digitálních aktiv.
+
+**Zdroj:** <https://www.e15.cz/kryptomeny/do-sveta-kryptomen-vstupuje-dalsi-cesky-miliardar-ondrej-tomek-rozjizdi-novy-fond-1411749>  
+Typ zdroje: média (sekundární), vydavatel: E15
+
+## V9. `inv-0046` – Patero (důvod vyloučení: `bez_fondu`)
+
+**Fakt `f-00245`:** Patero neinvestuje z vlastního fondu (např. poradce, investiční platforma nebo akcelerátor bez investičního vehiklu), proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj popisuje činnost subjektu tak, že z ní nevyplývá žádný vlastní investiční fond nebo vehikl. Odkaz vede na rozhraní ARES a prohlížeč zobrazí data ve formátu JSON: IČO je v poli „ico“, název v „obchodniJmeno“, sídlo v „sidlo“, vznik a zánik v „datumVzniku“ a „datumZaniku“, statutární orgány (u adres s „ekonomicke-subjekty-vr“) v „statutarniOrgany“.
+
+**Poznámka sběrače:** ARES uvádí pět společníků – fyzických osob, každý s podílem 20 %; web patero.cz nezmiňuje žádný fond ani kapitál třetích osob. Společnost s.r.o. investuje vlastní kapitál společníků bez fondu (stejně jako Impulse Ventures). Kód změněn 11. 10. 2026 z business_angel na bez_fondu rozhodnutím zadavatele; hraniční případ.
+
+**Zdroj:** <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty-vr/03928446>  
+Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí ČR – ARES (veřejný rejstřík)
+
+## V10. `inv-0051` – N1 (důvod vyloučení: `duplicita`)
+
+**Fakt `f-00057`:** N1 je jen jiným názvem nebo jinou entitou investora, který už je v databázi, proto je vyloučen.
+
+**Co hledat ve zdroji:** Zdroj ukazuje, že jde o tutéž značku (stejný tým, web nebo IČO) jako jiný záznam v databázi.
+
+**Poznámka sběrače:** Přehled pražských seed investorů uvádí fond jako „Nation 1 (N1)“ – N1 je zkratka značky Nation1 (inv-0021).
+
+**Zdroj:** <https://www.ellty.com/investors/prague-seed-investors>  
+Typ zdroje: jiný zdroj (sekundární), vydavatel: Ellty

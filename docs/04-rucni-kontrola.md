@@ -504,3 +504,36 @@ Výsledky jsou v počtech, protože při 5 záznamech jde o studii proveditelnos
 - **Versute – robots.txt.** R1 uvádí, že „versute.cz zakazuje robotům přístup“, a stránku podfondu ani článek Forbes neotevřel. Sběrač 12. 10. 2026 ověřil, že `https://versute.cz/robots.txt` obsahuje `User-agent: *` a prázdné `Disallow:`, tedy přístup povoluje. Odpověď nese hlavičku `X-Robots-Tag: noindex, follow`, která zakazuje jen indexování samotného souboru vyhledávači. Verdikt R1 zůstává. Jde o zjištění sběrače pro čtenáře, stejně jako v 4.6 („Možná přísnost hodnotitele“).
 - **Osobní údaj v poznámce.** Poznámka R1 u V4C uvádí jméno fyzické osoby (společnice nesouvisející V4C, s.r.o.). Podle zásady minimalizace (1.10) navrhuji jméno z poznámky odstranit. Poznámky R1 sběrač sám nemění.
 
+## 4.9 Kontrola vyloučených VC (odhad false negatives)
+
+Precision měří jen ověřené záznamy. Jestli pilot nevyloučil někoho, kdo do VC patří, ukáže až kontrola vyloučených. Dřívější kontrola R1 našla dva false negatives (Lighthouse, Tachles, 4.6), ale nebyla náhodná. Proto vzniká samostatný náhodný vzorek.
+
+**Výběr.** 10 z 32 vyloučených subjektů, `random.Random(2026).sample(sorted(ids), 10)`. Řádky jsou v `reviews.csv` s `category` = `vc_vyloucene` a založil je příkaz:
+
+```
+python -m investor_db review-template --reviewer R1 --category vc_vyloucene
+```
+
+Opakované spuštění vzorek nemění. Ve vzorku jsou čtyři PE subjekty, jedno dluhové financování, dva subjekty bez fondu, jeden zaniklý subjekt, jeden fond digitálních aktiv a jedna duplicita.
+
+**Otázky pro hodnotitele** (návod a doklady u každého subjektu jsou v [review/kontrolni-list-faktu.md](../review/kontrolni-list-faktu.md), oddíl „Kontrola vyloučených VC“):
+
+1. Dokládá uvedený zdroj důvod vyloučení?
+2. Je subjekt opravdu mimo definici VC pilotu (Z1–Z4, 1.3 v [01](01-plan-a-kriteria.md))?
+
+| Verdikt | Význam |
+|---|---|
+| `TP` | Vyloučení je správné. Zdroj důvod dokládá a subjekt do VC pilotu nepatří. |
+| `FP` | Subjekt do VC pilotu patří, měl být ověřen nebo veden jako kandidát. Jde o false negative. |
+| `nejiste` | Zdroje nestačí k rozhodnutí. |
+
+Pokud zdroj důvod nedokládá, ale subjekt přesto do VC nepatří (jiný důvod), je verdikt `TP` a do poznámky se napíše správný důvod. Do poznámky se nepíší jména fyzických osob.
+
+**Metrika.** `python -m investor_db metrics`, oddíl „Kontrola vyloučených VC“:
+
+- podíl správných vyloučení TP / (TP + FP) s Wilsonovým intervalem;
+- pesimistická varianta (nejisté jako chybné);
+- počet možných false negatives ve vzorku.
+
+Odhad false negatives ve všech 32 vyloučených = podíl chybných vyloučení × 32. Při vzorku 10 je interval široký.
+
