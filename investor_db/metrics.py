@@ -7,6 +7,7 @@ from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    FACT_EXCLUSION_REASON,
     CATEGORY_VC,
     AMOUNT_INVESTED_PERIOD,
     AMOUNT_TARGET,
@@ -200,10 +201,35 @@ def primary_registry_share(dataset: Dataset) -> Proportion:
     return Proportion(documented, len(verified))
 
 
-def primary_fact_share(dataset: Dataset) -> Proportion:
+def primary_fact_share(dataset: Dataset, facts: list[Row] | None = None) -> Proportion:
+    counted = dataset.facts if facts is None else facts
     sources_by_id = {row["source_id"]: row for row in dataset.sources}
-    primary = sum(is_primary_source(row["source_id"], sources_by_id) for row in dataset.facts)
-    return Proportion(primary, len(dataset.facts))
+    primary = sum(is_primary_source(row["source_id"], sources_by_id) for row in counted)
+    return Proportion(primary, len(counted))
+
+
+def category_assessed_ids(dataset: Dataset) -> set[str]:
+    return {row["investor_id"] for row in dataset.category_assessments}
+
+
+def vc_pilot_facts(dataset: Dataset) -> list[Row]:
+    assessed = category_assessed_ids(dataset)
+    vc_reasons = {row["investor_id"]: row["exclusion_reason"] for row in dataset.investors}
+    return [
+        row for row in dataset.facts
+        if row["investor_id"] not in assessed
+        or (row["field"] == FACT_EXCLUSION_REASON and row["value"] == vc_reasons.get(row["investor_id"]))
+    ]
+
+
+def category_facts(dataset: Dataset, investor_ids: set[str]) -> list[Row]:
+    vc_facts = {row["fact_id"] for row in vc_pilot_facts(dataset)}
+    return [row for row in dataset.facts if row["investor_id"] in investor_ids and row["fact_id"] not in vc_facts]
+
+
+def vc_pilot_searches(dataset: Dataset) -> list[Row]:
+    assessed = category_assessed_ids(dataset)
+    return [row for row in dataset.search_log if row["investor_id"] not in assessed]
 
 
 def investment_activity_share(dataset: Dataset, today: date) -> Proportion:

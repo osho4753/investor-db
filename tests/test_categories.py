@@ -87,3 +87,14 @@ def test_report_shows_category_section_separately(dataset: Dataset) -> None:
 
     assert "### Private equity (mini-pilot)" in report
     assert "- Posouzeno: 1; overeny 1, kandidat 0, vyloucen 0" in report
+
+
+def test_category_facts_do_not_change_vc_pilot_fact_share(dataset: Dataset) -> None:
+    before = render_report(dataset, TODAY)
+    vc_line = next(line for line in before.splitlines() if line.startswith("- Fakta z primárních zdrojů (VC pilot)"))
+    make_pe_candidate(dataset)
+    dataset.category_assessments.append(assessment())
+
+    after = render_report(dataset, TODAY)
+
+    assert vc_line in after

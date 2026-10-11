@@ -26,6 +26,9 @@ from investor_db.metrics import (
     population_estimates,
     precision,
     primary_fact_share,
+    category_facts,
+    vc_pilot_facts,
+    vc_pilot_searches,
     primary_registry_share,
     review_efforts,
     reviewer_agreement,
@@ -268,6 +271,7 @@ def category_lines(dataset: Dataset, category: str) -> list[str]:
         + (f"; důvody vyloučení: {', '.join(reasons)}" if reasons else ""),
     ]
     lines += effort_table(effort)
+    lines += ["", f"- Fakta z primárních zdrojů: {format_proportion(primary_fact_share(dataset, category_facts(dataset, assessed_ids)))}"]
     result = precision(dataset, REVIEWER_PRIMARY, category)
     if result.strict.denominator + result.unsure:
         lines += [
@@ -352,7 +356,7 @@ def evidence_section(dataset: Dataset, today: date) -> list[str]:
         "## Doložení a aktuálnost",
         "",
         f"- Ověření investoři s IČO z primárního zdroje: {format_proportion(primary_registry_share(dataset))}",
-        f"- Fakta z primárních zdrojů: {format_proportion(primary_fact_share(dataset))}",
+        f"- Fakta z primárních zdrojů (VC pilot): {format_proportion(primary_fact_share(dataset, vc_pilot_facts(dataset)))}",
         f"- Ověření investoři s doloženou investicí za 36 měsíců: {format_proportion(investment_activity_share(dataset, today))}",
         f"- Ověření investoři ověření za posledních 12 měsíců: {format_proportion(freshness_share(dataset.investors, today))}",
         f"- Skupiny možných duplicit: {duplicate_group_count(dataset.investors)}",
@@ -370,7 +374,8 @@ def effort_section(dataset: Dataset) -> list[str]:
         "",
         "### Model",
         "",
-        f"- Hledání kandidátů: {len(dataset.search_log)} průchodů, {format_decimal(search_minutes(dataset.search_log))} min celkem",
+        f"- Hledání kandidátů a cílená hledání (VC pilot): {len(vc_pilot_searches(dataset))} průchodů, "
+        f"{format_decimal(search_minutes(vc_pilot_searches(dataset)))} min celkem",
     ]
     lines += effort_table(
         [row for row in dataset.effort_log if row["actor"] == EFFORT_ACTOR_MODEL and row["activity"] != EFFORT_CATEGORY_VERIFICATION]
