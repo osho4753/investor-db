@@ -8,9 +8,12 @@ from decimal import Decimal
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
     AMOUNT_INVESTED,
+    AMOUNT_TARGET,
     APPROX_YES,
+    FACT_FUND_COUNT,
     FUND_AMOUNT_TYPES,
     LOWER_BOUND_AMOUNT_TYPES,
+    RAISED_AMOUNT_PRIORITY,
     SEARCH_TARGET_CAPITAL,
     SEARCH_TARGET_TICKET,
     SEARCH_TARGETS,
@@ -22,6 +25,7 @@ from investor_db.schema import (
     MONEY_FIELDS,
     REVIEWER_INDEPENDENT,
     REVIEWER_PRIMARY,
+    REVIEW_ROUND_SAMPLE,
     STATUS_CANDIDATE,
     STATUS_VERIFIED,
     VERDICT_FACT_CORRECT,
@@ -143,12 +147,17 @@ def reviewer_agreement(dataset: Dataset) -> AgreementResult | None:
     return AgreementResult(agreement, cohen_kappa(pairs))
 
 
-def fact_accuracy(dataset: Dataset, reviewer: str = REVIEWER_PRIMARY) -> FactAccuracyResult:
+def fact_accuracy(
+    dataset: Dataset, reviewer: str = REVIEWER_PRIMARY, review_round: str = REVIEW_ROUND_SAMPLE
+) -> FactAccuracyResult:
     fact_ids = {row["fact_id"] for row in dataset.facts}
     counts = Counter(
         row["verdict"]
         for row in dataset.fact_reviews
-        if row["reviewer"] == reviewer and row["verdict"] and row["fact_id"] in fact_ids
+        if row["reviewer"] == reviewer
+        and row["review_round"] == review_round
+        and row["verdict"]
+        and row["fact_id"] in fact_ids
     )
     return FactAccuracyResult(counts[VERDICT_FACT_CORRECT], counts[VERDICT_FACT_WRONG], counts[VERDICT_FACT_UNVERIFIABLE])
 
@@ -375,10 +384,34 @@ def funds_by_investor(funds: list[Row]) -> dict[str, list[Row]]:
     return grouped
 
 
+def funds_by_name(funds: list[Row]) -> dict[str, list[Row]]:
+    grouped: dict[str, list[Row]] = defaultdict(list)
+    for row in funds:
+        grouped[row["fund_name"]].append(row)
+    return grouped
+
+
+def best_raised_amount(rows: list[Row]) -> Row | None:
+    raised = [row for row in rows if row["amount"] and row["amount_type"] in RAISED_AMOUNT_PRIORITY]
+    return min(raised, key=lambda row: RAISED_AMOUNT_PRIORITY.index(row["amount_type"]), default=None)
+
+
+def raised_fund_amounts(funds: list[Row]) -> list[Row]:
+    return [row for row in map(best_raised_amount, funds_by_name(funds).values()) if row is not None]
+
+
 def capital_kinds(investor: Row, funds: list[Row]) -> set[str]:
     kinds = {row["amount_type"] for row in funds if row["amount"]}
     kinds |= {column for column in (CAPITAL_AUM, CAPITAL_INVESTED) if investor[column]}
     return kinds
+
+
+def has_capital(investor: Row, funds: list[Row]) -> bool:
+    return bool(raised_fund_amounts(funds) or investor[CAPITAL_AUM])
+
+
+def has_target_only(investor: Row, funds: list[Row]) -> bool:
+    return not has_capital(investor, funds) and any(row["amount_type"] == AMOUNT_TARGET for row in funds)
 
 
 def has_ticket(investor: Row) -> bool:
@@ -389,7 +422,7 @@ def requirement_met(target: str, investor: Row, funds: list[Row]) -> bool:
     if target == SEARCH_TARGET_TICKET:
         return has_ticket(investor)
     if target == SEARCH_TARGET_CAPITAL:
-        return bool(capital_kinds(investor, funds))
+        return has_capital(investor, funds)
     return bool(investor[target])
 
 
@@ -399,6 +432,7 @@ class RequirementCompleteness:
     searched_not_found: dict[str, int]
     tickets_both: Proportion
     capital_by_kind: dict[str, Proportion]
+    target_only: Proportion
     sources: Proportion
 
 
@@ -428,6 +462,9 @@ def requirement_completeness(dataset: Dataset) -> RequirementCompleteness:
             sum(bool(row["typical_ticket_min"] and row["typical_ticket_max"]) for row in verified), total
         ),
         capital_by_kind={kind: Proportion(sum(kind in found for found in kinds), total) for kind in CAPITAL_KINDS},
+        target_only=Proportion(
+            sum(has_target_only(row, funds.get(row["investor_id"], [])) for row in verified), total
+        ),
         sources=Proportion(sum(bool(row["evidence_urls"]) for row in verified), total),
     )
 
@@ -436,41 +473,62 @@ def requirement_completeness(dataset: Dataset) -> RequirementCompleteness:
 class CapitalSummary:
     investor_id: str
     name: str
-    totals: dict[str, Decimal]
+    raised: dict[str, Decimal]
     lower_bound: bool
+    targets: dict[str, Decimal]
+    invested: dict[str, Decimal]
     fund_count: int
-    funds_with_amount: int
-    amount_types: tuple[str, ...]
+    funds_with_raised: int
+    documented_fund_count: int | None
+    raised_types: tuple[str, ...]
     aum: str
     aum_currency: str
 
 
-def is_lower_bound_fund(fund: Row) -> bool:
-    return (
-        not fund["amount"]
-        or fund["approx"] == APPROX_YES
-        or fund["amount_type"] in LOWER_BOUND_AMOUNT_TYPES
-        or fund["amount_type"] == AMOUNT_INVESTED
-    )
-
-
-def capital_totals(funds: list[Row]) -> dict[str, Decimal]:
+def sum_by_currency(amounts: list[tuple[str, str]]) -> dict[str, Decimal]:
     totals: dict[str, Decimal] = defaultdict(Decimal)
-    for fund in funds:
-        if fund["amount"]:
-            totals[fund["currency"]] += Decimal(fund["amount"])
+    for amount, currency in amounts:
+        totals[currency] += Decimal(amount)
     return dict(sorted(totals.items()))
 
 
-def capital_summary(investor: Row, funds: list[Row]) -> CapitalSummary:
+def amounts_of(rows: list[Row]) -> list[tuple[str, str]]:
+    return [(row["amount"], row["currency"]) for row in rows]
+
+
+def documented_fund_count(facts: list[Row]) -> int | None:
+    counts = [row for row in facts if row["field"] == FACT_FUND_COUNT and row["value"].isdigit()]
+    if not counts:
+        return None
+    latest = max(counts, key=lambda row: (row["value_as_of"], row["fact_id"]))
+    return int(latest["value"])
+
+
+def is_lower_bound_amount(fund: Row) -> bool:
+    return fund["approx"] == APPROX_YES or fund["amount_type"] in LOWER_BOUND_AMOUNT_TYPES
+
+
+def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> CapitalSummary:
+    raised = raised_fund_amounts(funds)
+    raised_names = {row["fund_name"] for row in raised}
+    fund_count = len(funds_by_name(funds))
+    documented = documented_fund_count(facts)
+    all_funds_known = documented == fund_count == len(raised)
+    targets = [row for row in funds if row["amount_type"] == AMOUNT_TARGET and row["fund_name"] not in raised_names]
+    invested = amounts_of([row for row in funds if row["amount_type"] == AMOUNT_INVESTED])
+    if investor[CAPITAL_INVESTED]:
+        invested.append((investor[CAPITAL_INVESTED], investor["currency"]))
     return CapitalSummary(
         investor_id=investor["investor_id"],
         name=investor["name"],
-        totals=capital_totals(funds),
-        lower_bound=any(is_lower_bound_fund(fund) for fund in funds),
-        fund_count=len(funds),
-        funds_with_amount=sum(bool(fund["amount"]) for fund in funds),
-        amount_types=tuple(sorted({fund["amount_type"] for fund in funds if fund["amount"]})),
+        raised=sum_by_currency(amounts_of(raised)),
+        lower_bound=bool(raised) and (not all_funds_known or any(map(is_lower_bound_amount, raised))),
+        targets=sum_by_currency(amounts_of(targets)),
+        invested=sum_by_currency(invested),
+        fund_count=fund_count,
+        funds_with_raised=len(raised),
+        documented_fund_count=documented,
+        raised_types=tuple(sorted({row["amount_type"] for row in raised})),
         aum=investor[CAPITAL_AUM],
         aum_currency=investor["currency"] if investor[CAPITAL_AUM] else "",
     )
@@ -478,7 +536,8 @@ def capital_summary(investor: Row, funds: list[Row]) -> CapitalSummary:
 
 def investor_capital(dataset: Dataset) -> list[CapitalSummary]:
     funds = funds_by_investor(dataset.funds)
+    facts = group_facts_by_investor(dataset.facts)
     return [
-        capital_summary(investor, funds.get(investor["investor_id"], []))
+        capital_summary(investor, funds.get(investor["investor_id"], []), facts.get(investor["investor_id"], []))
         for investor in verified_investors(dataset.investors)
     ]

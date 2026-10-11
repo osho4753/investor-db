@@ -5,13 +5,20 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-from investor_db.io import SchemaError, load_dataset, table_path, write_table
+from investor_db.io import Dataset, SchemaError, load_dataset, table_path, write_table
 from investor_db.metrics import verified_ids
 from investor_db.rawtext import fetch_raw_text, find_first
 from investor_db.report import render_report
-from investor_db.review import add_pending_reviews, sample_fact_ids
+from investor_db.review import add_pending_reviews, facts_from, has_round, sample_fact_ids
 from investor_db.review_guide import GuideTemplateError, render_checklist, sampled_fact_ids
-from investor_db.schema import FACT_REVIEW_COLUMNS, REVIEW_COLUMNS, REVIEWERS
+from investor_db.schema import (
+    FACT_REVIEW_COLUMNS,
+    REVIEW_COLUMNS,
+    REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_SAMPLE,
+    REVIEW_ROUNDS,
+    REVIEWERS,
+)
 from investor_db.validation import validate_dataset
 
 DEFAULT_DATA_DIR = Path("data")
@@ -32,6 +39,9 @@ def build_parser() -> argparse.ArgumentParser:
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--reviewer", choices=REVIEWERS, required=True)
         command.set_defaults(handler=handler)
+        if name == "fact-review-template":
+            command.add_argument("--round", dest="review_round", choices=REVIEW_ROUNDS, default=REVIEW_ROUND_SAMPLE)
+            command.add_argument("--from-fact", help="u kola po_doplneni: první fact_id přidaný doplňováním")
     guide = commands.add_parser("review-guide", help="vygeneruje kontrolní list faktů pro hodnotitele")
     guide.add_argument("--output", type=Path, default=DEFAULT_CHECKLIST_PATH)
     guide.set_defaults(handler=run_review_guide)
@@ -75,13 +85,32 @@ def run_review_template(args: argparse.Namespace) -> int:
     return 0
 
 
+def fact_review_targets(args: argparse.Namespace, dataset: Dataset) -> list[str]:
+    fact_ids = [row["fact_id"] for row in dataset.facts]
+    if args.review_round == REVIEW_ROUND_COMPLETION:
+        return facts_from(fact_ids, args.from_fact)
+    if has_round(dataset.fact_reviews, args.reviewer, REVIEW_ROUND_SAMPLE):
+        return []
+    return sample_fact_ids(fact_ids)
+
+
 def run_fact_review_template(args: argparse.Namespace) -> int:
+    if args.review_round == REVIEW_ROUND_COMPLETION and not args.from_fact:
+        print("Kolo po_doplneni vyžaduje --from-fact.")
+        return 1
     dataset = load_dataset(args.data_dir)
-    sample = sample_fact_ids([row["fact_id"] for row in dataset.facts])
-    rows = add_pending_reviews(dataset.fact_reviews, FACT_REVIEW_COLUMNS, "fact_id", sample, args.reviewer)
+    targets = fact_review_targets(args, dataset)
+    rows = add_pending_reviews(
+        dataset.fact_reviews,
+        FACT_REVIEW_COLUMNS,
+        "fact_id",
+        targets,
+        args.reviewer,
+        {"review_round": args.review_round},
+    )
     write_table(table_path(args.data_dir, "fact_reviews"), FACT_REVIEW_COLUMNS, rows)
     print(
-        f"Vzorek {len(sample)} z {len(dataset.facts)} faktů; "
+        f"Kolo {args.review_round}: {len(targets)} z {len(dataset.facts)} faktů; "
         f"přidáno {len(rows) - len(dataset.fact_reviews)} řádků ke kontrole pro {args.reviewer}."
     )
     return 0

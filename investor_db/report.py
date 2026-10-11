@@ -40,6 +40,8 @@ from investor_db.schema import (
     EFFORT_VERIFICATION,
     REVIEWER_INDEPENDENT,
     REVIEWER_PRIMARY,
+    REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_SAMPLE,
     STATUSES,
 )
 
@@ -50,11 +52,16 @@ PROCESSING_LABELS = {
     EFFORT_COMPLETION: "doplňování",
 }
 
+REVIEW_ROUND_LABELS = {
+    REVIEW_ROUND_SAMPLE: "Původní kontrola – náhodný vzorek faktů",
+    REVIEW_ROUND_COMPLETION: "Kontrola po doplnění – všechny fakty přidané doplňováním",
+}
+
 REQUIREMENT_LABELS = {
     "investment_sectors": "Sektor (`investment_sectors`)",
     "investment_stages": "Do čeho investuje – fáze (`investment_stages`)",
     SEARCH_TARGET_TICKET: "Výše investice – ticket (alespoň jedna mez)",
-    SEARCH_TARGET_CAPITAL: "Kapitál (fond s částkou, AUM nebo investovaný kapitál)",
+    SEARCH_TARGET_CAPITAL: "Kapitál (získaná částka fondu nebo AUM)",
 }
 
 CAPITAL_LABELS = {
@@ -158,15 +165,19 @@ def agreement_section(dataset: Dataset) -> list[str]:
 
 def fact_accuracy_section(dataset: Dataset) -> list[str]:
     lines = ["## Přesnost faktů", ""]
-    for reviewer in (REVIEWER_PRIMARY, REVIEWER_INDEPENDENT):
-        result = fact_accuracy(dataset, reviewer)
-        if result.accuracy.denominator + result.unverifiable == 0:
-            lines.append(f"- {reviewer}: kontrola faktů zatím není vyplněna.")
-            continue
-        lines.append(
-            f"- {reviewer}: {format_proportion(result.accuracy)}; nelze ověřit: {result.unverifiable}"
-        )
-    return lines
+    for review_round, label in REVIEW_ROUND_LABELS.items():
+        lines.append(f"### {label}")
+        lines.append("")
+        for reviewer in (REVIEWER_PRIMARY, REVIEWER_INDEPENDENT):
+            result = fact_accuracy(dataset, reviewer, review_round)
+            if result.accuracy.denominator + result.unverifiable == 0:
+                lines.append(f"- {reviewer}: kontrola faktů zatím není vyplněna.")
+                continue
+            lines.append(
+                f"- {reviewer}: {format_proportion(result.accuracy)}; nelze ověřit: {result.unverifiable}"
+            )
+        lines.append("")
+    return lines[:-1]
 
 
 def format_share(proportion: Proportion) -> str:
@@ -188,6 +199,7 @@ def requirement_section(dataset: Dataset) -> list[str]:
     ]
     lines += [
         f"| Ticket – obě meze | {format_share(result.tickets_both)} | |",
+        f"| Kapitál – jen cílová velikost (získaný kapitál neznámý) | {format_share(result.target_only)} | |",
         f"| Zdroj (`evidence_urls`) | {format_share(result.sources)} | |",
         "",
         "| Typ kapitálu | Investorů s údajem |",
@@ -201,29 +213,42 @@ def format_amount(amount: Decimal) -> str:
     return f"{amount:,.0f}".replace(",", " ")
 
 
-def format_capital_total(summary: CapitalSummary) -> str:
-    if not summary.totals:
+def format_amounts(amounts: dict[str, Decimal]) -> str:
+    return " + ".join(f"{format_amount(amount)} {currency}" for currency, amount in amounts.items())
+
+
+def format_raised(summary: CapitalSummary) -> str:
+    if not summary.raised:
         return "neznámý"
-    amounts = " + ".join(f"{format_amount(amount)} {currency}" for currency, amount in summary.totals.items())
+    amounts = format_amounts(summary.raised)
     return f"{amounts} (dolní mez)" if summary.lower_bound else amounts
+
+
+def format_fund_count(summary: CapitalSummary) -> str:
+    documented = "–" if summary.documented_fund_count is None else str(summary.documented_fund_count)
+    return f"{summary.fund_count} ({summary.funds_with_raised}) / {documented}"
 
 
 def capital_section(dataset: Dataset) -> list[str]:
     lines = [
         "## Celkový investiční kapitál (odvozený z funds.csv)",
         "",
-        "Součet velikostí fondů investora po měnách; měny se nesčítají. „Dolní mez“: některý fond nemá částku, "
-        "částka je přibližná nebo jde o závazek jednoho LP či investovanou částku. AUM je uvedeno zvlášť.",
+        "Získaný kapitál je součet skutečně získaných částek (u každého fondu nejlepší typ: final close > "
+        "uzavřen bez upřesnění > first close > závazek jednoho LP); měny se nesčítají. Cílová velikost se do "
+        "získaného kapitálu nikdy nepřičítá a uvádí se zvlášť u fondů bez získané částky. „Dolní mez“: nejsou "
+        "známé získané částky všech fondů správce (počet fondů nedoložen faktem `pocet_fondu` nebo některý fond "
+        "nemá získanou částku), částka je přibližná nebo jde o závazek jednoho LP. Investováno a AUM jsou zvlášť.",
         "",
-        "| Investor | Fondů (s částkou) | Typy částek | Celkový kapitál | AUM |",
-        "|---|---|---|---|---|",
+        "| Investor | Fondů ve funds.csv (se získanou částkou) / dle zdroje | Typy získaných částek "
+        "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM |",
+        "|---|---|---|---|---|---|---|",
     ]
     for summary in investor_capital(dataset):
         aum = f"{format_amount(Decimal(summary.aum))} {summary.aum_currency}" if summary.aum else "–"
-        types = ", ".join(summary.amount_types) or "–"
         lines.append(
-            f"| {summary.name} | {summary.fund_count} ({summary.funds_with_amount}) | {types} "
-            f"| {format_capital_total(summary)} | {aum} |"
+            f"| {summary.name} | {format_fund_count(summary)} | {', '.join(summary.raised_types) or '–'} "
+            f"| {format_raised(summary)} | {format_amounts(summary.targets) or '–'} "
+            f"| {format_amounts(summary.invested) or '–'} | {aum} |"
         )
     return lines
 

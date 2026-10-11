@@ -11,6 +11,9 @@ from investor_db.schema import (
     INVESTMENT_STAGES,
     MONEY_FACT_FIELDS,
     PRIMARY_SOURCE_TYPES,
+    REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_SAMPLE,
+    REVIEW_ROUNDS,
     SOURCE_TYPES,
 )
 from investor_db.values import parse_date, parse_money, split_list
@@ -161,6 +164,13 @@ FIELD_GUIDES: Final[dict[str, FieldGuide]] = {
             AMOUNT_CHECK
             + " Zdroj musí uvádět, kolik fond už investoval (proinvestovaný kapitál), ne velikost fondu. "
             + APPROX_AMOUNT_CHECK
+        ),
+    ),
+    "pocet_fondu": FieldGuide(
+        claim="Investor {investor} má celkem {value} fondů{as_of_clause}.",
+        look_for=(
+            "Zdroj musí uvádět počet fondů investora, výslovně (např. „spravuje tři fondy“) nebo pořadím "
+            "posledního fondu (např. „pátý fond“). Počet musí sedět; jiný počet je chybne."
         ),
     ),
     "informace_o_fondu": FieldGuide(
@@ -454,12 +464,16 @@ def sampled_fact_ids(dataset: Dataset) -> list[str]:
     return sorted({row["fact_id"] for row in dataset.fact_reviews})
 
 
-def build_fact_guides(dataset: Dataset) -> list[FactGuide]:
+def round_fact_ids(dataset: Dataset, review_round: str) -> list[str]:
+    return sorted({row["fact_id"] for row in dataset.fact_reviews if row["review_round"] == review_round})
+
+
+def build_fact_guides(dataset: Dataset, fact_ids: list[str]) -> list[FactGuide]:
     facts = {row["fact_id"]: row for row in dataset.facts}
     investors = {row["investor_id"]: row for row in dataset.investors}
     sources = {row["source_id"]: row for row in dataset.sources}
     guides = []
-    for fact_id in sampled_fact_ids(dataset):
+    for fact_id in fact_ids:
         fact = facts[fact_id]
         guides.append(build_fact_guide(fact, investors[fact["investor_id"]], sources[fact["source_id"]]))
     return guides
@@ -488,19 +502,45 @@ def render_fact_guide(index: int, guide: FactGuide) -> str:
     ])
 
 
+ROUND_HEADINGS: Final = {
+    REVIEW_ROUND_SAMPLE: (
+        "Původní kontrola – náhodný vzorek",
+        "Náhodný vzorek faktů z původního sběru. Přesnost se z něj počítá zvlášť.",
+    ),
+    REVIEW_ROUND_COMPLETION: (
+        "Kontrola po doplnění – všechny nové fakty",
+        "Všechny fakty přidané doplňováním sektorů, ticketu a kapitálu, ne vzorek. Přesnost se počítá zvlášť.",
+    ),
+}
+
+
+def render_round(dataset: Dataset, review_round: str, first_index: int) -> tuple[list[str], int]:
+    guides = build_fact_guides(dataset, round_fact_ids(dataset, review_round))
+    if not guides:
+        return [], first_index
+    heading, description = ROUND_HEADINGS[review_round]
+    lines = [f"# {heading} ({len(guides)} faktů)", "", description, ""]
+    lines += [render_fact_guide(index, guide) for index, guide in enumerate(guides, start=first_index)]
+    return lines, first_index + len(guides)
+
+
 def render_checklist(dataset: Dataset) -> str:
-    guides = build_fact_guides(dataset)
     header = [
         "# Kontrolní list faktů",
         "",
-        "Vygenerováno příkazem `python -m investor_db review-guide` ze vzorku v `data/fact_reviews.csv`. "
+        "Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. "
         "Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.",
         "",
-        f"Vzorek obsahuje {len(guides)} z {len(dataset.facts)} faktů. "
+        f"Kontrola obsahuje {len(sampled_fact_ids(dataset))} z {len(dataset.facts)} faktů ve dvou kolech. "
         "U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. "
         "Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš "
         "do řádku se stejným `fact_id` v `data/fact_reviews.csv`. "
         "Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.",
         "",
     ]
-    return "\n".join(header + [render_fact_guide(index, guide) for index, guide in enumerate(guides, start=1)])
+    body: list[str] = []
+    next_index = 1
+    for review_round in REVIEW_ROUNDS:
+        lines, next_index = render_round(dataset, review_round, next_index)
+        body += lines
+    return "\n".join(header + body)

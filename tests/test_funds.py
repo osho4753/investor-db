@@ -117,7 +117,31 @@ def test_fund_without_amount_is_valid_with_fund_fact(dataset: Dataset) -> None:
 def test_duplicate_fund_of_investor_is_reported(dataset: Dataset) -> None:
     dataset.funds.append(dict(dataset.funds[0], fund_id="fd-0002"))
 
-    assert_reported(dataset, "je zapsán vícekrát")
+    assert_reported(dataset, "je zapsán s velikostí vícekrát")
+
+
+def add_invested(dataset: Dataset, fund_name: str = FUND_NAME) -> None:
+    dataset.facts.append(fact("f-00014", "fond_investovano", "12000000", "src-0002", currency="CZK", fund_name=fund_name))
+    dataset.funds.append(
+        fund("fd-0004", fund_name, "f-00014", amount="12000000", currency="CZK", amount_type="investovano", approx="ne")
+    )
+
+
+def test_fund_may_have_size_and_invested_amount(dataset: Dataset) -> None:
+    add_invested(dataset)
+
+    assert validate_dataset(dataset, TODAY) == []
+
+
+def add_fund_count(dataset: Dataset, count: str) -> None:
+    dataset.facts.append(fact("f-00015", "pocet_fondu", count, "src-0002", value_as_of="2026-01-01"))
+
+
+@pytest.mark.parametrize("count", ["0", "dva", "1.5"])
+def test_invalid_fund_count_is_reported(dataset: Dataset, count: str) -> None:
+    add_fund_count(dataset, count)
+
+    assert_reported(dataset, "počet fondů není kladné celé číslo")
 
 
 @pytest.mark.parametrize(
@@ -169,17 +193,71 @@ def test_capital_is_summed_per_currency_and_marked_as_lower_bound(dataset: Datas
         fund("fd-0003", "Fiktivní Fond III", "f-00013", amount="94000000", currency="CZK", amount_type="zavazek_jednoho_lp", approx="ne")
     )
 
+    add_fund_count(dataset, "3")
+
     summary = investor_capital(dataset)[0]
 
-    assert summary.totals == {"CZK": Decimal("94000000"), "EUR": Decimal("85000000")}
+    assert summary.raised == {"CZK": Decimal("94000000"), "EUR": Decimal("85000000")}
     assert summary.lower_bound
     assert summary.fund_count == 3
 
 
-def test_exact_final_close_is_not_lower_bound(dataset: Dataset) -> None:
+def add_target_fund(dataset: Dataset) -> None:
+    dataset.facts.append(
+        fact("f-00016", "cilova_velikost_fondu", "150000000", "src-0002", currency="EUR", fund_name="Fiktivní Fond IV")
+    )
+    dataset.funds.append(
+        fund("fd-0005", "Fiktivní Fond IV", "f-00016", amount="150000000", currency="EUR", amount_type="cil", approx="ne")
+    )
+
+
+def test_target_is_never_added_to_raised_capital(dataset: Dataset) -> None:
+    add_target_fund(dataset)
+    add_fund_count(dataset, "2")
+
     summary = investor_capital(dataset)[0]
 
-    assert summary.totals == {"EUR": Decimal("30000000")}
+    assert summary.raised == {"EUR": Decimal("30000000")}
+    assert summary.targets == {"EUR": Decimal("150000000")}
+    assert summary.lower_bound
+
+
+def test_investor_with_only_target_has_unknown_raised_capital(dataset: Dataset) -> None:
+    dataset.funds.clear()
+    add_target_fund(dataset)
+
+    summary = investor_capital(dataset)[0]
+    completeness = requirement_completeness(dataset)
+
+    assert summary.raised == {}
+    assert summary.targets == {"EUR": Decimal("150000000")}
+    assert not summary.lower_bound
+    assert completeness.target_only.numerator == 1
+
+
+def test_invested_amount_is_shown_separately(dataset: Dataset) -> None:
+    add_invested(dataset)
+
+    summary = investor_capital(dataset)[0]
+
+    assert summary.raised == {"EUR": Decimal("30000000")}
+    assert summary.invested == {"CZK": Decimal("12000000")}
+
+
+def test_raised_capital_is_lower_bound_without_documented_fund_count(dataset: Dataset) -> None:
+    summary = investor_capital(dataset)[0]
+
+    assert summary.raised == {"EUR": Decimal("30000000")}
+    assert summary.documented_fund_count is None
+    assert summary.lower_bound
+
+
+def test_exact_raised_capital_of_all_documented_funds_is_not_lower_bound(dataset: Dataset) -> None:
+    add_fund_count(dataset, "1")
+
+    summary = investor_capital(dataset)[0]
+
+    assert summary.documented_fund_count == 1
     assert not summary.lower_bound
 
 
@@ -187,4 +265,4 @@ def test_report_contains_requirement_and_capital_sections(dataset: Dataset) -> N
     report = render_report(dataset, TODAY)
 
     assert "## Úplnost podle požadavků zadání" in report
-    assert "| Fiktivní Ventures | 1 (1) | final_close | 30 000 000 EUR | – |" in report
+    assert "| Fiktivní Ventures | 1 (1) / – | final_close | 30 000 000 EUR (dolní mez) | – | – | – |" in report

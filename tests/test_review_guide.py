@@ -119,13 +119,31 @@ def test_ares_source_gets_json_hint() -> None:
 
 def test_checklist_covers_sample_without_evidence_note() -> None:
     dataset = build_valid_dataset()
-    dataset.fact_reviews = [{"fact_id": row["fact_id"], "reviewer": "R1"} for row in dataset.facts[:3]]
+    dataset.fact_reviews = [
+        {"fact_id": row["fact_id"], "reviewer": "R1", "review_round": "vzorek"} for row in dataset.facts[:3]
+    ]
+    fact_ids = sorted(row["fact_id"] for row in dataset.facts[:3])
 
     checklist = render_checklist(dataset)
 
-    assert [guide.fact_id for guide in build_fact_guides(dataset)] == sorted(row["fact_id"] for row in dataset.facts[:3])
+    assert [guide.fact_id for guide in build_fact_guides(dataset, fact_ids)] == fact_ids
     assert "Fiktivní testovací důkaz" not in checklist
     assert checklist == render_checklist(dataset)
+
+
+def test_checklist_lists_review_rounds_separately() -> None:
+    dataset = build_valid_dataset()
+    dataset.fact_reviews = [
+        {"fact_id": "f-00001", "reviewer": "R1", "review_round": "vzorek"},
+        {"fact_id": "f-00002", "reviewer": "R1", "review_round": "po_doplneni"},
+        {"fact_id": "f-00003", "reviewer": "R1", "review_round": "po_doplneni"},
+    ]
+
+    checklist = render_checklist(dataset)
+
+    assert "# Původní kontrola – náhodný vzorek (1 faktů)" in checklist
+    assert "# Kontrola po doplnění – všechny nové fakty (2 faktů)" in checklist
+    assert checklist.index("`f-00001`") < checklist.index("## 2. `f-00002`")
 
 
 def test_cli_writes_checklist(tmp_path: Path) -> None:

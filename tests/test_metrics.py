@@ -92,14 +92,37 @@ def test_agreement_reports_percent_and_kappa(dataset: Dataset) -> None:
 
 def test_fact_accuracy_separates_unverifiable(dataset: Dataset) -> None:
     dataset.fact_reviews += [
-        {"fact_id": "f-00002", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "chybne", "review_minutes": "", "note": ""},
-        {"fact_id": "f-00003", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "nelze_overit", "review_minutes": "", "note": ""},
+        fact_review("f-00002", "chybne", "vzorek"),
+        fact_review("f-00003", "nelze_overit", "vzorek"),
     ]
 
     result = fact_accuracy(dataset)
 
     assert result.accuracy == Proportion(1, 2)
     assert result.unverifiable == 1
+
+
+def fact_review(fact_id: str, verdict: str, review_round: str) -> dict[str, str]:
+    return {
+        "fact_id": fact_id,
+        "reviewer": "R1",
+        "reviewed_at": "2026-10-05",
+        "verdict": verdict,
+        "review_minutes": "",
+        "note": "",
+        "review_round": review_round,
+    }
+
+
+def test_fact_accuracy_is_reported_per_review_round(dataset: Dataset) -> None:
+    dataset.fact_reviews += [
+        fact_review("f-00002", "chybne", "po_doplneni"),
+        fact_review("f-00003", "chybne", "po_doplneni"),
+        fact_review("f-00004", "spravne", "po_doplneni"),
+    ]
+
+    assert fact_accuracy(dataset, "R1", "vzorek").accuracy == Proportion(1, 1)
+    assert fact_accuracy(dataset, "R1", "po_doplneni").accuracy == Proportion(1, 3)
 
 
 def test_field_completeness_counts_verified_investors_only(dataset: Dataset) -> None:

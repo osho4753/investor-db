@@ -45,7 +45,15 @@ SEARCH_LOG_COLUMNS: Final = (
     "target_field",
 )
 REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
-FACT_REVIEW_COLUMNS: Final = ("fact_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
+FACT_REVIEW_COLUMNS: Final = (
+    "fact_id",
+    "reviewer",
+    "reviewed_at",
+    "verdict",
+    "review_minutes",
+    "note",
+    "review_round",
+)
 CANDIDATE_SOURCE_COLUMNS: Final = ("investor_id", "search_id")
 EFFORT_COLUMNS: Final = ("investor_id", "activity", "actor", "minutes", "logged_at", "note")
 FUND_COLUMNS: Final = (
@@ -162,6 +170,10 @@ VERDICT_FACT_WRONG: Final = "chybne"
 VERDICT_FACT_UNVERIFIABLE: Final = "nelze_overit"
 FACT_VERDICTS: Final = (VERDICT_FACT_CORRECT, VERDICT_FACT_WRONG, VERDICT_FACT_UNVERIFIABLE)
 
+REVIEW_ROUND_SAMPLE: Final = "vzorek"
+REVIEW_ROUND_COMPLETION: Final = "po_doplneni"
+REVIEW_ROUNDS: Final = (REVIEW_ROUND_SAMPLE, REVIEW_ROUND_COMPLETION)
+
 EFFORT_TRIAGE: Final = "triaz"
 EFFORT_VERIFICATION: Final = "overeni"
 EFFORT_COMPLETION: Final = "doplneni"
@@ -200,6 +212,7 @@ FACT_FUND_CLOSED: Final = "fond_uzavren"
 FACT_FUND_FIRST_CLOSE: Final = "fond_first_close"
 FACT_FUND_LP_COMMITMENT: Final = "fond_zavazek_lp"
 FACT_FUND_INVESTED: Final = "fond_investovano"
+FACT_FUND_COUNT: Final = "pocet_fondu"
 FUND_AMOUNT_FACT_FIELDS: Final = (
     FACT_FUND_FINAL_CLOSE,
     FACT_FUND_CLOSED,
@@ -212,6 +225,7 @@ SUPPLEMENTARY_FACT_FIELDS: Final = (
     FACT_LEGAL_MANAGER,
     FACT_TARGET_FUND_SIZE,
     *FUND_AMOUNT_FACT_FIELDS,
+    FACT_FUND_COUNT,
     FACT_REGULATOR_REGISTRATION,
     FACT_DOCUMENTED_INVESTMENT,
     FACT_EXCLUSION_REASON,
@@ -240,9 +254,9 @@ AMOUNT_FIRST_CLOSE: Final = "first_close"
 AMOUNT_TARGET: Final = "cil"
 AMOUNT_LP_COMMITMENT: Final = "zavazek_jednoho_lp"
 AMOUNT_INVESTED: Final = "investovano"
-FUND_SIZE_PRIORITY: Final = (AMOUNT_FINAL_CLOSE, AMOUNT_CLOSED, AMOUNT_FIRST_CLOSE, AMOUNT_TARGET)
+RAISED_AMOUNT_PRIORITY: Final = (AMOUNT_FINAL_CLOSE, AMOUNT_CLOSED, AMOUNT_FIRST_CLOSE, AMOUNT_LP_COMMITMENT)
 LOWER_BOUND_AMOUNT_TYPES: Final = (AMOUNT_LP_COMMITMENT,)
-FUND_AMOUNT_TYPES: Final = (*FUND_SIZE_PRIORITY, AMOUNT_LP_COMMITMENT, AMOUNT_INVESTED)
+FUND_AMOUNT_TYPES: Final = (*RAISED_AMOUNT_PRIORITY[:3], AMOUNT_TARGET, AMOUNT_LP_COMMITMENT, AMOUNT_INVESTED)
 FACT_FIELDS_BY_AMOUNT_TYPE: Final = {
     AMOUNT_FINAL_CLOSE: (FACT_FUND_FINAL_CLOSE, "total_fund_size"),
     AMOUNT_CLOSED: (FACT_FUND_CLOSED, "total_fund_size"),

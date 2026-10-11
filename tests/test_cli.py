@@ -58,13 +58,39 @@ def test_review_template_adds_rows_for_second_reviewer(data_dir: Path) -> None:
 
 
 def test_fact_review_template_adds_sample(data_dir: Path) -> None:
-    assert main(["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1"]) == 0
+    assert main(["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R2"]) == 0
 
     dataset = load_dataset(data_dir)
-    listed_ids = [row["fact_id"] for row in dataset.fact_reviews]
-    assert set(sample_fact_ids([row["fact_id"] for row in dataset.facts])) <= set(listed_ids)
-    assert len(listed_ids) == len(set(listed_ids))
+    listed = [row for row in dataset.fact_reviews if row["reviewer"] == "R2"]
+    assert {row["fact_id"] for row in listed} == set(sample_fact_ids([row["fact_id"] for row in dataset.facts]))
+    assert {row["review_round"] for row in listed} == {"vzorek"}
     assert main(["--data-dir", str(data_dir), "validate"]) == 0
+
+
+def test_fact_review_template_keeps_existing_sample(data_dir: Path) -> None:
+    before = load_dataset(data_dir).fact_reviews
+
+    assert main(["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1"]) == 0
+
+    assert load_dataset(data_dir).fact_reviews == before
+
+
+def test_completion_round_lists_all_facts_from_given_id(data_dir: Path) -> None:
+    arguments = ["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1"]
+    assert main([*arguments, "--round", "po_doplneni", "--from-fact", "f-00005"]) == 0
+
+    dataset = load_dataset(data_dir)
+    completion = [row for row in dataset.fact_reviews if row["review_round"] == "po_doplneni"]
+    expected = sorted(row["fact_id"] for row in dataset.facts if row["fact_id"] >= "f-00005")
+    assert [row["fact_id"] for row in completion] == expected
+    assert [row["fact_id"] for row in dataset.fact_reviews if row["review_round"] == "vzorek"] == ["f-00001"]
+    assert main(["--data-dir", str(data_dir), "validate"]) == 0
+
+
+def test_completion_round_requires_first_fact(data_dir: Path) -> None:
+    arguments = ["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1", "--round", "po_doplneni"]
+
+    assert main(arguments) == 1
 
 
 def test_missing_data_file_is_reported(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:

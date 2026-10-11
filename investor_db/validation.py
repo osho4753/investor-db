@@ -8,7 +8,9 @@ from investor_db.io import Dataset, Row
 from investor_db.schema import (
     ACTIVITY_WINDOW_DAYS,
     APPROX_VALUES,
+    AMOUNT_INVESTED,
     APPROX_YES,
+    FACT_FUND_COUNT,
     FACT_FIELDS_BY_AMOUNT_TYPE,
     FUND_AMOUNT_TYPES,
     SEARCH_TARGETS,
@@ -35,6 +37,7 @@ from investor_db.schema import (
     MONEY_FIELDS,
     PILOT_COUNTRY,
     PRIMARY_SOURCE_TYPES,
+    REVIEW_ROUNDS,
     REVIEWERS,
     SOURCE_TYPES,
     STATUS_EXCLUDED,
@@ -266,6 +269,8 @@ def fact_value_issues(row: Row) -> Iterator[Issue]:
         yield Issue("facts", row_id, f"fakt {field} musí mít fund_name")
     if field == FACT_EXCLUSION_REASON:
         yield from exclusion_reason_issues("facts", row_id, "hodnota", value)
+    if field == FACT_FUND_COUNT and not (value.isdigit() and int(value) > 0):
+        yield Issue("facts", row_id, f"počet fondů není kladné celé číslo: {value!r}")
     if field == FACT_DOCUMENTED_INVESTMENT and not row["value_as_of"]:
         yield Issue("facts", row_id, "doložená investice musí mít value_as_of (datum investice)")
 
@@ -456,9 +461,13 @@ def check_funds(dataset: Dataset, today: date) -> Iterator[Issue]:
         yield from fund_amount_issues(row)
         if row["fact_id"]:
             yield from fund_fact_issues(row, facts_by_id.get(row["fact_id"]))
-    for (investor_id, fund_name), count in Counter((row["investor_id"], row["fund_name"]) for row in dataset.funds).items():
+    keys = Counter(
+        (row["investor_id"], row["fund_name"], row["amount_type"] == AMOUNT_INVESTED) for row in dataset.funds
+    )
+    for (investor_id, fund_name, is_invested), count in keys.items():
         if count > 1:
-            yield Issue("funds", investor_id, f"fond {fund_name!r} je zapsán vícekrát ({count}×)")
+            kind = "investovanou částkou" if is_invested else "velikostí"
+            yield Issue("funds", investor_id, f"fond {fund_name!r} je zapsán s {kind} vícekrát ({count}×)")
 
 
 def fund_amount_issues(row: Row) -> Iterator[Issue]:
@@ -524,6 +533,10 @@ def check_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
 def check_fact_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
     fact_ids = {row["fact_id"] for row in dataset.facts}
     yield from check_review_rows("fact_reviews", dataset.fact_reviews, "fact_id", fact_ids, FACT_VERDICTS, today)
+    for row in dataset.fact_reviews:
+        row_id = f"{row['fact_id']}/{row['reviewer']}"
+        yield from required_issues("fact_reviews", row_id, row, ("review_round",))
+        yield from vocabulary_issues("fact_reviews", row_id, "review_round", row["review_round"], REVIEW_ROUNDS)
 
 
 def check_review_rows(
