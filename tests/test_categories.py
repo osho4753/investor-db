@@ -116,3 +116,25 @@ def test_foreign_investor_counts_as_authentic_but_outside_pilot_country(dataset:
     assert "- Ověřená pravost (skutečný investor kategorie, i mimo zemi pilotu): 2/2" in report
     assert "- V rámci země pilotu (česká právnická osoba, status `overeny`): 1/2" in report
     assert "- Kontrola R1 u statusu `vyloucen`: TP 1 (z 1)" in report
+
+
+@pytest.mark.parametrize(
+    ("column", "value"),
+    [
+        ("investment_sectors", "sluzby_firmam;zdravotnictvi;vzdelavani;financni_sluzby;maloobchod;stavebnictvi;tmt;potravinarstvi"),
+        ("investment_stages", "buyout;growth_equity"),
+    ],
+)
+def test_pe_vocabulary_codes_are_valid(dataset: Dataset, column: str, value: str) -> None:
+    make_pe_candidate(dataset)
+    dataset.investors[2][column] = value
+    dataset.facts.append(fact("f-00021", column, value, "src-0002", investor_id="inv-0003"))
+    dataset.category_assessments.append(assessment())
+
+    assert messages(dataset) == []
+
+
+def test_unknown_pe_stage_is_reported(dataset: Dataset) -> None:
+    dataset.investors[0]["investment_stages"] = "seed;mbo"
+
+    assert any("mbo" in message for message in messages(dataset))

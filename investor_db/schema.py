@@ -128,7 +128,19 @@ CATEGORY_PE: Final = "pe"
 ASSESSED_CATEGORIES: Final = (CATEGORY_PE,)
 REVIEW_CATEGORIES: Final = (CATEGORY_VC, *ASSESSED_CATEGORIES)
 
-INVESTMENT_STAGES: Final = ("pre_seed", "seed", "serie_a", "serie_b", "growth")
+VC_INVESTMENT_STAGES: Final = ("pre_seed", "seed", "serie_a", "serie_b", "growth")
+PE_INVESTMENT_STAGES: Final = ("buyout", "growth_equity")
+INVESTMENT_STAGES: Final = (*VC_INVESTMENT_STAGES, *PE_INVESTMENT_STAGES)
+PE_INVESTMENT_SECTORS: Final = (
+    "sluzby_firmam",
+    "zdravotnictvi",
+    "vzdelavani",
+    "financni_sluzby",
+    "maloobchod",
+    "stavebnictvi",
+    "tmt",
+    "potravinarstvi",
+)
 INVESTMENT_SECTORS: Final = (
     "ai",
     "agritech",
@@ -154,6 +166,7 @@ INVESTMENT_SECTORS: Final = (
     "logistika",
     "jine",
     "sektorove_agnosticky",
+    *PE_INVESTMENT_SECTORS,
 )
 
 PRIMARY_SOURCE_TYPES: Final = ("regulator", "rejstrik", "vyrocni_zprava", "web_investora")

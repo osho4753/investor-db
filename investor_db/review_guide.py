@@ -339,6 +339,8 @@ STAGE_LABELS: Final = {
     "serie_a": "série A",
     "serie_b": "série B",
     "growth": "růstová fáze (growth)",
+    "buyout": "odkup většinového nebo kontrolního podílu (buyout, MBO, MBI, LBO)",
+    "growth_equity": "růstový kapitál do zralé firmy (growth equity, expansion capital)",
 }
 
 SECTOR_LABELS: Final = {
@@ -366,6 +368,14 @@ SECTOR_LABELS: Final = {
     "logistika": "logistika",
     "jine": "jiné sektory",
     "sektorove_agnosticky": "bez sektorového omezení (sector agnostic)",
+    "sluzby_firmam": "služby pro firmy (business services)",
+    "zdravotnictvi": "zdravotní péče a služby (healthcare)",
+    "vzdelavani": "vzdělávací služby (education)",
+    "financni_sluzby": "finanční služby (financial services)",
+    "maloobchod": "maloobchod (retail)",
+    "stavebnictvi": "stavebnictví (construction)",
+    "tmt": "telekomunikace, média a technologie (TMT)",
+    "potravinarstvi": "potravinářství (food production)",
 }
 
 LIST_LABELS: Final = {"investment_sectors": SECTOR_LABELS, "investment_stages": STAGE_LABELS}

@@ -112,7 +112,7 @@ Všechny soubory jsou v `data/`, kódování UTF-8, oddělovač čárka, konce �
 | `registry_id` | `overeny` | IČO vlastní české právnické osoby značky – správcovské či poradenské společnosti nebo fondu (8 číslic, kontrolní součet). **Nikdy IČO licencovaného třetího správce**, ten se ukládá jako fakt `pravni_spravce`; jinak by se různé značky jednoho správce jevily jako duplicity. |
 | `website` | ne | URL webu značky |
 | `investment_sectors` | ne | Řízený slovník, viz níže |
-| `investment_stages` | ne | `pre_seed`, `seed`, `serie_a`, `serie_b`, `growth`. Nepovinné doplňkové pole, není kritériem zařazení. |
+| `investment_stages` | ne | VC: `pre_seed`, `seed`, `serie_a`, `serie_b`, `growth`; PE: `buyout` (MBO, MBI, LBO, kontrolní podíl), `growth_equity` (růstový kapitál do zralé firmy). Nepovinné doplňkové pole, není kritériem zařazení. |
 | `typical_ticket_min`, `typical_ticket_max` | ne | Typická velikost **jedné investice** do jedné firmy |
 | `currency` | při částce | ISO 4217; platí pro všechny částky v řádku |
 | `total_fund_size` | ne | Velikost **posledního fondu při final close**. Cílová velikost sem nepatří. |
@@ -127,7 +127,7 @@ Velikost fondu, AUM, investovaný kapitál a velikost jednotlivé investice jsou
 
 **Měny:** Jeden řádek má jednu měnu. Pokud je některá částka doložena jen v jiné měně, do `investors.csv` se nezapíše a zůstane pouze ve `facts.csv`. Počet takových hodnot se vykazuje jako metrika (omezení dat).
 
-**Řízený slovník sektorů:** `ai`, `agritech`, `biotech`, `cleantech`, `deeptech`, `ecommerce`, `edtech`, `energetika`, `fintech`, `gaming`, `hardware`, `healthtech`, `kyberbezpecnost`, `media`, `mobilita`, `proptech`, `prumysl`, `software`, `spotrebitelske`, `obrana_bezpecnost`, `cestovani`, `logistika`, `jine`, `sektorove_agnosticky`.
+**Řízený slovník sektorů:** `ai`, `agritech`, `biotech`, `cleantech`, `deeptech`, `ecommerce`, `edtech`, `energetika`, `fintech`, `gaming`, `hardware`, `healthtech`, `kyberbezpecnost`, `media`, `mobilita`, `proptech`, `prumysl`, `software`, `spotrebitelske`, `obrana_bezpecnost`, `cestovani`, `logistika`, `jine`, `sektorove_agnosticky`. Pro PE (od 12. 10. 2026, viz [01](01-plan-a-kriteria.md), 1.11): `sluzby_firmam`, `zdravotnictvi`, `vzdelavani`, `financni_sluzby`, `maloobchod`, `stavebnictvi`, `tmt`, `potravinarstvi`. PE kódy popisují tradiční odvětví. Technologické kódy (`healthtech`, `fintech`, `edtech`) se používají jen tam, kde zdroj mluví o technologiích. Stávající VC kódy se nemění.
 
 ### `facts.csv` – jeden řádek = jeden doložený fakt
 
