@@ -129,3 +129,143 @@ Měny se nepřepočítávají, náklady na API a infrastrukturu jsou v USD, nák
 | Nejednoznačné názvy | Gain Ventures, Nation1, Tachles | Identifikace podle domény a týmu, část záznamů zůstává kandidáty. |
 | Paywall | Článek The Recursive o Tachles je jen pro předplatitele | Fakty z takových zdrojů se nezapisují. |
 | Konflikt uvnitř zdroje | Reflex: citace zakladatele a text redakce uvádějí jiný ticket | Pole tiketu neumí zachytit „typicky X, výjimečně Y“. |
+
+## 3.7 Zdroje pro další kategorie investorů
+
+Zdroje byly otevřeny 12. 10. 2026. Čísla, která se nepodařilo otevřít ve zdroji, se nepoužívají.
+
+| # | Zdroj | Typ | Údaj | Rozsah a omezení |
+|---|---|---|---|---|
+| E1 | [Vault – Private Equity: The Industry Today](https://legacy.vault.com/industries-professions/industries/private-equity/the-industry-today) | odborný přehled, cituje asociaci | „approximately **7,000** private equity firms worldwide (with **6,000** firms located in the United States), according to the American Investment Council“ | Sekundární zdroj. Údaj AIC jsme neotevřeli v originále. Celkový počet ve světě je menší než součet USA a Evropy (G3), definice se tedy zřejmě liší. |
+| E2 | G3 a P2 ze 3.1, mini-pilot PE ([01](01-plan-a-kriteria.md), 1.11) | vlastní měření | 17 PE mezi řádnými členy CVCA. Z 5 náhodně vybraných jsou skutečnými PE všech 5/5, českou entitu mají 2/5. | n = 5, jen členové CVCA |
+| E3 | [Deloitte Private – Family Office Insights Series, tisková zpráva](https://www.deloitte.com/in/en/about/press-room/global-edition-explores-the-rapid-expansion-family-offices-and-ffers-vision-of-the-future-landscape.html) | výzkumná zpráva | „an estimated **8,030** single family offices in the world today“ (2019: 6 130, projekce 2030: více než 10 720) | Jen single-family office. Odhad, ne registr. |
+| E4 | [Dakota o zprávě Deloitte](https://www.dakota.com/fundraising-news/deloitte-number-of-family-offices-to-grow-75-by-2030) | médium (cituje E3) | Evropa **2 020**, Severní Amerika 3 180, Asie a Tichomoří 2 290 family office | Regionální rozpad z tabulky Deloitte |
+| E5 | [EBAN – Statistics Compendium 2021](https://www.eban.org/2022/10/10/) | asociace | „approximately **39400** active business angel investors on the European continent“, investice 1 456 mil. EUR (2021) | Jen angelé organizovaní v sítích a asociacích. Shrnutí nástroje, surový text neotevřen. |
+| E6 | [CBAA – databáze členů](https://www.cbaa.cz/clenstvi) | asociace | **11** zveřejněných členů, z toho 7 fyzických osob | Stav 12. 10. 2026; sonda v [01](01-plan-a-kriteria.md), 1.12 |
+| E7 | [Forbes Česko o The Wealth Report (Knight Frank)](https://forbes.cz/pocet-ultrabohatych-roste-minuly-rok-jich-pribyvalo-sedmdesat-za-den/) | médium (cituje výzkumnou zprávu) | Lidí s majetkem nad 30 mil. USD je „přes **626 tisíc**“, meziročně +4,2 % | Článek z 19. 4. 2024. Českou hodnotu neuvádí. |
+| E8 | [e15, 29. 9. 2015](https://www.e15.cz/byznys/finance-a-bankovnictvi/v-ceske-republice-je-pres-200-ultrabohacu-1231288) | médium | Capgemini Czech Republic: „Přesné číslo není známé, ale lze odvodit, že je to jedno procento z milionářské populace, což je zhruba **210** lidí“ s investičním majetkem nad 30 mil. USD | Starý a odvozený odhad |
+| E9 | [Newstream (ČTK), 21. 6. 2022](https://www.newstream.cz/money/pocet-dolarovych-milionaru-v-cesku-prekonal-30-tisic-jsou-take-bohatsi) | médium (cituje Capgemini) | **32 200** dolarových milionářů v ČR (investovatelné jmění od 1 mil. USD), rok 2021 | Milionáři nejsou investoři do firem |
+| E10 | Sonda family office ([01](01-plan-a-kriteria.md), 1.12) | vlastní měření | 0/5 lze doložit podle F1–F4, 3/5 kandidáti, 2/5 poskytovatelé služeb; kapitál zveřejněn 0/5 | n = 5, jen mediálně známé případy |
+
+**Nepoužito.** Počet aktivních angel investorů v USA z UNH Center for Venture Research se nepodařilo otevřít: chyba certifikátu, PDF bez čitelného textu a stránka EBAN, která výsledky přebírá, vrátila 404. Údaj proto zůstává **neznámý**. Statistiky ČNB ani Knight Frank pro ČR v otevřených zdrojích nebyly.
+
+## 3.8 Odhad pro jednotlivé kategorie
+
+Každé číslo je buď ze zdroje (E1–E10, G1–G7, P1–P2), nebo je označeno jako **předpoklad**. „Získatelné z veřejných zdrojů“ znamená záznam, který lze doložit podle pravidel kategorie ([01](01-plan-a-kriteria.md), 1.10). Neznamená to, že bude mít vyplněná všechna pole zadání.
+
+### VC (změřeno v pilotu)
+
+| | Nízký | Základní | Vysoký | Zdroj |
+|---|---|---|---|---|
+| Svět, počet firem | 5 235 | 7 251 | 9 682 | 3.3 |
+| ČR | 16 | 20 | 25 | 16 ověřených, 16 + 4 kandidáti, horní mez Chapmanova intervalu (P1) |
+| Získatelné z veřejných zdrojů | 80 % | 80 % | 80 % | pilot: 16 ověřených z 20 VC subjektů, 4 kandidáti |
+
+**Spolehlivost (změřeno):**
+
+- precision 15/15;
+- přesnost faktů – vzorek 32/34, přísně 88,9 %;
+- přesnost faktů – doplňování 42/44, přísně 85,7 %;
+- opravy 7/7.
+
+Pole zadání: sektor 15/16, ticket 14/16, kapitál 13/16.
+
+**Náklady (změřeno):** model 5,4 min na ověřeného investora. Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
+
+### PE (změřeno v mini-pilotu, n = 5)
+
+| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
+|---|---|---|---|---|
+| USA | 6 000 | 6 000 | 6 000 | E1 |
+| Evropa: firmy PE a VC × podíl PE | 3 095 × 0,4 = 1 238 | × 0,5 = 1 548 | × 0,6 = 1 857 | G3; podíl PE = 1 − podíl VC (3.3, **předpoklad** z pilotu) |
+| Zbytek světa | – | 0,3 × (USA + Evropa) | 0,6 × (USA + Evropa) | **předpoklad**, bez zdroje |
+| **Svět celkem** | **7 000** | **9 812** | **12 571** | Nízký = celosvětové číslo z E1. Je menší než součet USA a Evropy, protože definice zdrojů se liší. |
+| ČR – skuteční PE investoři aktivní v ČR | 17 | 22 | 27 | 17 PE členů CVCA (E2), pravost 5/5; základní a vysoký scénář přičítají nečleny CVCA +30 %, resp. +60 % (**předpoklad**) |
+| ČR – s českou právnickou osobou | 3 | 9 | 16 | 17 × podíl s českou entitou 0,2 / 0,4 / 0,6 (pilot 2/5, malý vzorek), × 1,0 / 1,3 / 1,6 za nečleny (**předpoklad**) |
+| Získatelné z veřejných zdrojů | pravost 5/5, v zemi pilotu 2/5 | | | E2 |
+
+**Spolehlivost:**
+
+- Pravost 5/5.
+- Ruční kontrola PE od R1 v době zápisu ještě není v `reviews.csv`, výsledek proto chybí.
+- Přesnost faktů se očekává jako u VC, 85–95 % (**předpoklad**: stejná metodika).
+- Ticket se mezi webem a CVCA rozchází u 3/5, takže u pole „typická výše“ je spolehlivost nižší.
+- Pole zadání: sektor 5/5 a ticket 5/5. Získaný kapitál podle přísné definice má jen 1/5, nějaký údaj o kapitálu 5/5.
+
+**Náklady:** model **1,0 min** na subjekt (změřeno, n = 5, bez hledání kandidátů, seznam pochází z CVCA). Pro hledání se přičítá 0,4 min jako u VC ((5,6 + 0,7) / 16). Čas člověka zatím změřen není, počítá se jako u VC 15,5 min (**předpoklad**).
+
+### Family office
+
+| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
+|---|---|---|---|---|
+| Svět, single-family office | 8 030 | 8 030 | 10 720 | E3; vysoký scénář = projekce Deloitte pro rok 2030 jako horní mez |
+| z toho Evropa | 2 020 | 2 020 | – | E4 |
+| Svět – přímí investoři do firem (v rozsahu databáze) | 8 030 × 0,3 = 2 409 | 8 030 × 0,5 = 4 015 | 10 720 × 0,7 = 7 504 | Podíl přímých investorů je **předpoklad**. Sonda ukázala investice přes fondy jako LP (1/5) i poskytovatele služeb (2/5). |
+| ČR – family office celkem | 10 | 30 | 60 | **předpoklad**; žádný zdroj počet neuvádí |
+| ČR – přímí investoři | 3 | 15 | 42 | ČR × stejný podíl |
+| Získatelné z veřejných zdrojů | 0 % | 15 % | 30 % | Sonda 0/5 `overeny`, 3/5 kandidáti; **předpoklad**, že část kandidátů doloží hlubší hledání |
+
+**Spolehlivost (předpoklad):** přesnost faktů 70–90 %. Hlavním rizikem je klasifikace (vlastní, nebo cizí kapitál; přímá investice, nebo LP). Stejný typ chyby převažoval v kole `po_doplneni` (6/7 nálezů). Pole zadání: kapitál 0/5 v sondě, sektor a výše zřídka.
+
+**Náklady (předpoklad):** model 2–4× VC, tedy 11–22 min na záznam, protože chybí registr a seznam kandidátů. Člověk 15–30 min.
+
+### Angel investoři
+
+| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
+|---|---|---|---|---|
+| Evropa – aktivní angelé v sítích | 39 400 | 39 400 | 39 400 | E5 (jen organizovaní v sítích, skutečný počet je vyšší) |
+| Svět | 118 200 | 197 000 | 394 000 | **Předpoklad**: Evropa × 3 / 5 / 10. Údaj za USA nebyl ověřen (3.7). |
+| ČR – angelé celkem | 100 | 300 | 1 000 | **předpoklad**; žádný zdroj počet neuvádí, Světová banka (2018) popisuje málo sítí a koncentraci u „super angels“ |
+| ČR – sami se veřejně prezentují (A1) | 7 | 30 | 100 | Nízký = 7 fyzických osob v databázi CBAA (E6); ostatní **předpoklad** |
+| Svět – získatelné z veřejných zdrojů | 5 % | 10 % | 20 % | **předpoklad**; jen osoby s vlastním zveřejněním a doloženou investicí |
+
+**Spolehlivost (předpoklad):** 80–95 % u identity a investice, pokud stojí na vlastním zveřejnění. Pole zadání: sektor a ticket 2/11 profilů v CBAA, kapitál se neukládá.
+
+**Náklady (předpoklad):** model 11–22 min na záznam. Člověk 15–30 min. Navíc informační povinnost podle čl. 14 GDPR: 5–10 min na osobu na oznámení a evidenci námitek.
+
+**Omezení:** CBAA záměrně brání indexaci seznamu členů (1.12). Sběr proto vyžaduje dohodu nebo souhlas a odhad počítá s nízkým podílem.
+
+### Velcí soukromí investoři
+
+| | Nízký | Základní | Vysoký | Zdroj nebo předpoklad |
+|---|---|---|---|---|
+| Svět – UHNWI (majetek nad 30 mil. USD) | 626 000 | 626 000 | 626 000 | E7 |
+| Svět – přímí investoři do firem | 31 300 | 62 600 | 125 200 | Podíl 5 / 10 / 20 % je **předpoklad** |
+| ČR – UHNWI | 210 | 210 | 210 | E8 (odvozený odhad z roku 2015); dolaroví milionáři 32 200 (E9) |
+| ČR – přímí investoři | 11 | 21 | 42 | stejný podíl (**předpoklad**) |
+| Získatelné z veřejných zdrojů (holding s doloženými investicemi) | 10 % | 20 % | 30 % | **předpoklad**; evidence skutečných majitelů je uzavřena, Sbírka listin jen ručně |
+
+Kategorie se částečně překrývá s family office. Část UHNWI investuje přes vlastní kanceláře, takže součet obou kategorií by počítal některé subjekty dvakrát.
+
+**Spolehlivost (předpoklad):** 70–90 %. Vazba osoby na holding se dokládá jen vlastním zveřejněním.
+
+**Náklady (předpoklad):** model 11–22 min, člověk 15–30 min a GDPR jako u angelů.
+
+### Souhrnná tabulka (základní scénář, v závorce nízký – vysoký)
+
+| Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | Člověk na kontrolu záznamu |
+|---|---|---|---|---|---|---|
+| VC | 20 (16–25) | 7 251 (5 235–9 682) | 80 % (změřeno) | precision 15/15; fakta 94,1 %, přísně 85,7–88,9 % (změřeno) | 5,4 min (změřeno) | 15,5 min (změřeno) |
+| PE | 9 (3–16) s českou entitou; 22 (17–27) aktivních v ČR | 9 812 (7 000–12 571) | pravost 5/5, v zemi pilotu 2/5 (změřeno, n = 5) | kontrola R1 chybí; fakta 85–95 % (předpoklad) | 1,0 min + 0,4 min hledání (změřeno, n = 5) | 15,5 min (předpoklad) |
+| Family office | 15 (3–42) přímých investorů | 4 015 (2 409–7 504) přímých investorů | 15 % (0–30 %; sonda 0/5) | 70–90 % (předpoklad) | 11–22 min (předpoklad) | 15–30 min (předpoklad) |
+| Angel investor | 30 (7–100) s vlastním zveřejněním | 197 000 (118 200–394 000), z toho získatelné 10 % (5–20 %) | 10 % (předpoklad) | 80–95 % (předpoklad) | 11–22 min + GDPR 5–10 min (předpoklad) | 15–30 min (předpoklad) |
+| Velký soukromý investor | 21 (11–42) | 62 600 (31 300–125 200) | 20 % (10–30 %) | 70–90 % (předpoklad) | 11–22 min + GDPR 5–10 min (předpoklad) | 15–30 min (předpoklad) |
+
+**Čas modelu na získatelné záznamy ve světě, základní scénář** (počet × čas na záznam, bez koeficientů regionů z 3.4):
+
+| Kategorie | Výpočet | Hodin |
+|---|---|---|
+| VC | 7 251 × 0,8 × 5,4 min | 522 |
+| PE | 9 812 × 1,4 min | 229 |
+| Family office | 4 015 × 0,15 × 16,5 min | 166 |
+| Angel investor | 197 000 × 0,1 × (16,5 + 7,5) min | 7 880 |
+| Velký soukromý investor | 62 600 × 0,2 × (16,5 + 7,5) min | 5 008 |
+
+U PE je celý počet, protože pravost byla 5/5 a záznam se vede v zemi sídla.
+
+**Jak číst výsledek:**
+
+- **VC a PE** jsou dobře proveditelné: existují seznamy a registry a pole zadání jsou dostupná. Rozdíl mezi nízkým a vysokým scénářem je do dvojnásobku.
+- **Family office, angelé a velcí soukromí investoři** mají rozpětí v řádech. Většina vstupů je předpoklad a podíl získatelných záznamů je nízký.
+- U fyzických osob převažují náklady na GDPR a ruční kontrolu nad časem modelu.
+- Před rozšířením na tyto kategorie je potřeba nejdřív ověřit předpoklady **sondou o 25 záznamech na kategorii**, stejně velkou jako regionální vzorek v 3.5.
