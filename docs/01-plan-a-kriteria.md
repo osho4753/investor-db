@@ -96,6 +96,7 @@ Vyloučené subjekty zůstávají v datech, aby bylo zřejmé, co bylo posouzeno
 | StartupYard | `overeny` | Akcelerátor, který investuje přes vehikl s kapitálem třetích osob. |
 | Zaka VC | `vyloucen`, `family_office` | Kapitál třetích osob není doložen. |
 | Inven Capital | `kandidat` | Vazba na ČEZ doložena, podíl ČEZ na kapitálu fondu nad 50 % ne (pravidlo CVC). |
+| J&T Ventures | `kandidat` | J&T banka je podle webu fondu institucionálním investorem bez zvláštních práv, podíl neuveden (pravidlo CVC). Do 11. 10. 2026 `overeny`. |
 
 ## 1.5 Dvě úrovně zpracování a trychtýř
 

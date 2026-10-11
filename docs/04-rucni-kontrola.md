@@ -173,7 +173,7 @@ Kontrolu provedl hodnotitel R1 9. a 10. 10. 2026. R2 se kontroly neúčastnil, s
 |---|---|---|
 | TP / (TP + FP), v době kontroly | 15/15 = 100,0 % | 79,6 % – 100,0 % |
 | `nejiste` počítáno jako FP | 15/15 = 100,0 % (žádný verdikt `nejiste`) | 79,6 % – 100,0 % |
-| Pro informaci: aktuální stav (17 ověřených včetně Lighthouse a Tachles) | 17/17 = 100,0 % | 81,6 % – 100,0 % |
+| Pro informaci: aktuální stav (16 ověřených: přibyli Lighthouse a Tachles, J&T Ventures přešel po kontrole do kandidátů) | 16/16 = 100,0 % | 80,6 % – 100,0 % |
 
 Do precision vstupují jen řádky investorů, kteří měli v době kontroly status `overeny`. Při 15 záznamech je interval široký. Spodní mez 79,6 % je pesimistický odhad, ne naměřená chybovost.
 
@@ -200,7 +200,7 @@ Verdikty hodnotitele zůstávají beze změny. Níže jsou rozpory a návrh ře�
 | Springtide Ventures | `TP` u subjektu, který R1 sám popisuje jako „VC křídlo skupiny KKCG“. Podle Forbesu nemá cizí peníze, celý kapitál tedy dává jedna skupina, což je CVC mimo definici pilotu. | R1 verdikt buď potvrdí jako nesouhlas s pravidlem CVC (pak jde o návrh změny definice, ne o false negative), nebo ho změní na `FP`. |
 | Patero | `TP` s poznámkou „family office“. Family office i investice vlastního kapitálu bez fondu jsou podle 1.4 vyloučeny (Z3). | Stejně jako u Springtide: buď nesouhlas s pravidlem, nebo změna verdiktu. |
 | Gain Ventures | `TP` stojí na „databázích startupových transakcí“, tedy na agregátorech, které podle metodiky slouží jen jako vodítko. Z1 a Z3 nejsou doložena. | Změnit na `nejiste`, dokud nebude subjekt identifikován. |
-| J&T Ventures | `TP` odpovídá statusu, ale poznámka R1 „VC fond patřící pod J&T“ naznačuje vazbu na korporátní skupinu. Podíl skupiny J&T na kapitálu fondu v datech doložen není. Podle pravidla CVC by doložená vazba bez doloženého podílu znamenala status `kandidat`. | Viz návrh 5 v seznamu oprav dat. |
+| J&T Ventures | `TP` odpovídá statusu, ale poznámka R1 „VC fond patřící pod J&T“ naznačuje vazbu na korporátní skupinu. Podíl skupiny J&T na kapitálu fondu v datech doložen není. Podle pravidla CVC by doložená vazba bez doloženého podílu znamenala status `kandidat`. | Vyřešeno po kontrole, viz Opravy po kontrole. |
 
 ### Přesnost faktů
 
@@ -238,32 +238,32 @@ Kontrola investorů a kontrola faktů měří různé věci.
   U 4 záznamů zdroj uvedený není. Precision tedy vyjadřuje, zda jsou ověření investoři skutečně aktivní VC, ne zda je správný každý doklad v `evidence_urls`. Pro hodnotitele jsou agregátory legitimní nezávislá kontrola, přestože pro sběr faktů slouží jen jako vodítko.
 - **Kontrola faktů** naopak ověřovala přímo zdroj uvedený u faktu podle kontrolního listu. Měří tedy spolehlivost samotných dokladů.
 
-### Úplnost a doložení (ověření investoři, aktuální stav, n = 17)
+### Úplnost a doložení (ověření investoři, aktuální stav po opravách, n = 16)
 
 | Pole | Vyplněno |
 |---|---|
-| `name`, `investor_type`, `country`, `registry_id`, `evidence_urls`, `last_verified_at` | 17/17 (100,0 %) |
-| `investment_stages` | 16/17 (94,1 %) |
-| `website` | 15/17 (88,2 %) |
-| `investment_sectors` | 14/17 (82,4 %) |
-| `typical_ticket_max`, `currency` | 13/17 (76,5 %) |
-| `typical_ticket_min` | 12/17 (70,6 %) |
-| `total_fund_size`, `assets_under_management` | 2/17 (11,8 %) |
-| `invested_capital` | 0/17 (0,0 %) |
+| `name`, `investor_type`, `country`, `registry_id`, `evidence_urls`, `last_verified_at` | 16/16 (100,0 %) |
+| `investment_stages` | 15/16 (93,8 %) |
+| `website` | 14/16 (87,5 %) |
+| `investment_sectors` | 13/16 (81,2 %) |
+| `typical_ticket_max`, `currency` | 12/16 (75,0 %) |
+| `typical_ticket_min` | 11/16 (68,8 %) |
+| `total_fund_size`, `assets_under_management` | 2/16 (12,5 %) |
+| `invested_capital` | 0/16 (0,0 %) |
 
 | Metrika | Výsledek | 95% Wilsonův interval |
 |---|---|---|
-| Ověření investoři s IČO z primárního zdroje | 17/17 = 100,0 % | 81,6 % – 100,0 % |
-| Fakty z primárních zdrojů | 127/223 = 57,0 % | 50,4 % – 63,3 % |
-| Ověření investoři s doloženou investicí za 36 měsíců (u ostatních je Z4 doloženo novým fondem) | 14/17 = 82,4 % | 59,0 % – 93,8 % |
-| Ověření investoři ověření za posledních 12 měsíců | 17/17 = 100,0 % | 81,6 % – 100,0 % |
+| Ověření investoři s IČO z primárního zdroje | 16/16 = 100,0 % | 80,6 % – 100,0 % |
+| Fakty z primárních zdrojů | 128/224 = 57,1 % | 50,6 % – 63,4 % |
+| Ověření investoři s doloženou investicí za 36 měsíců (u ostatních je Z4 doloženo novým fondem) | 13/16 = 81,2 % | 57,0 % – 93,4 % |
+| Ověření investoři ověření za posledních 12 měsíců | 16/16 = 100,0 % | 80,6 % – 100,0 % |
 
 - **Duplicity:** žádná skupina možných duplicit; 1 záznam je vyloučen jako duplicita.
 - **Měny:** 0 peněžních hodnot ponechaných jen ve `facts.csv` kvůli jiné měně, než má řádek.
 
 ### Odhad celkového počtu (capture–recapture)
 
-Chapmanovy odhady počtu ověřitelných VC v ČR vycházejí podle dvojice průchodů od 7 do 25 a jejich intervaly od 7 do 41. U dvojic s velkým překryvem jsou odhady nižší než počet skutečně nalezených investorů. Ověřených investorů je 17. Zdroje hledání nejsou nezávislé (sekundární zdroje přebírají viditelné fondy), proto je odhad **dolní mezí**. V ČR je tedy nejméně 17 VC splňujících Z1–Z4, pravděpodobně více.
+Chapmanovy odhady počtu ověřitelných VC v ČR vycházejí podle dvojice průchodů od 7 do 25 a jejich intervaly od 7 do 41. U dvojic s velkým překryvem jsou odhady nižší než počet skutečně nalezených investorů. Ověřených investorů je 16. Zdroje hledání nejsou nezávislé (sekundární zdroje přebírají viditelné fondy), proto je odhad **dolní mezí**. V ČR je tedy nejméně 16 VC splňujících Z1–Z4, pravděpodobně více.
 
 ### Pracnost
 
@@ -271,7 +271,7 @@ Chapmanovy odhady počtu ověřitelných VC v ČR vycházejí podle dvojice prů
 |---|---|---|---|---|
 | Model | Hledání kandidátů | 17 průchodů | 5,6 min | 0,3 min na průchod |
 | Model | Rychlá triáž | 22 subjektů | 0,7 min | méně než 0,1 min |
-| Model | Plné ověření | 30 subjektů | 71,1 min | průměr 2,4 min, medián 1,7 min |
+| Model | Plné ověření včetně oprav po kontrole | 30 subjektů | 80,1 min | průměr 2,7 min, medián 1,9 min |
 | Člověk (R1) | Kontrola investorů | 22 záznamů | 340 min | průměr 15,5 min, medián 15 min (ověření investoři 14,7 min, ostatní 17,1 min) |
 | Člověk (R1) | Kontrola faktů | 36 faktů | 34 min | průměr 0,94 min, medián 0,5 min |
 
@@ -284,6 +284,7 @@ Chapmanovy odhady počtu ověřitelných VC v ČR vycházejí podle dvojice prů
 | Inven Capital | Žádné z Z1–Z4; nerozhodnuto pravidlo CVC | Data chybí | Doklad o podílu ČEZ na současném kapitálu fondu. V roce 2017 dal ČEZ asi 50 z 240 mil. EUR, původ zbytku není uveden; v roce 2021 dostal fond od ČEZ a EIB 6,3 mld. Kč bez rozpadu. |
 | Nation1 | Z1 | Nejednoznačný název / data chybí | Česká entita spojená se značkou. Jediná nalezená Nation1 Investment s.r.o. má jiné sídlo a jiné jednatele než tým fondu, web je nedostupný. |
 | Gain Ventures | Z1, Z3 | Nejednoznačný název | Identifikace subjektu z článku (web, tým). ARES zná GAIN Ventures s.r.o., vazba na článek ale není doložena. |
+| J&T Ventures | Žádné z Z1–Z4; nerozhodnuto pravidlo CVC | Data chybí | Podíl J&T banky na kapitálu fondu. Web uvádí banku jen jako institucionálního investora bez zvláštních práv, podíl neuvádí. |
 
 Opravené případy pro úplnost: Lighthouse Ventures (slabé hledání) a Tachles (chybné pravidlo). Oba byly false negatives a teď mají status `overeny`.
 
@@ -291,13 +292,28 @@ Opravené případy pro úplnost: Lighthouse Ventures (slabé hledání) a Tachl
 
 Orbit Capital je vyloučen jako `dluhovy_fond`, protože jeho nejnovější fond Growth Debt Fund II (107 mil. EUR, 2026) poskytuje venture debt. Nejde o chybu klasifikace, ale o **vyloučení z definice pilotu**. Profil CVCA uvádí i growth equity, proto je Orbit kandidátem pro budoucí rozšíření definice o venture debt.
 
-### Návrhy oprav dat podle kontroly
+### Opravy po kontrole
 
-Data se na základě kontroly neopravovala, níže jsou jen návrhy ke schválení. Metriky výše platí pro data v době kontroly.
+Opravy schválil zadavatel 11. 10. 2026 po zveřejnění výsledků. Provedly se až po kontrole, takže **precision a přesnost faktů výše se nemění** a platí pro data v době kontroly. Fakty ve vzorku si ponechávají své `fact_id` a verdikty R1 se vztahují k původní hodnotě (historie v Gitu).
 
-1. **f-00071 i&i Biotech – sektory.** Web uvádí, že fond investuje „výhradně“ do life science, a AI je jednou z vertikál vedle drug discovery, medtechu a diagnostiky. Návrh: ponechat `biotech;healthtech` a odebrat `ai`, nebo v metodice upřesnit, že se sektor zapisuje jen jako samostatné investiční zaměření.
-2. **f-00145 a f-00144 Reflex – ticket.** Zdroj uvádí typickou investici kolem 1 mil. EUR a výjimečně až 2 mil. EUR. Návrh: odebrat z `investors.csv` `typical_ticket_max` 2 mil. EUR, protože jde o výjimečné maximum, ne o typickou horní mez. Stejný problém má f-00144 (1 mil. EUR je typická hodnota, ne dolní mez), který ve vzorku nebyl.
-3. **f-00081 Tilia – ticket.** Při kontrole 11. 10. 2026 titulní stránka tilia.vc uváděla „0.3 - 1.2m EUR initial ticket“. Návrh: R1 stránku otevře znovu. Pokud údaj nenajde, je třeba zjistit, zda se obsah stránky liší podle verze.
-4. **f-00003 CVI.** Poznámka R1 cituje text, který dluhovou strategii podporuje („Direct Lending, Senior Debt, Mezzanine, exceptionally Minority Equity“). Návrh: R1 zváží verdikt `spravne`. Pokud byl problém ve zdroji (stránka se seznamem členů místo profilu), doplnit jako zdroj profil CVCA.
-5. **J&T Ventures – pravidlo CVC.** Návrh: dohledat strukturu kapitálu fondů J&T Ventures. Pokud zdroj potvrdí vazbu na skupinu J&T bez doloženého podílu, status `kandidat`; při podílu nad 50 % `vyloucen` (`cvc`).
-6. **Springtide, Patero, Gain.** Pokud R1 trvá na `TP`, jde o návrh změny pravidel (CVC, investice bez fondu, agregátory), ne o opravu dat.
+| Záznam | Před opravou | Po opravě | Zdroj a důvod |
+|---|---|---|---|
+| i&i Biotech Investments (f-00071, `investors.csv`) | `investment_sectors` = biotech; healthtech; ai | biotech; healthtech | Web fondu uvádí zaměření výhradně na life science. AI je tam jedna z vertikál v rámci life science, ne samostatný sektor. Verdikt R1 `chybne` se potvrdil. |
+| Reflex Capital (f-00144, f-00145) | ticket 1–2 mil. EUR | **beze změny hodnot**, do `evidence_note` zapsán konflikt | Po opětovném otevření článku se ukázalo, že zdroj si odporuje. Zakladatel v přímé citaci uvádí „typickou investici mezi jedním až dvěma miliony eur“, redakce o odstavec níže píše „kolem jednoho milionu eur, někdy ke hranici dvou milionů“. Hodnoty odpovídají přímé citaci, proto se „oprava podle zdroje“ provedla jen zápisem konfliktu. Původní návrh odebrat horní mez vycházel z textu redakce a citaci přehlédl. Verdikt R1 zůstává `chybne`. |
+| J&T Ventures (nový fakt f-00248, zdroj jtventures.cz/pristup) | `overeny` | `kandidat` | Web uvádí, že fond není korporátním fondem J&T banky a banka je v něm „pouze institucionálním investorem bez speciálních práv“. Podíl banky na kapitálu neuvádí. ARES u J&T Ventures CG SICAV (08220867) a J&T Ventures III SICAV (22175903) uvádí jen zakladatelské akcie, akcionáře neuvádí. Vazba na skupinu je tedy doložena, podíl ne, a podle pravidla CVC z [02-metodika.md](02-metodika.md) to znamená `kandidat` (stejně jako Inven). V době kontroly byl J&T `overeny` a verdikt R1 `TP` se do precision započítal. |
+
+### Možná přísnost hodnotitele
+
+R1 verdikty u dvou faktů ponechává. Opakovanou kontrolu by podnítil sběrač dat, takže by už nebyla nezávislá. Metriky zůstávají beze změny a níže je jen zjištění sběrače pro čtenáře.
+
+| Fakt | Verdikt R1 | Zjištění sběrače |
+|---|---|---|
+| f-00081 Tilia – `typical_ticket_min` 300 000 EUR | `nelze_overit` („žádné info na webu“) | Při opětovném otevření 11. 10. 2026 titulní stránka tilia.vc uváděla „0.3 - 1.2m EUR initial ticket“. Nelze vyloučit, že se obsah stránky liší podle verze nebo načtení skriptů. |
+| f-00003 CVI – `duvod_vylouceni` = dluhovy_fond | `nelze_overit` | Text, který R1 v poznámce cituje („Direct Lending, Senior Debt, Mezzanine, exceptionally Minority Equity Investments“), dluhovou strategii spíše podporuje. |
+
+Přesnost faktů 32/34 tedy může být mírně podhodnocená. Pesimistická varianta 32/36 tento případ pokrývá.
+
+### Otevřené otázky
+
+1. **J&T Ventures – podíl J&T banky na kapitálu fondu.** Rozhoduje mezi `overeny` (podíl do 50 %) a `vyloucen` s důvodem `cvc` (nad 50 %). Veřejné primární zdroje (web, ARES) podíl neuvádějí.
+2. **Springtide, Patero, Gain.** Rozpory verdiktů s pravidly jsou popsány výše. Případná změna verdiktu je na hodnotiteli, do precision se tyto řádky nezapočítávají.
