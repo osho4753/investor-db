@@ -77,6 +77,25 @@ Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávaj�
    python -m pytest
    ```
 
+## Práce s AI
+
+Data sbíral, kód psal a dokumentaci připravoval agent Claude Code podle pokynů autora. Ruční kontrolu dělá člověk. Celý průběh je v [ai-log/](ai-log/).
+
+### Příklad: agent ověřil pokyn proti zdrojům a neprovedl ho slepě
+
+Autor při revizi kapitálu nařídil: „Credo Stage 5 (88 mil. USD) je first close → dolní mez.“ Agent pokyn ověřil proti zdrojům a zjistil, že má slabou oporu:
+
+- „First close“ uvádí jen Wikipedie a článek Tech.eu, který Wikipedie cituje, first close nezmiňuje.
+- TNW (23. 3. 2026) naopak píše, že fond byl získán v jediném uzavření („raised in a single closing“).
+
+Agent pokyn provedl, protože first close je konzervativní varianta. Rozpor ale nezamlčel:
+
+- zapsal oba zdroje jako samostatné fakty (f-00295, f-00296),
+- konflikt označil ve `funds.csv` (`conflict_note`), takže je vidět v tabulce kapitálu,
+- autora výslovně upozornil, že zdroje jeho premisu nepodporují, a nabídl změnu typu na „uzavřen“.
+
+Autor rozhodl, že zápis zůstává. Credo je dolní mezí tak jako tak kvůli nevyřešenému konfliktu měny u Credo Stage 3 (100 mil. USD podle money.pl, 100 mil. EUR podle CzechCrunch, Vestbee a partnera Creda; primární zdroj se nenašel). Typ uzavření Stage 5 tedy výsledek nemění. Rozbor je v [docs/04](docs/04-rucni-kontrola.md), 4.7.
+
 ## Struktura
 
 ```
