@@ -2,7 +2,7 @@
 
 Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
 
-Kontrola obsahuje 82 z 270 faktů ve dvou kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+Kontrola obsahuje 85 z 273 faktů ve dvou kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
 
 # Původní kontrola – náhodný vzorek (36 faktů)
 
@@ -332,7 +332,7 @@ Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí 
 **Zdroj:** <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/02059533>  
 Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí ČR – ARES
 
-# Kontrola po doplnění – všechny nové fakty (46 faktů)
+# Kontrola po doplnění – všechny nové fakty (49 faktů)
 
 Všechny fakty přidané doplňováním sektorů, ticketu a kapitálu, ne vzorek. Přesnost se počítá zvlášť.
 
@@ -749,3 +749,30 @@ Typ zdroje: média (sekundární), vydavatel: Forbes Česko
 
 **Zdroj:** <https://www.reflexcapital.com/cs/>  
 Typ zdroje: web investora (primární), vydavatel: Reflex Capital
+
+## 83. `f-00295` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 5“ investora Credo Ventures dosáhl prvního uzavření (first close) ve výši 88 000 000 USD (stav k 1. 3. 2026).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 88 000 000 USD: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět first close (první uzavření), ne konečnou nebo cílovou velikost. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci. Datum připadá na 1. den měsíce: může jít o údaj s přesností na měsíc, pak stačí shoda měsíce a roku.
+
+**Zdroj:** <https://en.wikipedia.org/wiki/Venture_capital_in_the_Czech_Republic>  
+Typ zdroje: jiný zdroj (sekundární), vydavatel: Wikipedie
+
+## 84. `f-00296` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 5“ investora Credo Ventures byl konečně uzavřen (final close) s velikostí 88 000 000 USD (stav k 23. 3. 2026).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 88 000 000 USD: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí výslovně uvádět konečné uzavření (final close, „definitivně uzavřel“). Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://thenextweb.com/news/credo-ventures-88m-fund>  
+Typ zdroje: média (sekundární), vydavatel: TNW
+
+## 85. `f-00297` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 3“ investora Credo Ventures byl uzavřen s velikostí 100 000 000 EUR; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 100 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/andrej-kiska-z-credo-ventures-nejdriv-byla-slabina-ze-jsme-z-vychodni-evropy-ted-na-to-investori-v-silicon-valley-slysi/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch

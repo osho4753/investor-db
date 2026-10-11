@@ -1,33 +1,33 @@
-fund_id,investor_id,fund_name,vintage,amount,currency,amount_type,approx,amount_wording,value_as_of,fact_id
-fd-0001,inv-0003,Tensor Ventures Fund I SCSp,2017,20000000,EUR,uzavren_bez_upresneni,ne,,,f-00249
-fd-0002,inv-0003,Tensor Ventures Co-investment Fund,,1000000000,CZK,uzavren_bez_upresneni,ne,,2025-09-18,f-00252
-fd-0003,inv-0006,KAYA Fund IV,,72000000,EUR,final_close,ne,,2021-03-31,f-00254
-fd-0004,inv-0006,KAYA Fund V,2024,70000000,EUR,first_close,ne,,2025-06-25,f-00256
-fd-0005,inv-0006,ET3,,,,,,,,f-00039
-fd-0006,inv-0008,Grouport Ventures,,35000000,CZK,uzavren_bez_upresneni,ne,,,f-00258
-fd-0007,inv-0008,Depo Angels Fund II,,45000000,CZK,cil,ne,,2022-01-25,f-00259
-fd-0008,inv-0008,Depo Ventures – třetí andělský fond,,500000000,CZK,cil,ne,,2022-10-07,f-00260
-fd-0009,inv-0008,DEPO Ventures One SCSp,,94000000,CZK,zavazek_jednoho_lp,ne,,2026-08-26,f-00261
-fd-0010,inv-0009,i&i Biotech Fund I SCSp,2021,47000000,EUR,uzavren_bez_upresneni,ano,the total capital of the fund has risen to approximately €47 million,2022-11-30,f-00264
-fd-0011,inv-0013,Credo Stage 5,2026,88000000,USD,uzavren_bez_upresneni,ne,,2026-03-23,f-00266
-fd-0012,inv-0013,Credo Stage 4,2022,75000000,EUR,uzavren_bez_upresneni,ne,,2022-10-10,f-00267
-fd-0013,inv-0027,Tilia Impact Seed Fund,2023,26000000,EUR,uzavren_bez_upresneni,ne,,2023-09-21,f-00268
-fd-0014,inv-0027,Tilia Impact Ventures – první fond,2018,43000000,CZK,uzavren_bez_upresneni,ano,Máme na ně 43 milionů korun (v textu „přes 40 milionů korun“),2018-11-28,f-00270
-fd-0015,inv-0028,Presto Ventures – druhý fond,2022,30000000,EUR,uzavren_bez_upresneni,ne,,2022-06-23,f-00203
-fd-0016,inv-0028,Presto Tech Horizons,2024,150000000,EUR,cil,ne,,2024-06-26,f-00108
-fd-0017,inv-0029,Rockaway Ventures Fund II,2022,55000000,EUR,uzavren_bez_upresneni,ano,necelých 55 milionů eur,2025-05-14,f-00271
-fd-0018,inv-0035,Purple Ventures 2,2024,700000000,CZK,uzavren_bez_upresneni,ano,has raised over CZK 700 million,,f-00275
-fd-0019,inv-0037,Lighthouse Seed Fund,2019,23000000,EUR,uzavren_bez_upresneni,ne,,2019-06-07,f-00277
-fd-0020,inv-0037,Lighthouse Ventures Fund II,2024,,,,,,,f-00236
-fd-0021,inv-0038,Reflex Capital – třetí fond,2023,22000000,EUR,uzavren_bez_upresneni,ne,,2023-12-22,f-00204
-fd-0022,inv-0039,Tachles VC,2024,500000000,CZK,first_close,ano,prostředky na úrovni půl miliardy korun,2024-06-13,f-00281
-fd-0023,inv-0044,Soulmates Ventures – fond 50 mil. EUR,2025,50000000,EUR,uzavren_bez_upresneni,ne,,2025-03-18,f-00283
-fd-0024,inv-0047,SG One,2022,6000000,EUR,cil,ne,,,f-00284
-fd-0025,inv-0047,SG Two,,20000000,EUR,cil,ne,,,f-00285
-fd-0026,inv-0049,StartupYard Batch 15 s.r.o.,2024,,,,,,,f-00228
-fd-0027,inv-0052,IP Lab Ventures Fund,2026,1200000000,CZK,cil,ne,,2026-09-23,f-00152
-fd-0028,inv-0013,Credo 1,,18000000,EUR,uzavren_bez_upresneni,ne,,,f-00289
-fd-0029,inv-0013,Credo 2,2015,53000000,EUR,uzavren_bez_upresneni,ne,,,f-00290
-fd-0030,inv-0013,Credo Stage 3,2019,100000000,USD,uzavren_bez_upresneni,ne,,2019-11-01,f-00291
-fd-0031,inv-0035,Purple Ventures 2,2024,250000000,CZK,investovano,ano,invested a quarter billion to date,,f-00276
-fd-0032,inv-0009,i&i Biotech Fund I SCSp,2021,7400000,EUR,investovano,ano,about €7.4 million,2022-11-30,f-00265
+fund_id,investor_id,fund_name,vintage,amount,currency,amount_type,approx,amount_wording,value_as_of,fact_id,fundraising_open,conflict_note
+fd-0001,inv-0003,Tensor Ventures Fund I SCSp,2017,20000000,EUR,uzavren_bez_upresneni,ne,,,f-00249,,
+fd-0002,inv-0003,Tensor Ventures Co-investment Fund,,1000000000,CZK,uzavren_bez_upresneni,ne,,2025-09-18,f-00252,ano,
+fd-0003,inv-0006,KAYA Fund IV,,72000000,EUR,final_close,ne,,2021-03-31,f-00254,,
+fd-0004,inv-0006,KAYA Fund V,2024,70000000,EUR,first_close,ne,,2025-06-25,f-00256,,
+fd-0005,inv-0006,ET3,,,,,,,,f-00039,,
+fd-0006,inv-0008,Grouport Ventures,,35000000,CZK,uzavren_bez_upresneni,ne,,,f-00258,,
+fd-0007,inv-0008,Depo Angels Fund II,,45000000,CZK,cil,ne,,2022-01-25,f-00259,,
+fd-0008,inv-0008,Depo Ventures – třetí andělský fond,,500000000,CZK,cil,ne,,2022-10-07,f-00260,,
+fd-0009,inv-0008,DEPO Ventures One SCSp,,94000000,CZK,zavazek_jednoho_lp,ne,,2026-08-26,f-00261,,
+fd-0010,inv-0009,i&i Biotech Fund I SCSp,2021,47000000,EUR,uzavren_bez_upresneni,ano,the total capital of the fund has risen to approximately €47 million,2022-11-30,f-00264,,
+fd-0011,inv-0013,Credo Stage 5,2026,88000000,USD,first_close,ne,,2026-03-01,f-00295,,typ uzavření: Wikipedie first close (f-00295) × TNW jediné uzavření (f-00296); zapsán first close jako konzervativní varianta
+fd-0012,inv-0013,Credo Stage 4,2022,75000000,EUR,uzavren_bez_upresneni,ne,,2022-10-10,f-00267,,
+fd-0013,inv-0027,Tilia Impact Seed Fund,2023,26000000,EUR,uzavren_bez_upresneni,ne,,2023-09-21,f-00268,,
+fd-0014,inv-0027,Tilia Impact Ventures – první fond,2018,43000000,CZK,uzavren_bez_upresneni,ano,Máme na ně 43 milionů korun (v textu „přes 40 milionů korun“),2018-11-28,f-00270,,
+fd-0015,inv-0028,Presto Ventures – druhý fond,2022,30000000,EUR,uzavren_bez_upresneni,ne,,2022-06-23,f-00203,,
+fd-0016,inv-0028,Presto Tech Horizons,2024,150000000,EUR,cil,ne,,2024-06-26,f-00108,,
+fd-0017,inv-0029,Rockaway Ventures Fund II,2022,55000000,EUR,uzavren_bez_upresneni,ano,necelých 55 milionů eur,2025-05-14,f-00271,,
+fd-0018,inv-0035,Purple Ventures 2,2024,700000000,CZK,uzavren_bez_upresneni,ano,has raised over CZK 700 million,,f-00275,,
+fd-0019,inv-0037,Lighthouse Seed Fund,2019,23000000,EUR,uzavren_bez_upresneni,ne,,2019-06-07,f-00277,,
+fd-0020,inv-0037,Lighthouse Ventures Fund II,2024,,,,,,,f-00236,,
+fd-0021,inv-0038,Reflex Capital – třetí fond,2023,22000000,EUR,uzavren_bez_upresneni,ne,,2023-12-22,f-00204,,
+fd-0022,inv-0039,Tachles VC,2024,500000000,CZK,first_close,ano,prostředky na úrovni půl miliardy korun,2024-06-13,f-00281,,
+fd-0023,inv-0044,Soulmates Ventures – fond 50 mil. EUR,2025,50000000,EUR,uzavren_bez_upresneni,ne,,2025-03-18,f-00283,,
+fd-0024,inv-0047,SG One,2022,6000000,EUR,cil,ne,,,f-00284,,
+fd-0025,inv-0047,SG Two,,20000000,EUR,cil,ne,,,f-00285,,
+fd-0026,inv-0049,StartupYard Batch 15 s.r.o.,2024,,,,,,,f-00228,,
+fd-0027,inv-0052,IP Lab Ventures Fund,2026,1200000000,CZK,cil,ne,,2026-09-23,f-00152,,
+fd-0028,inv-0013,Credo 1,,18000000,EUR,uzavren_bez_upresneni,ne,,,f-00289,,
+fd-0029,inv-0013,Credo 2,2015,53000000,EUR,uzavren_bez_upresneni,ne,,,f-00290,,
+fd-0030,inv-0013,Credo Stage 3,2019,100000000,USD,uzavren_bez_upresneni,ne,,2019-11-01,f-00291,,"měna: money.pl 10. 3. 2020 (f-00291) 100 mil. USD, v citované tiskové zprávě Habermann „blisko 100 mln USD“, Silicon Canals 100 mil. USD × CzechCrunch 8. 11. 2019, Kiska 11. 11. 2019 (f-00297) a Vestbee 2. 4. 2020 100 mil. EUR; primární zdroj (web Credo, EIF) nenalezen; zapsána nižší varianta USD"
+fd-0031,inv-0035,Purple Ventures 2,2024,250000000,CZK,investovano,ano,invested a quarter billion to date,,f-00276,,
+fd-0032,inv-0009,i&i Biotech Fund I SCSp,2021,7400000,EUR,investovano,ano,about €7.4 million,2022-11-30,f-00265,,
