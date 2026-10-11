@@ -452,6 +452,10 @@ Opravy navrhl R1 a schválil je zadavatel 12. 10. 2026. Provedly se až po kontr
 
 **Opakovaná kontrola (kolo `po_oprave`).** Fakty f-00262, f-00267, f-00270, f-00273, f-00282, f-00285 a nový f-00298 mají po opravě jiný typ, zdroj nebo hodnotu. Jsou v `fact_reviews.csv` jako samostatné kolo `po_oprave` a v kontrolním listu jako třetí oddíl. Jejich verdikty v kole `po_doplneni` se vztahují k původnímu stavu a zůstávají. Přesnost kola `po_oprave` se vykazuje zvlášť a do přesnosti ostatních kol se nezapočítává.
 
+### Přesnost faktů – kolo `po_oprave`
+
+Kontrolu provedl R1 12. 10. 2026 na stavu dat v commitu `5d895a9`. Všech 7 opravených a nových faktů je `spravne`: **7/7**. Interval 64,6–100 % je při 7 faktech široký, proto jde hlavně o potvrzení, že opravy odpovídají zdrojům, ne o odhad chybovosti. R1 potřeboval 3,5 min (0,5 min na fakt). Výsledek platí pro opravený stav. Přesnost kola `po_doplneni` (42/44, přísně 42/49) se tím nemění, protože popisuje kvalitu doplňování v době kontroly.
+
 ## 4.8 Kontrola mini-pilotu PE
 
 Mini-pilot PE ([01](01-plan-a-kriteria.md), 1.11) má vlastní řádky v `reviews.csv` se sloupcem `category` = `pe`. Založil je příkaz `python -m investor_db review-template --reviewer R1 --category pe`. Posuzuje se **status podle pravidel PE** (P1–P4 v [01](01-plan-a-kriteria.md), 1.10), ne podle pravidel VC. Precision PE se počítá jen z řádků `pe` u subjektů se statusem PE `overeny`. VC precision se nemění.
@@ -462,7 +466,12 @@ Mini-pilot PE ([01](01-plan-a-kriteria.md), 1.11) má vlastní řádky v `review
 | `FP` | Status je chybný: ověřený subjekt P1–P4 nesplňuje nebo nejde o PE, případně vyloučený subjekt kritéria splňuje. |
 | `nejiste` | Zdroje nestačí k rozhodnutí. |
 
-Do precision vstupují jen `overeny` (2 subjekty). Verdikt u vyloučených slouží jako kontrola false negatives, stejně jako u VC.
+Výsledky se vykazují **v počtech, ne v procentech**. Při 5 záznamech jde o studii proveditelnosti, ne o měření precision. Vykazují se dvě oddělené otázky:
+
+- **(a) Pravost:** jde o skutečného PE investora? Sem patří i subjekty vyloučené jen kvůli zemi (`zahranicni_subjekt`).
+- **(b) Rámec pilotu:** má subjekt českou právnickou osobu (P1) a splňuje P2–P4?
+
+Verdikt u vyloučených slouží jako kontrola false negatives, stejně jako u VC.
 
 ### Záznamy ke kontrole
 

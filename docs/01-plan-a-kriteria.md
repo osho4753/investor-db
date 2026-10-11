@@ -349,16 +349,39 @@ Co k tomu patří:
 | Innova Capital | `vyloucen` | `zahranicni_subjekt` | v ARES nenalezeno | ✓ CVCA (2020) | 25–40 mil. EUR (web) | Innova/7 uzavřen 407 mil. EUR (4/2024), 7 fondů | – |
 | Value4Capital (V4C) | `vyloucen` | `zahranicni_subjekt` | v ARES jen nesouvisející V4C, s.r.o. | ✓ web | 7–15 mil. EUR (web) | velikosti fondů 91 mil. a „128M+“ EUR bez typu | – |
 
+**Pravost a rámec pilotu jsou dvě různé otázky.** Výsledky jsou v počtech, protože při 5 záznamech jde o studii proveditelnosti, ne o měření precision.
+
+| Otázka | Výsledek | Poznámka |
+|---|---|---|
+| (a) Ověřená pravost: skutečný PE investor podle zdrojů | **5/5** | Enterprise Investors, Innova a V4C mají doložené PE fondy a buyout strategii. Nejsou to „ne-investoři“. |
+| (b) V rámci země pilotu: česká právnická osoba a P1–P4 | **2/5** | EVERITA, Versute |
+| Mimo zemi pilotu, v globální databázi by patřili do země sídla | 3/5 | Polsko (Enterprise Investors, Innova), Lucembursko a Polsko (V4C) |
+
 **Zjištění:**
 
-- **P1 vyřadilo 3 z 5.** Regionální PE fondy jsou členy CVCA a uvádějí Česko jako cílový trh, ale nemají českou právnickou osobu (Varšava, Lucemburk). Pro databázi světa to znamená, že se mají evidovat v zemi sídla. Česká mutace webu (ei.com.pl/cz) neexistuje (HTTP 404).
+- **P1 vyřadilo 3 z 5, ale jen z rámce země.** Regionální PE fondy jsou členy CVCA a uvádějí Česko jako cílový trh, ale nemají českou právnickou osobu (Varšava, Lucemburk). Status `vyloucen` s důvodem `zahranicni_subjekt` znamená „mimo zemi pilotu“, ne „neověřený investor“. Report metrik proto vykazuje pravost a rámec země zvlášť. Česká mutace webu (ei.com.pl/cz) neexistuje (HTTP 404).
 - **Pole zadání jsou u PE dostupnější než u VC:**
   - sektor 5/5, ticket 5/5 (obě meze);
   - nějaký údaj o kapitálu 5/5;
   - získaný kapitál podle přísné definice ale jen 1/5 (Innova). Ostatní zdroje uvádějí cíl, „size“ bez typu nebo investovanou částku za celou historii.
 - **Konflikty ticketu web × CVCA** u 3 z 5 (EI, Innova, V4C). Profily CVCA jsou starší a vyplňuje je člen. Zapsán je web.
-- **Mapování sektorů.** Slovník sektorů je stavěný na VC. Tradiční odvětví PE (služby, stavebnictví, zdravotnictví) se mapují přibližně na `jine`, `prumysl` a `healthtech`. Pro rozšíření na PE by slovník potřeboval kategorie jako služby nebo zdravotnictví.
+- **Slovník sektorů pro PE nestačí.** Je stavěný na VC: technologické vertikály jako `healthtech`, `fintech` a `edtech`. PE investuje do tradičních odvětví, která se v pilotu mapovala jen přibližně. U 4 z 5 subjektů skončila aspoň jedna položka v `jine`, nebo byla namapována na technologickou vertikálu, která neodpovídá (healthcare → `healthtech`).
 - **Fáze.** Slovník fází má pro PE jen `growth`; buyout a growth nerozlišuje.
+
+**Návrh rozšíření slovníků pro PE (k rozhodnutí zadavatele, zatím neimplementováno).** Navržené kódy kopírují formulace ze zdrojů pilotu.
+
+| Nový kód | Význam | Formulace ve zdrojích pilotu (dnes mapováno na) |
+|---|---|---|
+| `sluzby_firmam` | B2B služby | „Business Services“ (EVERITA, EI, Innova; `jine`) |
+| `zdravotnictvi` | Zdravotní péče a služby, ne technologie | „Healthcare“ (EVERITA, EI, Innova; `healthtech`) |
+| `vzdelavani` | Vzdělávací služby | „Education“ (EVERITA; `edtech`) |
+| `financni_sluzby` | Banky, pojišťovny, úvěry | „Financial Services“ (EI, Innova; `fintech`) |
+| `maloobchod` | Maloobchod a distribuce | „retail“ (EI; `spotrebitelske`) |
+| `stavebnictvi` | Stavebnictví a stavební materiály | „Construction“ (Innova; `prumysl`) |
+| `tmt` | Telekomunikace, média a technologie jako odvětví | „TMT“ (Innova; `software`) |
+| `potravinarstvi` | Výroba potravin | „food production“ (EVERITA v CVCA; nezapsáno) |
+
+U fází by PE potřebovalo `buyout` (MBO, MBI, LBO) a `growth_equity` místo jediného `growth`, případně `rekapitalizace`. Rozšíření by znamenalo nové kódy v `schema.py`, popis v [02-metodika.md](02-metodika.md) a nové namapování 5 záznamů z pilotu. Stávající VC kódy zůstávají beze změny.
 - **Čas modelu:** 5,0 min celkem, průměr 1,0 min a medián 1,1 min na subjekt. VC pilot měl 5,4 min na ověřeného investora. Vyloučení podle P1 je rychlé (0,5–1,3 min), ověřené PE trvalo 1,1–1,6 min.
 - Hledání bez výsledku (česká entita) je v `search_log` jako s-033 až s-035.
 
