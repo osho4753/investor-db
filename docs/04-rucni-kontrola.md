@@ -352,7 +352,7 @@ Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do
 | Kapitál (fond s částkou, AUM nebo investovaný kapitál) | 2/16 strukturovaně, 13/16 alespoň jako text | 15/16 | 1 (StartupYard) |
 | Zdroj | 16/16 | 16/16 | – |
 
-Kapitál po doplnění podle typu: uzavřený fond bez upřesnění 11, cílová velikost 4, first close 2, final close 1, závazek jednoho LP jako jediná částka fondu 1, AUM 2, investovaný kapitál v `investors.csv` 2 (Depo 9 mil. EUR, Tachles 30 mil. Kč). Celkový investiční kapitál každého investora počítá `python -m investor_db metrics`. U 9 z 16 investorů je označen jako dolní mez.
+Kapitál po doplnění podle typu: uzavřený fond bez upřesnění 11, cílová velikost 4, first close 2, final close 1, závazek jednoho LP jako jediná částka fondu 1, AUM 2, investovaný kapitál v `investors.csv` 2 (Depo 9 mil. EUR, Tachles 30 mil. Kč). Celkový investiční kapitál každého investora počítá `python -m investor_db metrics`. U 8 z 16 investorů je označen jako dolní mez, u StartupYard je neznámý.
 
 ### Přehled po investorech
 
