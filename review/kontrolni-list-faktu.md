@@ -1,8 +1,12 @@
 # Kontrolní list faktů
 
-Vygenerováno příkazem `python -m investor_db review-guide` ze vzorku v `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
+Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
 
-Vzorek obsahuje 36 z 223 faktů. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+Kontrola obsahuje 82 z 270 faktů ve dvou kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+
+# Původní kontrola – náhodný vzorek (36 faktů)
+
+Náhodný vzorek faktů z původního sběru. Přesnost se z něj počítá zvlášť.
 
 ## 1. `f-00001` – Stratum Partners (status: vyloucen)
 
@@ -96,7 +100,7 @@ Typ zdroje: asociace (sekundární), vydavatel: CVCA – Czech Private Equity an
 
 ## 11. `f-00071` – i&i Biotech Investments (status: overeny)
 
-**Tvrzení:** i&i Biotech Investments investuje do těchto sektorů: biotechnologie, zdravotnické technologie (healthtech), umělá inteligence (AI).
+**Tvrzení:** i&i Biotech Investments investuje do těchto sektorů: biotechnologie, zdravotnické technologie (healthtech).
 
 **Co hledat ve zdroji:** Zdroj jmenuje každý z uvedených sektorů (stačí obdobné označení, např. „climate“ pro cleantech). Pokud některý uvedený sektor ve zdroji chybí, je verdikt chybne.
 
@@ -166,7 +170,7 @@ Typ zdroje: média (sekundární), vydavatel: E15
 **Zdroj:** <https://rockawayventures.com/>  
 Typ zdroje: web investora (primární), vydavatel: Rockaway Ventures
 
-## 19. `f-00121` – J&T Ventures (status: overeny)
+## 19. `f-00121` – J&T Ventures (status: kandidat)
 
 **Tvrzení:** J&T Ventures investuje v těchto fázích: pre-seed, seed, série A.
 
@@ -327,3 +331,421 @@ Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí 
 
 **Zdroj:** <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/02059533>  
 Typ zdroje: veřejný rejstřík (primární), vydavatel: Ministerstvo financí ČR – ARES
+
+# Kontrola po doplnění – všechny nové fakty (46 faktů)
+
+Všechny fakty přidané doplňováním sektorů, ticketu a kapitálu, ne vzorek. Přesnost se počítá zvlášť.
+
+## 37. `f-00249` – Tensor Ventures (status: overeny)
+
+**Tvrzení:** Fond „Tensor Ventures Fund I SCSp“ investora Tensor Ventures byl uzavřen s velikostí 20 000 000 EUR; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 20 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/evropsky-investicni-fond-uz-vlozil-penize-do-17-ceskych-fondu-miliardovy-ted-otevira-s-tensor-ventures/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 38. `f-00250` – Tensor Ventures (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „Tensor Ventures Co-investment Fund“ investora Tensor Ventures je 50 000 000 EUR (stav k 15. 5. 2024).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 50 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://cc.cz/evropsky-investicni-fond-uz-vlozil-penize-do-17-ceskych-fondu-miliardovy-ted-otevira-s-tensor-ventures/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 39. `f-00251` – Tensor Ventures (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „Tensor Ventures Co-investment Fund“ investora Tensor Ventures 20 000 000 EUR (stav k 15. 5. 2024); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 20 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/evropsky-investicni-fond-uz-vlozil-penize-do-17-ceskych-fondu-miliardovy-ted-otevira-s-tensor-ventures/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 40. `f-00252` – Tensor Ventures (status: overeny)
+
+**Tvrzení:** Fond „Tensor Ventures Co-investment Fund“ investora Tensor Ventures byl uzavřen s velikostí 1 000 000 000 CZK (stav k 18. 9. 2025); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 1 000 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://forbes.cz/tensor-vybral-miliardu-a-miri-dal-cesti-investori-sazi-na-ai-i-kvantove-technologie/>  
+Typ zdroje: média (sekundární), vydavatel: Forbes Česko
+
+## 41. `f-00253` – KAYA VC (status: overeny)
+
+**Tvrzení:** KAYA VC investuje do těchto sektorů: bez sektorového omezení (sector agnostic).
+
+**Co hledat ve zdroji:** Zdroj jmenuje každý z uvedených sektorů (stačí obdobné označení, např. „climate“ pro cleantech). Pokud některý uvedený sektor ve zdroji chybí, je verdikt chybne.
+
+**Zdroj:** <https://www.vestbee.com/blog/articles/kaya-secures-70-m>  
+Typ zdroje: média (sekundární), vydavatel: Vestbee
+
+## 42. `f-00254` – KAYA VC (status: overeny)
+
+**Tvrzení:** Fond „KAYA Fund IV“ investora KAYA VC byl konečně uzavřen (final close) s velikostí 72 000 000 EUR (stav k 31. 3. 2021).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 72 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí výslovně uvádět konečné uzavření (final close, „definitivně uzavřel“). Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.globalprivatecapital.org/?p=27830>  
+Typ zdroje: asociace (sekundární), vydavatel: Global Private Capital Association (GPCA)
+
+## 43. `f-00255` – KAYA VC (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „KAYA Fund V“ investora KAYA VC je 80 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 80 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://www.vestbee.com/blog/articles/kaya-secures-70-m>  
+Typ zdroje: média (sekundární), vydavatel: Vestbee
+
+## 44. `f-00256` – KAYA VC (status: overeny)
+
+**Tvrzení:** Fond „KAYA Fund V“ investora KAYA VC dosáhl prvního uzavření (first close) ve výši 70 000 000 EUR (stav k 25. 6. 2025).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 70 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět first close (první uzavření), ne konečnou nebo cílovou velikost. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.vestbee.com/blog/articles/kaya-secures-70-m>  
+Typ zdroje: média (sekundární), vydavatel: Vestbee
+
+## 45. `f-00257` – Depo Ventures (status: overeny)
+
+**Tvrzení:** Depo Ventures dosud investoval celkem 9 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 9 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o skutečně investovaný kapitál, ne o velikost fondu ani o spravovaná aktiva.
+
+**Zdroj:** <https://depoventures.com/>  
+Typ zdroje: web investora (primární), vydavatel: DEPO Ventures
+
+## 46. `f-00258` – Depo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Grouport Ventures“ investora Depo Ventures byl uzavřen s velikostí 35 000 000 CZK; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 35 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/cesti-depo-ventures-oteviraji-druhy-fond-v-desitkach-milionu-prvni-investice-podpori-startup-ktery-ukazuje-data-z-kryptouctu/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 47. `f-00259` – Depo Ventures (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „Depo Angels Fund II“ investora Depo Ventures je 45 000 000 CZK (stav k 25. 1. 2022).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 45 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://cc.cz/cesti-depo-ventures-oteviraji-druhy-fond-v-desitkach-milionu-prvni-investice-podpori-startup-ktery-ukazuje-data-z-kryptouctu/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 48. `f-00260` – Depo Ventures (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „Depo Ventures – třetí andělský fond“ investora Depo Ventures je 500 000 000 CZK (stav k 7. 10. 2022).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 500 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://cc.cz/vice-penez-pro-nejmladsi-startupy-depo-ventures-otevira-novy-andelsky-fond-cili-na-pul-miliardy/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 49. `f-00261` – Depo Ventures (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „DEPO Ventures One SCSp“ investora Depo Ventures 94 000 000 CZK (stav k 26. 8. 2026); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 94 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.nrb.cz/nri-dokoncila-vyber-venture-kapitaloveho-fondu-pro-program-fond-ukrajina/>  
+Typ zdroje: média (sekundární), vydavatel: Národní rozvojová banka
+
+## 50. `f-00262` – i&i Biotech Investments (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „i&i Biotech Fund I SCSp“ investora i&i Biotech Investments je 50 000 000 EUR (stav k 24. 9. 2021).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 50 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://www.eif.org/press/all/eif-to-invest-25-million-to-support-biomedical-tech-transfer-in-central-europe>  
+Typ zdroje: média (sekundární), vydavatel: European Investment Fund
+
+## 51. `f-00263` – i&i Biotech Investments (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „i&i Biotech Fund I SCSp“ investora i&i Biotech Investments 25 000 000 EUR (stav k 24. 9. 2021); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 25 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.eif.org/press/all/eif-to-invest-25-million-to-support-biomedical-tech-transfer-in-central-europe>  
+Typ zdroje: média (sekundární), vydavatel: European Investment Fund
+
+## 52. `f-00264` – i&i Biotech Investments (status: overeny)
+
+**Tvrzení:** Fond „i&i Biotech Fund I SCSp“ investora i&i Biotech Investments byl uzavřen s velikostí 47 000 000 EUR (stav k 30. 11. 2022); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 47 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.uochb.cz/en/news/451/experienced-businessmen-join-forces-with-excellent-science-invest-eur-2-million-in-the-fund-of-iocb-prague-family>  
+Typ zdroje: média (sekundární), vydavatel: ÚOCHB AV ČR
+
+## 53. `f-00265` – i&i Biotech Investments (status: overeny)
+
+**Tvrzení:** Z fondu „i&i Biotech Fund I SCSp“ investora i&i Biotech Investments bylo investováno 7 400 000 EUR (stav k 30. 11. 2022).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 7 400 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět, kolik fond už investoval (proinvestovaný kapitál), ne velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://www.uochb.cz/en/news/451/experienced-businessmen-join-forces-with-excellent-science-invest-eur-2-million-in-the-fund-of-iocb-prague-family>  
+Typ zdroje: média (sekundární), vydavatel: ÚOCHB AV ČR
+
+## 54. `f-00266` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 5“ investora Credo Ventures byl uzavřen s velikostí 88 000 000 USD (stav k 23. 3. 2026); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 88 000 000 USD: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://tech.eu/2026/03/23/credo-ventures-raises-88m-fund-5-to-double-down-on-pre-seed-in-cee-and-its-global-diaspora/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 55. `f-00267` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 4“ investora Credo Ventures byl uzavřen s velikostí 75 000 000 EUR (stav k 10. 10. 2022); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 75 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://sifted.eu/articles/czech-credo-ventures-fund-75m-poland>  
+Typ zdroje: média (sekundární), vydavatel: Sifted
+
+## 56. `f-00268` – Tilia Impact Ventures (status: overeny)
+
+**Tvrzení:** Fond „Tilia Impact Seed Fund“ investora Tilia Impact Ventures byl uzavřen s velikostí 26 000 000 EUR (stav k 21. 9. 2023); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 26 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/cesky-fond-urceny-na-investice-se-spolecenskymi-dopady-ma-dalsich-600-milionu-podporili-ho-winkler-ci-barta/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 57. `f-00269` – Tilia Impact Ventures (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „Tilia Impact Seed Fund“ investora Tilia Impact Ventures je 32 000 000 EUR (stav k 21. 9. 2023).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 32 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://cc.cz/cesky-fond-urceny-na-investice-se-spolecenskymi-dopady-ma-dalsich-600-milionu-podporili-ho-winkler-ci-barta/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 58. `f-00270` – Tilia Impact Ventures (status: overeny)
+
+**Tvrzení:** Fond „Tilia Impact Ventures – první fond“ investora Tilia Impact Ventures byl uzavřen s velikostí 43 000 000 CZK (stav k 28. 11. 2018); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 43 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/silke-horakova-a-petr-vitek-z-noveho-tilia-impact-ventures-chybel-nam-rizikovy-kapital-pro-socialni-inovace/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 59. `f-00271` – Rockaway Ventures (status: overeny)
+
+**Tvrzení:** Fond „Rockaway Ventures Fund II“ investora Rockaway Ventures byl uzavřen s velikostí 55 000 000 EUR (stav k 14. 5. 2025); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 55 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/rockaway-ventures-oznamilo-druhy-fond-na-startupy-ma-pripravene-14-miliardy-korun/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 60. `f-00272` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Purple Ventures investuje do těchto sektorů: software, zdravotnické technologie (healthtech), energetika, kybernetická bezpečnost, média.
+
+**Co hledat ve zdroji:** Zdroj jmenuje každý z uvedených sektorů (stačí obdobné označení, např. „climate“ pro cleantech). Pokud některý uvedený sektor ve zdroji chybí, je verdikt chybne.
+
+**Zdroj:** <https://tech.eu/2024/06/27/purple-ventures-launches-eur40m-fund-for-early-stage-software-startups/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 61. `f-00273` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „Purple Ventures 2“ investora Purple Ventures je 40 000 000 EUR (stav k 27. 6. 2024).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 40 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://tech.eu/2024/06/27/purple-ventures-launches-eur40m-fund-for-early-stage-software-startups/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 62. `f-00274` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „Purple Ventures 2“ investora Purple Ventures 14 000 000 EUR (stav k 27. 6. 2024); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 14 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://tech.eu/2024/06/27/purple-ventures-launches-eur40m-fund-for-early-stage-software-startups/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 63. `f-00275` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Fond „Purple Ventures 2“ investora Purple Ventures byl uzavřen s velikostí 700 000 000 CZK; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 700 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://purple-ventures.com/>  
+Typ zdroje: web investora (primární), vydavatel: Purple Ventures
+
+## 64. `f-00276` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Z fondu „Purple Ventures 2“ investora Purple Ventures bylo investováno 250 000 000 CZK.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 250 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět, kolik fond už investoval (proinvestovaný kapitál), ne velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://purple-ventures.com/>  
+Typ zdroje: web investora (primární), vydavatel: Purple Ventures
+
+## 65. `f-00277` – Lighthouse Ventures (status: overeny)
+
+**Tvrzení:** Fond „Lighthouse Seed Fund“ investora Lighthouse Ventures byl uzavřen s velikostí 23 000 000 EUR (stav k 7. 6. 2019); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 23 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/cesky-fond-lighthouse-ventures-vlozil-vyssi-stovky-tisic-eur-do-brnenskeho-ai-startupu-pekat-vision/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 66. `f-00278` – Lighthouse Ventures (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „Lighthouse Seed Fund“ investora Lighthouse Ventures 15 000 000 EUR (stav k 7. 6. 2019); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 15 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/cesky-fond-lighthouse-ventures-vlozil-vyssi-stovky-tisic-eur-do-brnenskeho-ai-startupu-pekat-vision/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 67. `f-00279` – Tachles (status: overeny)
+
+**Tvrzení:** Oficiální web investora Tachles je https://tachlesvc.com/.
+
+**Co hledat ve zdroji:** Zdroj je tento web, nebo na něj odkazuje jako na web investora. Doména musí být stejná a web musí patřit investorovi Tachles, ne firmě s podobným názvem.
+
+**Zdroj:** <https://tachlesvc.com/team>  
+Typ zdroje: web investora (primární), vydavatel: Tachles VC
+
+## 68. `f-00280` – Tachles (status: overeny)
+
+**Tvrzení:** Tachles investuje v těchto fázích: seed.
+
+**Co hledat ve zdroji:** Zdroj jmenuje každou z uvedených fází (např. „early stage“ samo o sobě nestačí na série A). Pokud některá uvedená fáze ve zdroji chybí, je verdikt chybne.
+
+**Zdroj:** <https://tachles.decilehub.com/submit_your_company>  
+Typ zdroje: web investora (primární), vydavatel: Tachles VC (formulář na Decile Hub)
+
+## 69. `f-00281` – Tachles (status: overeny)
+
+**Tvrzení:** Fond „Tachles VC“ investora Tachles dosáhl prvního uzavření (first close) ve výši 500 000 000 CZK (stav k 13. 6. 2024).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 500 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět first close (první uzavření), ne konečnou nebo cílovou velikost. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/roky-hledali-startupy-pro-fond-karla-komarka-ted-rozbihaji-vlastni-v-prvni-fazi-maji-pul-miliardy/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 70. `f-00282` – Tachles (status: overeny)
+
+**Tvrzení:** Tachles dosud investoval celkem 30 000 000 CZK (stav k 12. 2. 2025).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 30 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o skutečně investovaný kapitál, ne o velikost fondu ani o spravovaná aktiva.
+
+**Zdroj:** <https://cc.cz/cesi-v-izraeli-na-lovu-miliardovych-jednorozcu-navzdory-konfliktu-se-tu-startupum-dari-hlasi/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 71. `f-00283` – Soulmates Ventures (status: overeny)
+
+**Tvrzení:** Fond „Soulmates Ventures – fond 50 mil. EUR“ investora Soulmates Ventures byl uzavřen s velikostí 50 000 000 EUR (stav k 18. 3. 2025); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 50 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://vestbee.com/blog/articles/soulmates-ventures-raises-50-m-fund>  
+Typ zdroje: média (sekundární), vydavatel: Vestbee
+
+## 72. `f-00284` – Startguide VC (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „SG One“ investora Startguide VC je 6 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 6 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://www.startguide.cz/sgone/>  
+Typ zdroje: web investora (primární), vydavatel: Start Guide
+
+## 73. `f-00285` – Startguide VC (status: overeny)
+
+**Tvrzení:** Cílová velikost fondu „SG Two“ investora Startguide VC je 20 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 20 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), ne o velikost kola ani o vklad do jedné firmy.
+
+**Zdroj:** <https://www.startguide.cz/sgtwo/>  
+Typ zdroje: web investora (primární), vydavatel: Start Guide
+
+## 74. `f-00286` – Startguide VC (status: overeny)
+
+**Tvrzení:** Typická investice investora Startguide VC do jednoho startupu dosahuje nejvýše 2 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 2 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o horní mez investice fondu do jedné firmy (ticket, check size), ne o velikost celého kola ani velikost fondu.
+
+**Zdroj:** <https://www.startguide.cz/sgtwo/>  
+Typ zdroje: web investora (primární), vydavatel: Start Guide
+
+## 75. `f-00287` – IP Lab Ventures (status: overeny)
+
+**Tvrzení:** Jeden investor (LP) se zavázal vložit do fondu „IP Lab Ventures Fund“ investora IP Lab Ventures 656 000 000 CZK (stav k 23. 9. 2026); jde jen o část fondu.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 656 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět vklad nebo závazek jednoho investora do fondu (např. EIF, NRI), ne celkovou velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/vlada-posila-700-milionu-do-noveho-druhu-fondu-zameri-se-i-na-ai-ridi-ho-byvaly-sef-dame-jidlo/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 76. `f-00288` – IP Lab Ventures (status: overeny)
+
+**Tvrzení:** Typická investice investora IP Lab Ventures do jednoho startupu dosahuje nejvýše 1 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 1 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o horní mez investice fondu do jedné firmy (ticket, check size), ne o velikost celého kola ani velikost fondu.
+
+**Zdroj:** <https://www.lupa.cz/aktuality/ceske-univerzitni-napady-maji-dostat-az-miliardu-na-cestu-z-laboratore-do-byznysu-vetsina-penez-jde-z-evropy/>  
+Typ zdroje: média (sekundární), vydavatel: Lupa.cz
+
+## 77. `f-00289` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo 1“ investora Credo Ventures byl uzavřen s velikostí 18 000 000 EUR; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 18 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/dalsi-tezka-vaha-na-investicnim-poli-ceske-credo-otevira-svuj-treti-fond-ve-kterem-ma-pro-startupy-25-miliardy-korun/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 78. `f-00290` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo 2“ investora Credo Ventures byl uzavřen s velikostí 53 000 000 EUR; zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 53 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/dalsi-tezka-vaha-na-investicnim-poli-ceske-credo-otevira-svuj-treti-fond-ve-kterem-ma-pro-startupy-25-miliardy-korun/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 79. `f-00291` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „Credo Stage 3“ investora Credo Ventures byl uzavřen s velikostí 100 000 000 USD (stav k 1. 11. 2019); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 100 000 000 USD: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci. Datum připadá na 1. den měsíce: může jít o údaj s přesností na měsíc, pak stačí shoda měsíce a roku.
+
+**Zdroj:** <https://www.money.pl/gielda/fundusz-credo-ventures-planuje-zainwestowac-prawie-100-mln-usd-w-cee-6487384000940161a.html>  
+Typ zdroje: média (sekundární), vydavatel: money.pl
+
+## 80. `f-00292` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Investor Credo Ventures má celkem 5 fondů (stav k 23. 3. 2026).
+
+**Co hledat ve zdroji:** Zdroj musí uvádět počet fondů investora, výslovně (např. „spravuje tři fondy“) nebo pořadím posledního fondu (např. „pátý fond“). Počet musí sedět; jiný počet je chybne.
+
+**Zdroj:** <https://tech.eu/2026/03/23/credo-ventures-raises-88m-fund-5-to-double-down-on-pre-seed-in-cee-and-its-global-diaspora/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 81. `f-00293` – Tensor Ventures (status: overeny)
+
+**Tvrzení:** Investor Tensor Ventures má celkem 2 fondů (stav k 18. 9. 2025).
+
+**Co hledat ve zdroji:** Zdroj musí uvádět počet fondů investora, výslovně (např. „spravuje tři fondy“) nebo pořadím posledního fondu (např. „pátý fond“). Počet musí sedět; jiný počet je chybne.
+
+**Zdroj:** <https://forbes.cz/tensor-vybral-miliardu-a-miri-dal-cesti-investori-sazi-na-ai-i-kvantove-technologie/>  
+Typ zdroje: média (sekundární), vydavatel: Forbes Česko
+
+## 82. `f-00294` – Reflex Capital (status: overeny)
+
+**Tvrzení:** Reflex Capital dosud investoval celkem 150 000 000 EUR.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 150 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Musí jít o skutečně investovaný kapitál, ne o velikost fondu ani o spravovaná aktiva.
+
+**Zdroj:** <https://www.reflexcapital.com/cs/>  
+Typ zdroje: web investora (primární), vydavatel: Reflex Capital
