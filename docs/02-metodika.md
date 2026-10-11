@@ -156,6 +156,7 @@ Doplňkové typy faktů:
 | `fond_first_close` | První uzavření fondu (first close) | částka, `currency` a `fund_name` povinné |
 | `fond_zavazek_lp` | Vklad nebo závazek jednoho investora (LP) do fondu, např. EIF nebo NRI; jen část fondu | částka, `currency` a `fund_name` povinné |
 | `fond_investovano` | Kolik fond už investoval | částka, `currency` a `fund_name` povinné |
+| `pocet_fondu` | Kolik fondů investor má (výslovně, nebo pořadím posledního fondu, např. „pátý fond“) | kladné celé číslo; `value_as_of` = datum zdroje |
 | `registrace_regulator` | Registrace správce či fondu u regulátora | — |
 | `dolozena_investice` | Doložená investice; hodnota je název portfoliové firmy | `value_as_of` = datum investice, povinné |
 | `duvod_vylouceni` | Doklad důvodu vyloučení; hodnota je kód z `exclusion_reason` | povinný u každého vyloučeného subjektu |
@@ -187,13 +188,13 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 
 Cílené hledání chybějícího údaje se zapisuje i tehdy, když nic nenajde (`results_count` = 0, poznámka „hledáno, nenalezeno“ a kde se hledalo). „Hledáno, nenalezeno“ je výsledek, ne mezera; metrika úplnosti ho vykazuje zvlášť. `investor_id` a `target_field` se vyplňují jen společně.
 
-### `funds.csv` – jeden řádek = jeden fond
+### `funds.csv` – jeden řádek = jedna částka fondu
 
 | Sloupec | Povinný | Popis |
 |---|---|---|
 | `fund_id` | ano | `fd-0001` |
 | `investor_id` | ano | Odkaz do `investors.csv` (správce, VC značka) |
-| `fund_name` | ano | Název fondu; v rámci investora jedinečný |
+| `fund_name` | ano | Název fondu; v rámci investora nejvýše jeden řádek s velikostí a jeden s investovanou částkou |
 | `vintage` | ne | Rok založení nebo prvního uzavření (RRRR) |
 | `amount` | ne | Částka fondu; prázdná, pokud zdroj doloží jen existenci fondu |
 | `currency` | u částky | ISO 4217 |
@@ -203,13 +204,22 @@ Cílené hledání chybějícího údaje se zapisuje i tehdy, když nic nenajde 
 | `value_as_of` | ne | Datum, ke kterému částka platí (datum uzavření, oznámení) |
 | `fact_id` | ano | Fakt, který řádek dokládá |
 
-Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří stejnému investorovi a fondu, má stejnou částku a měnu a odpovídající typ: `final_close` dokládá `fond_final_close` nebo `total_fund_size`, `uzavren_bez_upresneni` dokládá `fond_uzavren` nebo `total_fund_size`, `first_close` dokládá `fond_first_close`, `cil` dokládá `cilova_velikost_fondu`, `zavazek_jednoho_lp` dokládá `fond_zavazek_lp` a `investovano` dokládá `fond_investovano`. Fond bez částky dokládá libovolný fondový fakt (např. `informace_o_fondu`). Má-li fond doloženo více částek (např. first close a později final close), řádek nese nejlepší dostupný typ podle pořadí v definici celkového kapitálu; ostatní částky zůstávají jako fakty. Přibližné hodnoty se nevynechávají: číslo z formulace se zapíše s `approx` = `ano` a doslovnou formulací. Pravidlo pro `total_fund_size` v `investors.csv` (2.3) se tím nemění.
+Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří stejnému investorovi a fondu, má stejnou částku a měnu a odpovídající typ: `final_close` dokládá `fond_final_close` nebo `total_fund_size`, `uzavren_bez_upresneni` dokládá `fond_uzavren` nebo `total_fund_size`, `first_close` dokládá `fond_first_close`, `cil` dokládá `cilova_velikost_fondu`, `zavazek_jednoho_lp` dokládá `fond_zavazek_lp` a `investovano` dokládá `fond_investovano`. Fond bez částky dokládá libovolný fondový fakt (např. `informace_o_fondu`). Fond má nejvýše jeden řádek s velikostí (`final_close`, `uzavren_bez_upresneni`, `first_close`, `cil` nebo `zavazek_jednoho_lp`) a nejvýše jeden řádek `investovano`. Má-li fond doloženo více velikostí (např. first close a později final close), řádek nese nejlepší dostupný typ podle pořadí v definici získaného kapitálu; ostatní částky zůstávají jako fakty. Přibližné hodnoty se nevynechávají: číslo z formulace se zapíše s `approx` = `ano` a doslovnou formulací. Pravidlo pro `total_fund_size` v `investors.csv` (2.3) se tím nemění.
 
 **Proč samostatná tabulka.** Správci mají více fondů (Lighthouse tři, Presto dva) a o každém zdroje uvádějí jiný typ částky. Dosud se to ztrácelo ve volném textu `informace_o_fondu` a do `investors.csv` se vešel jen jeden uzavřený fond. Tabulka fondů drží každou částku strukturovaně s typem a přesností, takže lze spočítat celkový kapitál a úplnost podle typu.
 
 ### Celkový investiční kapitál investora (odvozený, neukládá se)
 
-Součet velikostí fondů investora z `funds.csv` podle nejlepšího dostupného typu u každého fondu: `final_close` > `uzavren_bez_upresneni` > `first_close` > `cil`. `zavazek_jednoho_lp` a `investovano` se započítávají jen jako dolní mez. Výsledek je označen jako **dolní mez**, pokud některý fond nemá částku, některá částka je přibližná nebo jde o závazek jednoho LP či investovanou částku. Měny se nesčítají: má-li investor fondy v různých měnách, uvádějí se součty zvlášť. AUM se uvádí zvlášť, pokud ho správce zveřejňuje, a do součtu se nepřičítá (může zahrnovat i jiné než vlastní fondy). Hodnotu počítá `python -m investor_db metrics`.
+*Definice platí od 11. 10. 2026. Předchozí verze přičítala cílovou velikost ke kapitálu. Cíl ale není kapitál, takže šlo o chybu definice.*
+
+- **Získaný kapitál** je součet jen skutečně získaných částek fondů z `funds.csv`. U každého fondu se bere nejlepší typ: `final_close` > `uzavren_bez_upresneni` > `first_close`. Pokud je u fondu doložen jen `zavazek_jednoho_lp`, započte se jako dolní mez, protože fond získal nejméně tuto částku.
+- **Cíl** (`cil`) se nikdy nepřičítá k získanému kapitálu a uvádí se zvlášť u fondů, které nemají získanou částku. Má-li investor jen cíl, je získaný kapitál **neznámý** a vedle se ukáže cíl.
+- **Dolní mez.** Získaný kapitál je označen jako dolní mez vždy, když nejsou známé získané částky všech fondů správce, nejen fondů zapsaných ve `funds.csv`. Počet fondů správce musí doložit fakt `pocet_fondu`. Bez něj, nebo když se počet neshoduje s počtem fondů se získanou částkou, jde o dolní mez. Dolní mez platí také u přibližné částky (`approx` = `ano`) a u závazku jednoho LP.
+- **Investováno** (`investovano` ve `funds.csv` a `invested_capital` v `investors.csv`) a **AUM** se uvádějí zvlášť a do získaného kapitálu se nepřičítají. AUM může zahrnovat i jiné než vlastní fondy.
+- **Měny se nesčítají.** Má-li investor fondy v různých měnách, uvádějí se součty zvlášť.
+- Pro požadavek zadání „celkový investiční kapitál“ se investor počítá jako vyplněný, pokud má získaný kapitál nebo AUM. Investoři jen s cílem se vykazují zvlášť.
+
+Hodnoty počítá `python -m investor_db metrics`.
 
 **`invested_capital` v `investors.csv`** se vyplní, jen pokud je doložený přesnou částkou ve stejné měně, jakou má řádek; ostatní (přibližné nebo v jiné měně) zůstávají ve `funds.csv` jako `investovano` a ve faktech.
 
@@ -241,7 +251,7 @@ Jeden subjekt může být nalezen ve více průchodech. Každý subjekt v `inves
 
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
-Popsány v `docs/04-rucni-kontrola.md`. Vyplňuje je výhradně člověk.
+Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`.
 
 ## 2.5 Validace integrity
 
@@ -266,7 +276,7 @@ Pole `investor_type` a `country` jsou klasifikace odvozené z ostatních faktů 
 |---|---|
 | **Precision** | TP / (TP + FP) přes záznamy `overeny` zkontrolované R1; verdikt `nejiste` se vykazuje zvlášť a v pesimistické variantě se počítá jako FP. Uvádí se 95% Wilsonův interval. |
 | Shoda hodnotitelů | Jen pokud existují data R2: prosté procento shody a Cohenovo κ. Při malém vzorku a vysokém podílu TP je κ nestabilní, proto se vždy uvádí i procento shody. |
-| Přesnost faktů | správně / (správně + chybně) přes zkontrolované fakty; `nelze_overit` zvlášť. Fakty se kontrolují na náhodném vzorku (Cochran, 95 %, ±15 p. b., seed 2026); důvod volby ±15 p. b. (časová kapacita hodnotitele) viz [04-rucni-kontrola.md](04-rucni-kontrola.md#velikost-vzorku-faktů). |
+| Přesnost faktů | správně / (správně + chybně) přes zkontrolované fakty; `nelze_overit` zvlášť. Vykazuje se zvlášť pro každé kolo (`vzorek`, `po_doplneni`). Původní kolo je náhodný vzorek (Cochran, 95 %, ±15 p. b., seed 2026); důvod volby ±15 p. b. (časová kapacita hodnotitele) viz [04-rucni-kontrola.md](04-rucni-kontrola.md#velikost-vzorku-faktů). |
 | Úplnost polí | Podíl vyplněných hodnot každého pole u záznamů `overeny`. |
 | Primární zdroje | Podíl záznamů `overeny`, jejichž IČO je doloženo primárním zdrojem; podíl všech faktů z primárních zdrojů. |
 | Doložení investiční činnosti | Podíl záznamů `overeny` s doloženou investicí za posledních 36 měsíců. |

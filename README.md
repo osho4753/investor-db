@@ -14,7 +14,7 @@ Reprodukovatelný proces vyhledávání, klasifikace a ověřování reálných 
 
 ## Klíčové výsledky
 
-Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávají kandidáty a 32 je vyloučených s konkrétním důvodem. Ruční kontrola hodnotitele R1 dala precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %) a přesnost vzorku faktů **32/34 = 94,1 %** (80,9–98,4 %, pesimisticky 88,9 %), obojí ze stavu dat v době kontroly. Kontrola odhalila dva false negatives, Lighthouse a Tachles, které jsou už opravené. Capture–recapture dává dolní mez nejméně 16 VC v ČR. Model potřeboval 5,4 min na ověřeného investora, člověk 15,5 min na kontrolu investora a 0,96 min na fakt. Globální odhad vychází na 5 235 / 7 251 / 9 682 VC firem (nízký, základní a vysoký scénář). Po doplnění podle požadavků zadání má z 16 ověřených investorů sektor 15, ticket 14 a doložený kapitál 15; kapitál je v [data/funds.csv](data/funds.csv) po fondech s typem částky a chybějící údaje jsou zapsány jako „hledáno, nenalezeno“ (viz [docs/04](docs/04-rucni-kontrola.md), 4.7).
+Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávají kandidáty a 32 je vyloučených s konkrétním důvodem. Ruční kontrola hodnotitele R1 dala precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %) a přesnost vzorku faktů **32/34 = 94,1 %** (80,9–98,4 %, pesimisticky 88,9 %), obojí ze stavu dat v době kontroly. Kontrola odhalila dva false negatives, Lighthouse a Tachles, které jsou už opravené. Capture–recapture dává dolní mez nejméně 16 VC v ČR. Model potřeboval 5,4 min na ověřeného investora, člověk 15,5 min na kontrolu investora a 0,96 min na fakt. Globální odhad vychází na 5 235 / 7 251 / 9 682 VC firem (nízký, základní a vysoký scénář). Po doplnění podle požadavků zadání má z 16 ověřených investorů 15 sektor, 14 ticket a 13 získaný kapitál nebo AUM. Dva investoři mají doloženou jen cílovou velikost fondu, která se ke kapitálu nepřičítá. Kapitál je v [data/funds.csv](data/funds.csv) po fondech s typem částky. Bez dolní meze je jen tam, kde je doložen počet fondů a všechny fondy mají získanou částku (Tensor, Credo). Chybějící údaje jsou zapsány jako „hledáno, nenalezeno“. Všech 46 faktů z doplňování čeká na samostatnou kontrolu „po doplnění“ (viz [docs/04](docs/04-rucni-kontrola.md), 4.7).
 
 ## Povinné výstupy
 
@@ -60,6 +60,7 @@ Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávaj�
    python -m investor_db review-guide                          # review/kontrolni-list-faktu.md
    python -m investor_db review-template --reviewer R2         # řádky pro kontrolu investorů
    python -m investor_db fact-review-template --reviewer R2    # řádky pro kontrolu vzorku faktů
+   python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249  # kolo po doplnění
    ```
 
    CSV upravujte v textovém editoru (UTF-8), ne v Excelu. Excel mění kódování a ořezává úvodní nuly v IČO.
