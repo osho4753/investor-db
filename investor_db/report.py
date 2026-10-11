@@ -71,6 +71,7 @@ CAPITAL_LABELS = {
     "cil": "fond – cílová velikost",
     "zavazek_jednoho_lp": "fond – závazek jednoho LP (jen část fondu)",
     "investovano": "fond – investováno",
+    "investovano_za_obdobi": "fond – investováno jen za období (dolní mez)",
     CAPITAL_AUM: "AUM správce",
     CAPITAL_INVESTED: "investovaný kapitál (`invested_capital`)",
 }
@@ -231,9 +232,12 @@ def format_raised(summary: CapitalSummary) -> str:
 
 def format_invested(summary: CapitalSummary) -> str:
     amounts = format_amounts(summary.invested) or "–"
+    notes = []
+    if summary.invested_period_fact_ids:
+        notes.append(f"dolní mez: jen investice za období, formulace ve faktu {', '.join(summary.invested_period_fact_ids)}")
     if summary.invested_fact_id:
-        return f"{amounts} (údaj za celého správce; formulace a rozsah ve faktu {summary.invested_fact_id})"
-    return amounts
+        notes.append(f"údaj za celého správce; formulace a rozsah ve faktu {summary.invested_fact_id}")
+    return f"{amounts} ({'; '.join(notes)})" if notes else amounts
 
 
 def format_conflicts(summary: CapitalSummary) -> str:
@@ -253,7 +257,7 @@ def capital_section(dataset: Dataset) -> list[str]:
         "uzavřen bez upřesnění > first close > závazek jednoho LP); měny se nesčítají. Cílová velikost se do "
         "získaného kapitálu nikdy nepřičítá a uvádí se zvlášť u fondů bez získané částky. „Dolní mez“: nejsou "
         "známé získané částky všech fondů správce (počet fondů nedoložen faktem `pocet_fondu` nebo některý fond "
-        "nemá získanou částku), částka je přibližná, jde o first close nebo závazek jednoho LP, fundraising některého fondu podle zdrojů pokračuje nebo se zdroje u některého fondu rozcházejí (sloupec Konflikt zdrojů). Investováno a AUM jsou zvlášť; investovaný kapitál za celého správce odkazuje na fakt s doslovnou formulací.",
+        "nemá získanou částku), částka je přibližná, jde o first close nebo závazek jednoho LP, fundraising některého fondu podle zdrojů pokračuje nebo se zdroje u některého fondu rozcházejí (sloupec Konflikt zdrojů). Investováno a AUM jsou zvlášť; investovaný kapitál za celého správce odkazuje na fakt s doslovnou formulací a částka investovaná jen za určité období je dolní mez.",
         "",
         "| Investor | Fondů ve funds.csv (se získanou částkou) / dle zdroje | Typy získaných částek "
         "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM | Konflikt zdrojů |",

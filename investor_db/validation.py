@@ -8,11 +8,11 @@ from investor_db.io import Dataset, Row
 from investor_db.schema import (
     ACTIVITY_WINDOW_DAYS,
     APPROX_VALUES,
-    AMOUNT_INVESTED,
     APPROX_YES,
     FACT_FUND_COUNT,
     FACT_FIELDS_BY_AMOUNT_TYPE,
     FUND_AMOUNT_TYPES,
+    INVESTED_AMOUNT_TYPES,
     FUNDRAISING_VALUES,
     SEARCH_TARGETS,
     CURRENCIES,
@@ -464,7 +464,7 @@ def check_funds(dataset: Dataset, today: date) -> Iterator[Issue]:
         if row["fact_id"]:
             yield from fund_fact_issues(row, facts_by_id.get(row["fact_id"]))
     keys = Counter(
-        (row["investor_id"], row["fund_name"], row["amount_type"] == AMOUNT_INVESTED) for row in dataset.funds
+        (row["investor_id"], row["fund_name"], row["amount_type"] in INVESTED_AMOUNT_TYPES) for row in dataset.funds
     )
     for (investor_id, fund_name, is_invested), count in keys.items():
         if count > 1:

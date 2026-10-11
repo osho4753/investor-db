@@ -314,3 +314,52 @@ def test_investor_level_invested_capital_points_to_its_fact(dataset: Dataset) ->
 
     assert summary.invested == {"EUR": Decimal("5000000")}
     assert summary.invested_fact_id == "f-00017"
+
+
+def add_invested_in_period(dataset: Dataset) -> None:
+    dataset.facts.append(fact("f-00018", "fond_investovano_za_obdobi", "30000000", "src-0002", currency="CZK", fund_name=FUND_NAME))
+    dataset.funds.append(
+        fund(
+            "fd-0005",
+            FUND_NAME,
+            "f-00018",
+            amount="30000000",
+            currency="CZK",
+            amount_type="investovano_za_obdobi",
+            approx="ne",
+            amount_wording="během minulého roku",
+        )
+    )
+
+
+def test_amount_invested_in_period_is_shown_as_lower_bound_of_invested_capital(dataset: Dataset) -> None:
+    add_invested_in_period(dataset)
+
+    summary = investor_capital(dataset)[0]
+    report = render_report(dataset, TODAY)
+
+    assert validate_dataset(dataset, TODAY) == []
+    assert summary.invested == {"CZK": Decimal("30000000")}
+    assert summary.invested_period_fact_ids == ("f-00018",)
+    assert "30 000 000 CZK (dolní mez: jen investice za období, formulace ve faktu f-00018)" in report
+
+
+def test_fund_may_not_have_two_invested_amounts(dataset: Dataset) -> None:
+    add_invested(dataset)
+    add_invested_in_period(dataset)
+
+    assert_reported(dataset, "je zapsán s investovanou částkou vícekrát")
+
+
+def test_announced_fund_size_is_not_capital(dataset: Dataset) -> None:
+    dataset.funds.clear()
+    dataset.facts.append(
+        fact("f-00019", "oznamena_velikost_fondu", "40000000", "src-0002", currency="EUR", fund_name=FUND_NAME)
+    )
+    dataset.funds.append(fund("fd-0006", FUND_NAME, "f-00019"))
+
+    summary = investor_capital(dataset)[0]
+
+    assert validate_dataset(dataset, TODAY) == []
+    assert summary.raised == {}
+    assert not requirement_completeness(dataset).filled["kapital"].numerator

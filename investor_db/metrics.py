@@ -7,13 +7,14 @@ from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
-    AMOUNT_INVESTED,
+    AMOUNT_INVESTED_PERIOD,
     AMOUNT_TARGET,
     APPROX_YES,
     FACT_FUND_COUNT,
     AMOUNT_LP_COMMITMENT,
     FUND_AMOUNT_TYPES,
     FUNDRAISING_OPEN,
+    INVESTED_AMOUNT_TYPES,
     LOWER_BOUND_AMOUNT_TYPES,
     RAISED_AMOUNT_PRIORITY,
     SEARCH_TARGET_CAPITAL,
@@ -485,6 +486,7 @@ class CapitalSummary:
     fundraising_open: tuple[str, ...]
     conflicts: tuple[str, ...]
     invested_fact_id: str
+    invested_period_fact_ids: tuple[str, ...]
     documented_fund_count: int | None
     raised_types: tuple[str, ...]
     aum: str
@@ -528,7 +530,8 @@ def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> Capita
     conflicts = tuple(f"{row['fund_name']}: {row['conflict_note']}" for row in funds if row["conflict_note"])
     exact = all_funds_known and not still_raising and not conflicts and not any(map(is_lower_bound_amount, raised))
     targets = [row for row in funds if row["amount_type"] == AMOUNT_TARGET and row["fund_name"] not in raised_names]
-    invested = amounts_of([row for row in funds if row["amount_type"] == AMOUNT_INVESTED])
+    invested_rows = [row for row in funds if row["amount_type"] in INVESTED_AMOUNT_TYPES]
+    invested = amounts_of(invested_rows)
     if investor[CAPITAL_INVESTED]:
         invested.append((investor[CAPITAL_INVESTED], investor["currency"]))
     return CapitalSummary(
@@ -544,6 +547,7 @@ def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> Capita
         fundraising_open=still_raising,
         conflicts=conflicts,
         invested_fact_id=invested_capital_fact_id(facts) if investor[CAPITAL_INVESTED] else '',
+        invested_period_fact_ids=tuple(row["fact_id"] for row in invested_rows if row["amount_type"] == AMOUNT_INVESTED_PERIOD),
         documented_fund_count=documented,
         raised_types=tuple(sorted({row["amount_type"] for row in raised})),
         aum=investor[CAPITAL_AUM],

@@ -166,6 +166,15 @@ FIELD_GUIDES: Final[dict[str, FieldGuide]] = {
             + APPROX_AMOUNT_CHECK
         ),
     ),
+    "fond_investovano_za_obdobi": FieldGuide(
+        claim="Z fondu {fund} investora {investor} bylo za období uvedené ve zdroji investováno {money}{as_of_clause}; jde o dolní mez celkové investované částky.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj musí uvádět částku investovanou za vymezené období (např. „během minulého roku“). "
+            "Chybné je, pokud zdroj uvádí celkovou investovanou částku nebo velikost fondu. "
+            + APPROX_AMOUNT_CHECK
+        ),
+    ),
     "pocet_fondu": FieldGuide(
         claim="Investor {investor} má celkem {value} fondů{as_of_clause}.",
         look_for=(
@@ -193,6 +202,14 @@ FIELD_GUIDES: Final[dict[str, FieldGuide]] = {
             AMOUNT_CHECK
             + " Musí jít o cílovou nebo plánovanou velikost fondu (target, „až X“), "
             "ne o velikost kola ani o vklad do jedné firmy."
+        ),
+    ),
+    "oznamena_velikost_fondu": FieldGuide(
+        claim="Zdroj uvádí velikost fondu {fund} investora {investor} {money}{as_of_clause}, aniž rozlišuje cíl a získanou částku.",
+        look_for=(
+            AMOUNT_CHECK
+            + " Zdroj uvádí velikost fondu bez slov jako cíl, target, „až“, uzavřen nebo získal. "
+            "Chybné je, pokud zdroj typ výslovně uvádí; pak patří do cilova_velikost_fondu nebo fond_uzavren."
         ),
     ),
     "registrace_regulator": FieldGuide(
