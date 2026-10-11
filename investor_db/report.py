@@ -220,8 +220,24 @@ def format_amounts(amounts: dict[str, Decimal]) -> str:
 def format_raised(summary: CapitalSummary) -> str:
     if not summary.raised:
         return "neznámý"
+    notes = ["dolní mez"] if summary.lower_bound else []
+    if summary.lp_commitments:
+        notes.append(f"z toho závazek jednoho LP {format_amounts(summary.lp_commitments)}")
+    if summary.fundraising_open:
+        notes.append(f"fundraising pokračuje: {', '.join(summary.fundraising_open)}")
     amounts = format_amounts(summary.raised)
-    return f"{amounts} (dolní mez)" if summary.lower_bound else amounts
+    return f"{amounts} ({'; '.join(notes)})" if notes else amounts
+
+
+def format_invested(summary: CapitalSummary) -> str:
+    amounts = format_amounts(summary.invested) or "–"
+    if summary.invested_fact_id:
+        return f"{amounts} (údaj za celého správce; formulace a rozsah ve faktu {summary.invested_fact_id})"
+    return amounts
+
+
+def format_conflicts(summary: CapitalSummary) -> str:
+    return "**KONFLIKT** " + "; ".join(summary.conflicts) if summary.conflicts else "–"
 
 
 def format_fund_count(summary: CapitalSummary) -> str:
@@ -237,18 +253,18 @@ def capital_section(dataset: Dataset) -> list[str]:
         "uzavřen bez upřesnění > first close > závazek jednoho LP); měny se nesčítají. Cílová velikost se do "
         "získaného kapitálu nikdy nepřičítá a uvádí se zvlášť u fondů bez získané částky. „Dolní mez“: nejsou "
         "známé získané částky všech fondů správce (počet fondů nedoložen faktem `pocet_fondu` nebo některý fond "
-        "nemá získanou částku), částka je přibližná nebo jde o závazek jednoho LP. Investováno a AUM jsou zvlášť.",
+        "nemá získanou částku), částka je přibližná, jde o first close nebo závazek jednoho LP, fundraising některého fondu podle zdrojů pokračuje nebo se zdroje u některého fondu rozcházejí (sloupec Konflikt zdrojů). Investováno a AUM jsou zvlášť; investovaný kapitál za celého správce odkazuje na fakt s doslovnou formulací.",
         "",
         "| Investor | Fondů ve funds.csv (se získanou částkou) / dle zdroje | Typy získaných částek "
-        "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM |",
-        "|---|---|---|---|---|---|---|",
+        "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM | Konflikt zdrojů |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for summary in investor_capital(dataset):
         aum = f"{format_amount(Decimal(summary.aum))} {summary.aum_currency}" if summary.aum else "–"
         lines.append(
             f"| {summary.name} | {format_fund_count(summary)} | {', '.join(summary.raised_types) or '–'} "
             f"| {format_raised(summary)} | {format_amounts(summary.targets) or '–'} "
-            f"| {format_amounts(summary.invested) or '–'} | {aum} |"
+            f"| {format_invested(summary)} | {aum} | {format_conflicts(summary)} |"
         )
     return lines
 

@@ -13,6 +13,7 @@ from investor_db.schema import (
     FACT_FUND_COUNT,
     FACT_FIELDS_BY_AMOUNT_TYPE,
     FUND_AMOUNT_TYPES,
+    FUNDRAISING_VALUES,
     SEARCH_TARGETS,
     CURRENCIES,
     EFFORT_ACTIVITIES,
@@ -458,6 +459,7 @@ def check_funds(dataset: Dataset, today: date) -> Iterator[Issue]:
         if row["vintage"] and not (row["vintage"].isdigit() and len(row["vintage"]) == 4):
             yield Issue("funds", row_id, f"vintage není rok RRRR: {row['vintage']!r}")
         yield from date_issues("funds", row_id, "value_as_of", row["value_as_of"], today, required=False)
+        yield from vocabulary_issues("funds", row_id, "fundraising_open", row["fundraising_open"], FUNDRAISING_VALUES)
         yield from fund_amount_issues(row)
         if row["fact_id"]:
             yield from fund_fact_issues(row, facts_by_id.get(row["fact_id"]))

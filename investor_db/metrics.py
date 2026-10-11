@@ -11,7 +11,9 @@ from investor_db.schema import (
     AMOUNT_TARGET,
     APPROX_YES,
     FACT_FUND_COUNT,
+    AMOUNT_LP_COMMITMENT,
     FUND_AMOUNT_TYPES,
+    FUNDRAISING_OPEN,
     LOWER_BOUND_AMOUNT_TYPES,
     RAISED_AMOUNT_PRIORITY,
     SEARCH_TARGET_CAPITAL,
@@ -479,6 +481,10 @@ class CapitalSummary:
     invested: dict[str, Decimal]
     fund_count: int
     funds_with_raised: int
+    lp_commitments: dict[str, Decimal]
+    fundraising_open: tuple[str, ...]
+    conflicts: tuple[str, ...]
+    invested_fact_id: str
     documented_fund_count: int | None
     raised_types: tuple[str, ...]
     aum: str
@@ -508,12 +514,19 @@ def is_lower_bound_amount(fund: Row) -> bool:
     return fund["approx"] == APPROX_YES or fund["amount_type"] in LOWER_BOUND_AMOUNT_TYPES
 
 
+def invested_capital_fact_id(facts: list[Row]) -> str:
+    return next((row["fact_id"] for row in facts if row["field"] == CAPITAL_INVESTED), "")
+
+
 def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> CapitalSummary:
     raised = raised_fund_amounts(funds)
     raised_names = {row["fund_name"] for row in raised}
     fund_count = len(funds_by_name(funds))
     documented = documented_fund_count(facts)
     all_funds_known = documented == fund_count == len(raised)
+    still_raising = tuple(sorted({row["fund_name"] for row in funds if row["fundraising_open"] == FUNDRAISING_OPEN}))
+    conflicts = tuple(f"{row['fund_name']}: {row['conflict_note']}" for row in funds if row["conflict_note"])
+    exact = all_funds_known and not still_raising and not conflicts and not any(map(is_lower_bound_amount, raised))
     targets = [row for row in funds if row["amount_type"] == AMOUNT_TARGET and row["fund_name"] not in raised_names]
     invested = amounts_of([row for row in funds if row["amount_type"] == AMOUNT_INVESTED])
     if investor[CAPITAL_INVESTED]:
@@ -522,11 +535,15 @@ def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> Capita
         investor_id=investor["investor_id"],
         name=investor["name"],
         raised=sum_by_currency(amounts_of(raised)),
-        lower_bound=bool(raised) and (not all_funds_known or any(map(is_lower_bound_amount, raised))),
+        lower_bound=bool(raised) and not exact,
         targets=sum_by_currency(amounts_of(targets)),
         invested=sum_by_currency(invested),
         fund_count=fund_count,
         funds_with_raised=len(raised),
+        lp_commitments=sum_by_currency(amounts_of([row for row in raised if row['amount_type'] == AMOUNT_LP_COMMITMENT])),
+        fundraising_open=still_raising,
+        conflicts=conflicts,
+        invested_fact_id=invested_capital_fact_id(facts) if investor[CAPITAL_INVESTED] else '',
         documented_fund_count=documented,
         raised_types=tuple(sorted({row["amount_type"] for row in raised})),
         aum=investor[CAPITAL_AUM],

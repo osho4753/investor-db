@@ -31,6 +31,8 @@ def fund(fund_id: str, fund_name: str, fact_id: str, **overrides: str) -> Row:
         "amount_wording": "",
         "value_as_of": "",
         "fact_id": fact_id,
+        "fundraising_open": "",
+        "conflict_note": "",
     }
     row.update(overrides)
     return row
@@ -81,6 +83,7 @@ def test_valid_funds_have_no_issues(dataset: Dataset) -> None:
         ("approx", "asi", "approx má neplatnou hodnotu"),
         ("approx", "ano", "musí mít amount_wording"),
         ("fund_name", "Jiný fond", "fund_name faktu se neshoduje"),
+        ("fundraising_open", "možná", "fundraising_open má neplatnou hodnotu"),
     ],
 )
 def test_invalid_fund_is_reported(dataset: Dataset, column: str, value: str, fragment: str) -> None:
@@ -265,4 +268,49 @@ def test_report_contains_requirement_and_capital_sections(dataset: Dataset) -> N
     report = render_report(dataset, TODAY)
 
     assert "## Úplnost podle požadavků zadání" in report
-    assert "| Fiktivní Ventures | 1 (1) / – | final_close | 30 000 000 EUR (dolní mez) | – | – | – |" in report
+    assert "| Fiktivní Ventures | 1 (1) / – | final_close | 30 000 000 EUR (dolní mez) | – | – | – | – |" in report
+
+
+def test_first_close_is_always_lower_bound(dataset: Dataset) -> None:
+    dataset.funds.clear()
+    add_approximate_first_close(dataset)
+    dataset.funds[0].update(approx="ne", amount_wording="")
+    add_fund_count(dataset, "1")
+
+    assert investor_capital(dataset)[0].lower_bound
+
+
+@pytest.mark.parametrize(
+    ("column", "value"),
+    [("fundraising_open", "ano"), ("conflict_note", "měna: zdroj A uvádí EUR, zdroj B USD")],
+)
+def test_open_fundraising_or_conflict_makes_raised_capital_lower_bound(dataset: Dataset, column: str, value: str) -> None:
+    add_fund_count(dataset, "1")
+    dataset.funds[0][column] = value
+
+    assert investor_capital(dataset)[0].lower_bound
+
+
+def test_report_shows_lp_commitment_part_and_conflict(dataset: Dataset) -> None:
+    dataset.facts.append(
+        fact("f-00013", "fond_zavazek_lp", "94000000", "src-0002", currency="EUR", fund_name="Fiktivní Fond III")
+    )
+    dataset.funds.append(
+        fund("fd-0003", "Fiktivní Fond III", "f-00013", amount="94000000", currency="EUR", amount_type="zavazek_jednoho_lp", approx="ne")
+    )
+    dataset.funds[0]["conflict_note"] = "měna sporná"
+
+    report = render_report(dataset, TODAY)
+
+    assert "124 000 000 EUR (dolní mez; z toho závazek jednoho LP 94 000 000 EUR)" in report
+    assert "**KONFLIKT** Fiktivní Fond I: měna sporná" in report
+
+
+def test_investor_level_invested_capital_points_to_its_fact(dataset: Dataset) -> None:
+    dataset.investors[0]["invested_capital"] = "5000000"
+    dataset.facts.append(fact("f-00017", "invested_capital", "5000000", "src-0002", currency="EUR"))
+
+    summary = investor_capital(dataset)[0]
+
+    assert summary.invested == {"EUR": Decimal("5000000")}
+    assert summary.invested_fact_id == "f-00017"

@@ -160,6 +160,8 @@ def build_valid_dataset() -> Dataset:
                 "amount_wording": "",
                 "value_as_of": "2025-06-30",
                 "fact_id": "f-00008",
+                "fundraising_open": "",
+                "conflict_note": "",
             }
         ],
     )
