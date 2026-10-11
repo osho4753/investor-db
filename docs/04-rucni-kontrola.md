@@ -401,4 +401,27 @@ Doplňování trvalo modelu 13,0 min běhu nástrojů v první fázi (16 investo
 
 ### Nové fakty ke kontrole
 
-Doplňování přidalo 49 faktů (f-00249 až f-00297). Všechny jsou v `fact_reviews.csv` jako samostatné kolo `po_doplneni`, kontroluje se každý fakt, ne vzorek. Původní vzorek 36 faktů (kolo `vzorek`) zůstal beze změny, přibyl mu jen sloupec `review_round`. Přesnost faktů se vykazuje zvlášť pro obě kola. Hodnoty v 4.6 platí pro kolo `vzorek`, kolo `po_doplneni` čeká na kontrolu R1. U f-00036, f-00037 a f-00038 (KAYA, původní sběr) přibyla jen poznámka v `evidence_note`. U f-00252 (Tensor) přibyla poznámka o ověření, že jde o získaný kapitál.
+Doplňování přidalo 49 faktů (f-00249 až f-00297). Všechny jsou v `fact_reviews.csv` jako samostatné kolo `po_doplneni`, kontroluje se každý fakt, ne vzorek. Původní vzorek 36 faktů (kolo `vzorek`) zůstal beze změny, přibyl mu jen sloupec `review_round`. Přesnost faktů se vykazuje zvlášť pro obě kola. Hodnoty v 4.6 platí pro kolo `vzorek`, výsledek kola `po_doplneni` je v následujícím oddílu. U f-00036, f-00037 a f-00038 (KAYA, původní sběr) přibyla jen poznámka v `evidence_note`. U f-00252 (Tensor) přibyla poznámka o ověření, že jde o získaný kapitál.
+
+### Přesnost faktů – kolo `po_doplneni`
+
+Kontrolu provedl R1 12. 10. 2026 na stavu dat v commitu `50b0205`. Zkontrolováno bylo všech 49 faktů z doplňování, ne vzorek. Interval proto nevyjadřuje výběrovou chybu, ale nejistotu odhadu chybovosti procesu doplňování.
+
+| Varianta | Výsledek | 95% Wilsonův interval |
+|---|---|---|
+| správně / (správně + chybně) | 42/44 = 95,5 % | 84,9 % – 98,7 % |
+| přísná: `nelze_overit` počítáno jako chybně | 42/49 = 85,7 % | 73,3 % – 92,9 % |
+
+Pro srovnání kolo `vzorek`: 94,1 %, v přísné variantě 88,9 %. R1 potřeboval 40 min, tedy 0,82 min na fakt.
+
+| Fakt | Investor | Pole a hodnota | Verdikt | Nález R1 (zkráceně) |
+|---|---|---|---|---|
+| f-00270 | Tilia Impact Ventures | `fond_uzavren` 43 mil. Kč (první fond) | `chybne` | Zdroj říká „první kolo jsme uzavřeli na 43 milionech“, jde o first close. |
+| f-00295 | Credo Ventures | `fond_first_close` 88 mil. USD (Stage 5) | `chybne` | Wikipedie first close uvádí, ale citovaný Tech.eu ne a TNW píše „single closing“. Totéž platí pro dříve schválený f-00030. |
+| f-00262 | i&i Biotech | `cilova_velikost_fondu` 50 mil. EUR | `nelze_overit` | EIF uvádí 50 mil. EUR jako velikost fondu, ne jako cíl. Cíl byl odvozen z pozdějšího údaje ÚOCHB. |
+| f-00267 | Credo Ventures | `fond_uzavren` 75 mil. EUR (Stage 4) | `nelze_overit` | Sifted se nenačetl. AIN.UA částku potvrzuje, název „Credo Stage 4“ ne. |
+| f-00273 | Purple Ventures | `cilova_velikost_fondu` 40 mil. EUR | `nelze_overit` | Tech.eu „launched a €40 million fund“ nerozlišuje cíl a získanou částku. |
+| f-00282 | Tachles | `invested_capital` 30 mil. Kč | `nelze_overit` | Jde o investice „během minulého roku“ (2024), ne o celkový investovaný kapitál. |
+| f-00285 | Startguide VC | `cilova_velikost_fondu` 20 mil. EUR (SG Two) | `nelze_overit` | „Plánujeme investovat 20 M EUR do 15 projektů“ je plánovaný objem investic, ne cílová velikost fondu. |
+
+**Co z kontroly plyne.** Šest ze sedmi nálezů se netýká částky, ale jejího **typu**: cíl, získaná částka, first close, investice za období. Částky samotné odpovídaly zdrojům. Doplňování tedy chybovalo hlavně v klasifikaci. Agent přiřadil typ podle kontextu nebo pozdějšího zdroje („je vedeno jako cíl, protože…“), ne podle formulace zdroje. Jen f-00267 je `nelze_overit` kvůli nedostupnému zdroji. U zbylých čtyř R1 zdroj otevřel, ale zdroj typ údaje nedokládá. Proto je pro toto kolo výstižnější přísná varianta (85,7 %). Verdikty zůstávají, jak je R1 zapsal. Opravy, které R1 navrhl, jsou v oddílu „Opravy po kontrole kola `po_doplneni`“. Metrika výše platí pro data v době kontroly.
