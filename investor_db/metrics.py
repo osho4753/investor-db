@@ -7,6 +7,7 @@ from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    CATEGORY_VC,
     AMOUNT_INVESTED_PERIOD,
     AMOUNT_TARGET,
     APPROX_YES,
@@ -112,17 +113,32 @@ def verified_ids(investors: list[Row]) -> set[str]:
     return {row["investor_id"] for row in verified_investors(investors)}
 
 
-def investor_verdicts(dataset: Dataset, reviewer: str) -> dict[str, str]:
-    eligible = verified_ids(dataset.investors)
+def category_investors(dataset: Dataset, category: str, statuses: tuple[str, ...] = (STATUS_VERIFIED,)) -> list[Row]:
+    assessed = {
+        row["investor_id"]
+        for row in dataset.category_assessments
+        if row["category"] == category and row["verification_status"] in statuses
+    }
+    return [row for row in dataset.investors if row["investor_id"] in assessed]
+
+
+def eligible_for_precision(dataset: Dataset, category: str) -> set[str]:
+    if category == CATEGORY_VC:
+        return verified_ids(dataset.investors)
+    return {row["investor_id"] for row in category_investors(dataset, category)}
+
+
+def investor_verdicts(dataset: Dataset, reviewer: str, category: str = CATEGORY_VC) -> dict[str, str]:
+    eligible = eligible_for_precision(dataset, category)
     return {
         row["investor_id"]: row["verdict"]
         for row in dataset.reviews
-        if row["reviewer"] == reviewer and row["verdict"] and row["investor_id"] in eligible
+        if row["reviewer"] == reviewer and row["verdict"] and row["category"] == category and row["investor_id"] in eligible
     }
 
 
-def precision(dataset: Dataset, reviewer: str = REVIEWER_PRIMARY) -> PrecisionResult:
-    counts = Counter(investor_verdicts(dataset, reviewer).values())
+def precision(dataset: Dataset, reviewer: str = REVIEWER_PRIMARY, category: str = CATEGORY_VC) -> PrecisionResult:
+    counts = Counter(investor_verdicts(dataset, reviewer, category).values())
     return PrecisionResult(counts[VERDICT_TRUE_POSITIVE], counts[VERDICT_FALSE_POSITIVE], counts[VERDICT_UNSURE])
 
 
@@ -443,8 +459,8 @@ def searched_targets(search_log: list[Row]) -> set[tuple[str, str]]:
     return {(row["investor_id"], row["target_field"]) for row in search_log if row["investor_id"]}
 
 
-def requirement_completeness(dataset: Dataset) -> RequirementCompleteness:
-    verified = verified_investors(dataset.investors)
+def requirement_completeness(dataset: Dataset, investors: list[Row] | None = None) -> RequirementCompleteness:
+    verified = verified_investors(dataset.investors) if investors is None else investors
     funds = funds_by_investor(dataset.funds)
     searched = searched_targets(dataset.search_log)
     total = len(verified)
@@ -555,10 +571,10 @@ def capital_summary(investor: Row, funds: list[Row], facts: list[Row]) -> Capita
     )
 
 
-def investor_capital(dataset: Dataset) -> list[CapitalSummary]:
+def investor_capital(dataset: Dataset, investors: list[Row] | None = None) -> list[CapitalSummary]:
     funds = funds_by_investor(dataset.funds)
     facts = group_facts_by_investor(dataset.facts)
     return [
         capital_summary(investor, funds.get(investor["investor_id"], []), facts.get(investor["investor_id"], []))
-        for investor in verified_investors(dataset.investors)
+        for investor in (verified_investors(dataset.investors) if investors is None else investors)
     ]

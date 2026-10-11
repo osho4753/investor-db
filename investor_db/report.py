@@ -14,6 +14,8 @@ from investor_db.metrics import (
     CAPITAL_AUM,
     CAPITAL_INVESTED,
     CapitalSummary,
+    RequirementCompleteness,
+    category_investors,
     fact_accuracy,
     field_completeness,
     investor_capital,
@@ -32,6 +34,9 @@ from investor_db.metrics import (
     values_only_in_facts_due_to_currency,
 )
 from investor_db.schema import (
+    ASSESSED_CATEGORIES,
+    CATEGORY_VC,
+    EFFORT_CATEGORY_VERIFICATION,
     EFFORT_COMPLETION,
     SEARCH_TARGET_CAPITAL,
     SEARCH_TARGET_TICKET,
@@ -45,6 +50,10 @@ from investor_db.schema import (
     REVIEW_ROUND_SAMPLE,
     STATUSES,
 )
+
+CATEGORY_LABELS = {
+    "pe": "Private equity (mini-pilot)",
+}
 
 PROCESSING_LABELS = {
     "": "nezpracováno",
@@ -103,6 +112,7 @@ def render_report(dataset: Dataset, today: date) -> str:
         fact_accuracy_section(dataset),
         requirement_section(dataset),
         capital_section(dataset),
+        category_section(dataset),
         completeness_section(dataset),
         evidence_section(dataset, today),
         effort_section(dataset),
@@ -189,10 +199,11 @@ def format_share(proportion: Proportion) -> str:
 
 
 def requirement_section(dataset: Dataset) -> list[str]:
-    result = requirement_completeness(dataset)
+    return ["## Úplnost podle požadavků zadání (ověření investoři)", ""] + requirement_lines(requirement_completeness(dataset))
+
+
+def requirement_lines(result: RequirementCompleteness) -> list[str]:
     lines = [
-        "## Úplnost podle požadavků zadání (ověření investoři)",
-        "",
         "| Požadavek | Vyplněno | Chybí, hledáno a nenalezeno |",
         "|---|---|---|",
     ]
@@ -210,6 +221,69 @@ def requirement_section(dataset: Dataset) -> list[str]:
     ]
     lines += [f"| {CAPITAL_LABELS[kind]} | {format_share(share)} |" for kind, share in result.capital_by_kind.items()]
     return lines
+
+
+def capital_rows(summaries: list[CapitalSummary]) -> list[str]:
+    lines = [
+        "| Investor | Fondů ve funds.csv (se získanou částkou) / dle zdroje | Typy získaných částek "
+        "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM | Konflikt zdrojů |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for summary in summaries:
+        aum = f"{format_amount(Decimal(summary.aum))} {summary.aum_currency}" if summary.aum else "–"
+        lines.append(
+            f"| {summary.name} | {format_fund_count(summary)} | {', '.join(summary.raised_types) or '–'} "
+            f"| {format_raised(summary)} | {format_amounts(summary.targets) or '–'} "
+            f"| {format_invested(summary)} | {aum} | {format_conflicts(summary)} |"
+        )
+    return lines
+
+
+def category_section(dataset: Dataset) -> list[str]:
+    lines = ["## Hodnocení v dalších kategoriích", ""]
+    categories = [category for category in ASSESSED_CATEGORIES if any(row["category"] == category for row in dataset.category_assessments)]
+    if not categories:
+        return lines + ["Žádný subjekt zatím není hodnocen v jiné kategorii než VC."]
+    for category in categories:
+        lines += category_lines(dataset, category)
+    return lines
+
+
+def category_lines(dataset: Dataset, category: str) -> list[str]:
+    assessed = [row for row in dataset.category_assessments if row["category"] == category]
+    verified = category_investors(dataset, category)
+    counts = {status: sum(row["verification_status"] == status for row in assessed) for status in STATUSES}
+    reasons = sorted({row["exclusion_reason"] for row in assessed if row["exclusion_reason"]})
+    assessed_ids = {row["investor_id"] for row in assessed}
+    effort = [
+        row for row in dataset.effort_log
+        if row["activity"] == EFFORT_CATEGORY_VERIFICATION and row["investor_id"] in assessed_ids
+    ]
+    lines = [
+        f"### {CATEGORY_LABELS[category]}",
+        "",
+        "Status podle pravidel kategorie (tabulka `category_assessments.csv`); status ve VC pilotu se nemění.",
+        "",
+        f"- Posouzeno: {len(assessed)}; " + ", ".join(f"{status} {count}" for status, count in counts.items())
+        + (f"; důvody vyloučení: {', '.join(reasons)}" if reasons else ""),
+    ]
+    lines += effort_table(effort)
+    result = precision(dataset, REVIEWER_PRIMARY, category)
+    if result.strict.denominator + result.unsure:
+        lines += [
+            "",
+            f"- Precision R1: TP = {result.true_positives}, FP = {result.false_positives}, nejisté = {result.unsure}; "
+            f"{format_proportion(result.strict)}",
+        ]
+    else:
+        lines += ["", "- Ruční kontrola R1 v této kategorii zatím není vyplněna."]
+    if not verified:
+        return lines + [""]
+    lines += ["", f"#### Úplnost podle požadavků zadání (ověření v kategorii, n = {len(verified)})", ""]
+    lines += requirement_lines(requirement_completeness(dataset, verified))
+    lines += ["", "#### Kapitál", ""]
+    lines += capital_rows(investor_capital(dataset, verified))
+    return lines + [""]
 
 
 def format_amount(amount: Decimal) -> str:
@@ -261,18 +335,8 @@ def capital_section(dataset: Dataset) -> list[str]:
         "známé získané částky všech fondů správce (počet fondů nedoložen faktem `pocet_fondu` nebo některý fond "
         "nemá získanou částku), částka je přibližná, jde o first close nebo závazek jednoho LP, fundraising některého fondu podle zdrojů pokračuje nebo se zdroje u některého fondu rozcházejí (sloupec Konflikt zdrojů). Investováno a AUM jsou zvlášť; investovaný kapitál za celého správce odkazuje na fakt s doslovnou formulací a částka investovaná jen za určité období je dolní mez.",
         "",
-        "| Investor | Fondů ve funds.csv (se získanou částkou) / dle zdroje | Typy získaných částek "
-        "| Získaný kapitál | Cíl (nezapočten) | Investováno | AUM | Konflikt zdrojů |",
-        "|---|---|---|---|---|---|---|---|",
     ]
-    for summary in investor_capital(dataset):
-        aum = f"{format_amount(Decimal(summary.aum))} {summary.aum_currency}" if summary.aum else "–"
-        lines.append(
-            f"| {summary.name} | {format_fund_count(summary)} | {', '.join(summary.raised_types) or '–'} "
-            f"| {format_raised(summary)} | {format_amounts(summary.targets) or '–'} "
-            f"| {format_invested(summary)} | {aum} | {format_conflicts(summary)} |"
-        )
-    return lines
+    return lines + capital_rows(investor_capital(dataset))
 
 
 def completeness_section(dataset: Dataset) -> list[str]:
@@ -308,11 +372,14 @@ def effort_section(dataset: Dataset) -> list[str]:
         "",
         f"- Hledání kandidátů: {len(dataset.search_log)} průchodů, {format_decimal(search_minutes(dataset.search_log))} min celkem",
     ]
-    lines += effort_table([row for row in dataset.effort_log if row["actor"] == EFFORT_ACTOR_MODEL])
+    lines += effort_table(
+        [row for row in dataset.effort_log if row["actor"] == EFFORT_ACTOR_MODEL and row["activity"] != EFFORT_CATEGORY_VERIFICATION]
+    )
     lines += ["", "Čas modelu je čas běhu nástrojů včetně čekání na stránky a není přímo srovnatelný s časem člověka."]
     lines += ["", "### Člověk", ""]
     lines += effort_table([row for row in dataset.effort_log if row["actor"] != EFFORT_ACTOR_MODEL])
-    for label, rows in (("Kontrola investorů", dataset.reviews), ("Kontrola faktů", dataset.fact_reviews)):
+    vc_reviews = [row for row in dataset.reviews if row["category"] == CATEGORY_VC]
+    for label, rows in (("Kontrola investorů (VC)", vc_reviews), ("Kontrola faktů", dataset.fact_reviews)):
         efforts = review_efforts(rows)
         if not efforts:
             lines.append(f"- {label}: zatím neprovedena.")

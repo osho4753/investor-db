@@ -4,6 +4,7 @@ from pathlib import Path
 
 from investor_db.schema import (
     CANDIDATE_SOURCE_COLUMNS,
+    CATEGORY_ASSESSMENT_COLUMNS,
     EFFORT_COLUMNS,
     FACT_COLUMNS,
     FACT_REVIEW_COLUMNS,
@@ -26,6 +27,7 @@ TABLE_COLUMNS: dict[str, tuple[str, ...]] = {
     "effort_log": EFFORT_COLUMNS,
     "candidate_sources": CANDIDATE_SOURCE_COLUMNS,
     "funds": FUND_COLUMNS,
+    "category_assessments": CATEGORY_ASSESSMENT_COLUMNS,
 }
 
 
@@ -44,6 +46,7 @@ class Dataset:
     effort_log: list[Row] = field(default_factory=list)
     candidate_sources: list[Row] = field(default_factory=list)
     funds: list[Row] = field(default_factory=list)
+    category_assessments: list[Row] = field(default_factory=list)
 
 
 def table_path(data_dir: Path, table: str) -> Path:

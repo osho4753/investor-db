@@ -7,6 +7,7 @@ FACT_SAMPLE_SEED = 2026
 FACT_SAMPLE_MARGIN = 0.15
 FACT_SAMPLE_Z = 1.96
 FACT_SAMPLE_PROPORTION = 0.5
+SCOPE_COLUMNS = ("review_round", "category")
 
 
 def fact_sample_size(population: int) -> int:
@@ -38,11 +39,11 @@ def add_pending_reviews(
     reviewer: str,
     defaults: Row | None = None,
 ) -> list[Row]:
-    review_round = (defaults or {}).get("review_round")
+    scope = {column: value for column, value in (defaults or {}).items() if column in SCOPE_COLUMNS}
     already_listed = {
         row[target_column]
         for row in existing
-        if row["reviewer"] == reviewer and (review_round is None or row.get("review_round") == review_round)
+        if row["reviewer"] == reviewer and all(row.get(column) == value for column, value in scope.items())
     }
     pending = [
         {**dict.fromkeys(columns, ""), **(defaults or {}), target_column: target_id, "reviewer": reviewer}

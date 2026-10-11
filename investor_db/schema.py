@@ -44,7 +44,7 @@ SEARCH_LOG_COLUMNS: Final = (
     "investor_id",
     "target_field",
 )
-REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note")
+REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note", "category")
 FACT_REVIEW_COLUMNS: Final = (
     "fact_id",
     "reviewer",
@@ -56,6 +56,14 @@ FACT_REVIEW_COLUMNS: Final = (
 )
 CANDIDATE_SOURCE_COLUMNS: Final = ("investor_id", "search_id")
 EFFORT_COLUMNS: Final = ("investor_id", "activity", "actor", "minutes", "logged_at", "note")
+CATEGORY_ASSESSMENT_COLUMNS: Final = (
+    "investor_id",
+    "category",
+    "verification_status",
+    "exclusion_reason",
+    "last_verified_at",
+    "note",
+)
 FUND_COLUMNS: Final = (
     "fund_id",
     "investor_id",
@@ -113,6 +121,12 @@ EXCLUSION_REASONS: Final = (
     EXCLUSION_DUPLICATE,
 )
 RETIRED_EXCLUSION_REASONS: Final = {"mimo_definici_pilotu": OUT_OF_SCOPE_EXCLUSION_REASONS}
+CATEGORY_EXCLUSION_REASONS: Final = (*EXCLUSION_REASONS, "vc_ne_pe", "realitni_fond")
+
+CATEGORY_VC: Final = INVESTOR_TYPE_VC
+CATEGORY_PE: Final = "pe"
+ASSESSED_CATEGORIES: Final = (CATEGORY_PE,)
+REVIEW_CATEGORIES: Final = (CATEGORY_VC, *ASSESSED_CATEGORIES)
 
 INVESTMENT_STAGES: Final = ("pre_seed", "seed", "serie_a", "serie_b", "growth")
 INVESTMENT_SECTORS: Final = (
@@ -180,7 +194,8 @@ REVIEW_ROUNDS: Final = (REVIEW_ROUND_SAMPLE, REVIEW_ROUND_COMPLETION, REVIEW_ROU
 EFFORT_TRIAGE: Final = "triaz"
 EFFORT_VERIFICATION: Final = "overeni"
 EFFORT_COMPLETION: Final = "doplneni"
-EFFORT_ACTIVITIES: Final = (EFFORT_TRIAGE, EFFORT_VERIFICATION, EFFORT_COMPLETION)
+EFFORT_CATEGORY_VERIFICATION: Final = "overeni_kategorie"
+EFFORT_ACTIVITIES: Final = (EFFORT_TRIAGE, EFFORT_VERIFICATION, EFFORT_COMPLETION, EFFORT_CATEGORY_VERIFICATION)
 EFFORT_ACTOR_MODEL: Final = "model"
 EFFORT_ACTORS: Final = (EFFORT_ACTOR_MODEL, *REVIEWERS)
 

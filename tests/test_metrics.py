@@ -28,7 +28,7 @@ from investor_db.report import render_report
 
 
 def review(investor_id: str, reviewer: str, verdict: str) -> dict[str, str]:
-    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "review_minutes": "", "note": ""}
+    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc"}
 
 
 def test_wilson_interval_matches_reference_values() -> None:

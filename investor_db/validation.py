@@ -6,6 +6,9 @@ from datetime import date, timedelta
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    ASSESSED_CATEGORIES,
+    CATEGORY_EXCLUSION_REASONS,
+    REVIEW_CATEGORIES,
     ACTIVITY_WINDOW_DAYS,
     APPROX_VALUES,
     APPROX_YES,
@@ -89,6 +92,7 @@ def validate_dataset(dataset: Dataset, today: date) -> list[Issue]:
         *check_fact_reviews(dataset, today),
         *check_effort_log(dataset, today),
         *check_candidate_sources(dataset),
+        *check_category_assessments(dataset, today),
     ]
 
 
@@ -530,6 +534,10 @@ def check_effort_log(dataset: Dataset, today: date) -> Iterator[Issue]:
 def check_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
     investor_ids = {row["investor_id"] for row in dataset.investors}
     yield from check_review_rows("reviews", dataset.reviews, "investor_id", investor_ids, INVESTOR_VERDICTS, today)
+    for row in dataset.reviews:
+        row_id = f"{row['investor_id']}/{row['reviewer']}"
+        yield from required_issues("reviews", row_id, row, ("category",))
+        yield from vocabulary_issues("reviews", row_id, "category", row["category"], REVIEW_CATEGORIES)
 
 
 def check_fact_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
@@ -558,11 +566,60 @@ def check_review_rows(
         yield from vocabulary_issues(table, row_id, "verdict", row["verdict"], verdicts)
         yield from date_issues(table, row_id, "reviewed_at", row["reviewed_at"], today, required=bool(row["verdict"]))
         yield from minutes_issues(table, row_id, row["review_minutes"])
-    keys = Counter((row[target_column], row["reviewer"], row.get("review_round", "")) for row in rows)
-    for (target_id, reviewer, review_round), count in keys.items():
+    keys = Counter((row[target_column], row["reviewer"], review_scope(row)) for row in rows)
+    for (target_id, reviewer, scope), count in keys.items():
         if count > 1:
-            round_suffix = f" v kole {review_round}" if review_round else ""
+            round_suffix = f" v kole {scope}" if scope else ""
             yield Issue(table, f"{target_id}/{reviewer}", f"hodnotitel má více kontrol téhož záznamu{round_suffix} ({count}×)")
+
+
+def review_scope(row: Row) -> str:
+    return row.get("review_round") or row.get("category") or ""
+
+
+def check_category_assessments(dataset: Dataset, today: date) -> Iterator[Issue]:
+    investors = {row["investor_id"]: row for row in dataset.investors}
+    facts_by_investor = group_facts_by_investor(dataset.facts)
+    sources_by_id = {row["source_id"]: row for row in dataset.sources}
+    for row in dataset.category_assessments:
+        row_id = f"{row['investor_id']}/{row['category']}"
+        yield from required_issues("category_assessments", row_id, row, ("category", "verification_status", "last_verified_at"))
+        yield from vocabulary_issues("category_assessments", row_id, "category", row["category"], ASSESSED_CATEGORIES)
+        yield from vocabulary_issues("category_assessments", row_id, "verification_status", row["verification_status"], STATUSES)
+        yield from vocabulary_issues("category_assessments", row_id, "exclusion_reason", row["exclusion_reason"], CATEGORY_EXCLUSION_REASONS)
+        yield from date_issues("category_assessments", row_id, "last_verified_at", row["last_verified_at"], today, required=True)
+        investor = investors.get(row["investor_id"])
+        if investor is None:
+            yield Issue("category_assessments", row_id, f"odkaz na neexistujícího investora {row['investor_id']!r}")
+            continue
+        if investor["investor_type"] != row["category"]:
+            yield Issue("category_assessments", row_id, "investor_type investora se neshoduje s kategorií hodnocení")
+        yield from category_status_issues(row, investor, facts_by_investor.get(row["investor_id"], []), sources_by_id)
+    keys = Counter((row["investor_id"], row["category"]) for row in dataset.category_assessments)
+    for (investor_id, category), count in keys.items():
+        if count > 1:
+            yield Issue("category_assessments", f"{investor_id}/{category}", f"investor je v kategorii hodnocen vícekrát ({count}×)")
+
+
+def category_status_issues(row: Row, investor: Row, facts: list[Row], sources_by_id: dict[str, Row]) -> Iterator[Issue]:
+    row_id = f"{row['investor_id']}/{row['category']}"
+    status = row["verification_status"]
+    reason = row["exclusion_reason"]
+    if status == STATUS_EXCLUDED and not reason:
+        yield Issue("category_assessments", row_id, "vyloučený subjekt nemá exclusion_reason")
+    if status != STATUS_EXCLUDED and reason:
+        yield Issue("category_assessments", row_id, "exclusion_reason je vyplněn u nevyloučeného subjektu")
+    if reason and not any(fact["field"] == FACT_EXCLUSION_REASON and fact["value"] == reason for fact in facts):
+        yield Issue("category_assessments", row_id, f"důvod vyloučení {reason!r} není doložen faktem {FACT_EXCLUSION_REASON}")
+    if status != STATUS_VERIFIED:
+        return
+    if not investor["registry_id"] or not has_primary_registry_fact(investor, facts, sources_by_id):
+        yield Issue("category_assessments", row_id, "kritérium P1: IČO není doloženo faktem z primárního zdroje")
+    if not any(fact["fund_name"] for fact in facts):
+        yield Issue("category_assessments", row_id, "kritérium P3: chybí fakt o fondu (fund_name)")
+    last_verified = parse_date(row["last_verified_at"])
+    if last_verified is not None and not has_recent_activity(facts, last_verified):
+        yield Issue("category_assessments", row_id, f"kritérium P4: chybí doložená investice ani nový fond za posledních {ACTIVITY_WINDOW_DAYS} dní")
 
 
 def check_candidate_sources(dataset: Dataset) -> Iterator[Issue]:

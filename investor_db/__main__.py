@@ -12,6 +12,8 @@ from investor_db.report import render_report
 from investor_db.review import add_pending_reviews, facts_from, has_round, sample_fact_ids
 from investor_db.review_guide import GuideTemplateError, render_checklist, sampled_fact_ids
 from investor_db.schema import (
+    CATEGORY_VC,
+    REVIEW_CATEGORIES,
     FACT_REVIEW_COLUMNS,
     REVIEW_COLUMNS,
     REVIEW_ROUND_COMPLETION,
@@ -40,6 +42,8 @@ def build_parser() -> argparse.ArgumentParser:
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--reviewer", choices=REVIEWERS, required=True)
         command.set_defaults(handler=handler)
+        if name == "review-template":
+            command.add_argument("--category", choices=REVIEW_CATEGORIES, default=CATEGORY_VC)
         if name == "fact-review-template":
             command.add_argument("--round", dest="review_round", choices=REVIEW_ROUNDS, default=REVIEW_ROUND_SAMPLE)
             command.add_argument("--from-fact", help="u kola po_doplneni: první fact_id přidaný doplňováním")
@@ -78,10 +82,18 @@ def run_metrics(args: argparse.Namespace) -> int:
     return 0
 
 
+def review_targets(dataset: Dataset, category: str) -> list[str]:
+    if category == CATEGORY_VC:
+        return sorted(verified_ids(dataset.investors))
+    return sorted({row["investor_id"] for row in dataset.category_assessments if row["category"] == category})
+
+
 def run_review_template(args: argparse.Namespace) -> int:
     dataset = load_dataset(args.data_dir)
-    target_ids = sorted(verified_ids(dataset.investors))
-    rows = add_pending_reviews(dataset.reviews, REVIEW_COLUMNS, "investor_id", target_ids, args.reviewer)
+    target_ids = review_targets(dataset, args.category)
+    rows = add_pending_reviews(
+        dataset.reviews, REVIEW_COLUMNS, "investor_id", target_ids, args.reviewer, {"category": args.category}
+    )
     write_table(table_path(args.data_dir, "reviews"), REVIEW_COLUMNS, rows)
     print(f"Přidáno {len(rows) - len(dataset.reviews)} řádků ke kontrole pro {args.reviewer}.")
     return 0
