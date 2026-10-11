@@ -483,7 +483,7 @@ Verdikt u vyloučených slouží jako kontrola false negatives, stejně jako u V
 | 4 | Versute Investments (inv-0023) | `overeny` | IČO 03965953; růstový kapitál a LBO; podfond VERSUTE Private Equity Fund Otevřený; Unipap | f-00326 (ARES), f-00329 (fáze), f-00332 (cílová hodnota aktiv 1,5–2 mld. Kč), f-00333 Unipap 24. 9. 2025 |
 | 5 | Value4Capital (inv-0024) | `vyloucen`, `zahranicni_subjekt` | že nemá českou právnickou osobu; že V4C, s.r.o. v ARES nesouvisí | f-00336 (kontakt; ARES), s-035 |
 
-Doplňková pole (sektor, ticket, kapitál) jsou fakty f-00299–f-00343. Mapování sektorů na slovník je u každého faktu v `evidence_note` a je přibližné (1.11). Čas kontroly zapište do `review_minutes`.
+Doplňková pole (sektor, ticket, kapitál) jsou fakty f-00299–f-00343. Mapování sektorů na slovník je u každého faktu v `evidence_note`. Po kontrole R1 bylo přemapováno na schválený PE slovník (1.11), což verdikty R1 o statusu nemění. Čas kontroly zapište do `review_minutes`.
 
 ### Výsledek kontroly PE (R1, 12. 10. 2026)
 

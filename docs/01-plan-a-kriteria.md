@@ -368,7 +368,7 @@ Co k tomu patří:
 - **Slovník sektorů pro PE nestačí.** Je stavěný na VC: technologické vertikály jako `healthtech`, `fintech` a `edtech`. PE investuje do tradičních odvětví, která se v pilotu mapovala jen přibližně. U 4 z 5 subjektů skončila aspoň jedna položka v `jine`, nebo byla namapována na technologickou vertikálu, která neodpovídá (healthcare → `healthtech`).
 - **Fáze.** Slovník fází má pro PE jen `growth`; buyout a growth nerozlišuje.
 
-**Návrh rozšíření slovníků pro PE (k rozhodnutí zadavatele, zatím neimplementováno).** Navržené kódy kopírují formulace ze zdrojů pilotu.
+**Rozšíření slovníků pro PE (schváleno zadavatelem a implementováno 12. 10. 2026).** Navržené kódy kopírují formulace ze zdrojů pilotu.
 
 | Nový kód | Význam | Formulace ve zdrojích pilotu (dnes mapováno na) |
 |---|---|---|
@@ -381,7 +381,7 @@ Co k tomu patří:
 | `tmt` | Telekomunikace, média a technologie jako odvětví | „TMT“ (Innova; `software`) |
 | `potravinarstvi` | Výroba potravin | „food production“ (EVERITA v CVCA; nezapsáno) |
 
-U fází by PE potřebovalo `buyout` (MBO, MBI, LBO) a `growth_equity` místo jediného `growth`, případně `rekapitalizace`. Rozšíření by znamenalo nové kódy v `schema.py`, popis v [02-metodika.md](02-metodika.md) a nové namapování 5 záznamů z pilotu. Stávající VC kódy zůstávají beze změny.
+U fází by PE potřebovalo `buyout` (MBO, MBI, LBO) a `growth_equity` místo jediného `growth`, případně `rekapitalizace`. Nové kódy jsou v `schema.py` a v [02-metodika.md](02-metodika.md). Fáze PE jsou `buyout` a `growth_equity`. Všech 5 záznamů mini-pilotu je přemapováno (fakty f-00302, f-00303, f-00312, f-00313, f-00320, f-00321, f-00329, f-00337, f-00338). Po přemapování nemá žádný PE záznam sektor `jine` a `healthtech` se u PE nepoužívá. Stávající VC kódy zůstávají beze změny.
 - **Čas modelu:** 5,0 min celkem, průměr 1,0 min a medián 1,1 min na subjekt. Vyloučení podle P1 je rychlé (0,5–1,3 min), ověřené PE trvalo 1,1–1,6 min. Srovnání s VC podle sjednocené definice (hledání, triáž, ověření, doplnění) je v [03](03-globalni-odhad.md), 3.8: VC 6,9 min na ověřený záznam, PE 1,15 min na pravého investora.
 - Hledání bez výsledku (česká entita) je v `search_log` jako s-033 až s-035.
 
