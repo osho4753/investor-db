@@ -61,7 +61,9 @@ Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávaj�
    python -m investor_db review-template --reviewer R2         # řádky pro kontrolu investorů
    python -m investor_db fact-review-template --reviewer R2    # řádky pro kontrolu vzorku faktů
    python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249  # kolo po doplnění
-python -m investor_db fact-review-template --reviewer R1 --round po_oprave --facts f-00262,f-00267  # kolo po opravě (výběr faktů)
+   python -m investor_db fact-review-template --reviewer R1 --round po_oprave --facts f-00262,f-00267  # kolo po opravě (výběr faktů)
+   python -m investor_db review-template --reviewer R1 --category pe            # mini-pilot PE
+   python -m investor_db review-template --reviewer R1 --category vc_vyloucene  # náhodný vzorek 10 vyloučených VC
    ```
 
    CSV upravujte v textovém editoru (UTF-8), ne v Excelu. Excel mění kódování a ořezává úvodní nuly v IČO.
