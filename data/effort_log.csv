@@ -120,3 +120,7 @@ inv-0003,doplneni,model,1.25,2026-10-11,Doplnění kapitálu: dva fondy z CzechC
 inv-0006,doplneni,model,1.09,2026-10-11,"Doplnění sektoru a kapitálu (Fund IV final close, Fund V first close), ověření významu AUM."
 inv-0008,doplneni,model,1.17,2026-10-11,"Doplnění kapitálu: čtyři fondy (CzechCrunch 2022, NRB 2026) a investovaný kapitál z webu."
 inv-0009,doplneni,model,0.80,2026-10-11,"Doplnění kapitálu fondu i&i Biotech Fund I (EIF 2021, ÚOCHB 2022)."
+inv-0013,doplneni,model,0.70,2026-10-11,Doplnění kapitálu: Credo Stage 5 (Tech.eu 2026) a Credo Stage 4 (Sifted 2022).
+inv-0027,doplneni,model,0.77,2026-10-11,Doplnění kapitálu: dva fondy (CzechCrunch 2018 a 2023).
+inv-0028,doplneni,model,0.51,2026-10-11,Převod doložených částek do funds.csv; hledání uzavření Tech Horizons bez výsledku.
+inv-0029,doplneni,model,0.73,2026-10-11,"Doplnění kapitálu Fund II (typovaný fakt); ticket hledán, nenalezen."
