@@ -128,3 +128,7 @@ inv-0035,doplneni,model,0.99,2026-10-11,"Doplnění sektorů (Tech.eu 2024) a ka
 inv-0037,doplneni,model,0.58,2026-10-11,"Doplnění kapitálu prvního fondu (CzechCrunch 2019); velikost Fund II hledána, nenalezena."
 inv-0038,doplneni,model,0.62,2026-10-11,"Převod třetího fondu do funds.csv; sektory hledány, nenalezeny (jen agregátory)."
 inv-0039,doplneni,model,1.16,2026-10-11,"Doplnění webu, fáze, first close a investovaného kapitálu; ticket hledán, nenalezen."
+inv-0044,doplneni,model,0.80,2026-10-11,"Převod fondu 50 mil. EUR do funds.csv (typovaný fakt); dolní mez ticketu hledána, nenalezena."
+inv-0047,doplneni,model,0.73,2026-10-11,Doplnění kapitálu (cíle fondů SG One a SG Two) a horní meze ticketu z webu.
+inv-0049,doplneni,model,0.33,2026-10-11,"Kapitál hledán, nenalezen; vehikl ročníku 15 zapsán do funds.csv bez částky."
+inv-0052,doplneni,model,0.77,2026-10-11,"Doplnění horní meze ticketu (Lupa 2026), závazku EIF a převod cíle fondu do funds.csv."
