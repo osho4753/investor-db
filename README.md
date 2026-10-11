@@ -14,7 +14,7 @@ Reprodukovatelný proces vyhledávání, klasifikace a ověřování reálných 
 
 ## Klíčové výsledky
 
-Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávají kandidáty a 32 je vyloučených s konkrétním důvodem. Ruční kontrola hodnotitele R1 dala precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %) a přesnost vzorku faktů **32/34 = 94,1 %** (80,9–98,4 %, pesimisticky 88,9 %), obojí ze stavu dat v době kontroly. Kontrola odhalila dva false negatives, Lighthouse a Tachles, které jsou už opravené. Capture–recapture dává dolní mez nejméně 16 VC v ČR. Model potřeboval 5,4 min na ověřeného investora, člověk 15,5 min na kontrolu investora a 0,96 min na fakt. Globální odhad vychází na 5 235 / 7 251 / 9 682 VC firem (nízký, základní a vysoký scénář).
+Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávají kandidáty a 32 je vyloučených s konkrétním důvodem. Ruční kontrola hodnotitele R1 dala precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %) a přesnost vzorku faktů **32/34 = 94,1 %** (80,9–98,4 %, pesimisticky 88,9 %), obojí ze stavu dat v době kontroly. Kontrola odhalila dva false negatives, Lighthouse a Tachles, které jsou už opravené. Capture–recapture dává dolní mez nejméně 16 VC v ČR. Model potřeboval 5,4 min na ověřeného investora, člověk 15,5 min na kontrolu investora a 0,96 min na fakt. Globální odhad vychází na 5 235 / 7 251 / 9 682 VC firem (nízký, základní a vysoký scénář). Po doplnění podle požadavků zadání má z 16 ověřených investorů sektor 15, ticket 14 a doložený kapitál 15; kapitál je v [data/funds.csv](data/funds.csv) po fondech s typem částky a chybějící údaje jsou zapsány jako „hledáno, nenalezeno“ (viz [docs/04](docs/04-rucni-kontrola.md), 4.7).
 
 ## Povinné výstupy
 
@@ -24,7 +24,7 @@ Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávaj�
 | 2 | Metodika vyhledávání a ověřování | [docs/02-metodika.md](docs/02-metodika.md) |
 | 3 | Odhad globálního pokrytí, počtu investorů a spolehlivosti | [docs/03-globalni-odhad.md](docs/03-globalni-odhad.md), oddíly 3.1–3.4 |
 | 4 | Pilotní vzorek v ČR a zdůvodnění výběru země | [data/investors.csv](data/investors.csv), [docs/01-plan-a-kriteria.md](docs/01-plan-a-kriteria.md) |
-| 5 | Zdroje a data ověření záznamů i faktů | [data/facts.csv](data/facts.csv), [data/sources.csv](data/sources.csv), [data/search_log.csv](data/search_log.csv), [data/effort_log.csv](data/effort_log.csv) |
+| 5 | Zdroje a data ověření záznamů i faktů | [data/facts.csv](data/facts.csv), [data/funds.csv](data/funds.csv), [data/sources.csv](data/sources.csv), [data/search_log.csv](data/search_log.csv), [data/effort_log.csv](data/effort_log.csv) |
 | 6 | Ruční kontrola vzorku a precision | [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), [review/kontrolni-list-faktu.md](review/kontrolni-list-faktu.md), [data/reviews.csv](data/reviews.csv), [data/fact_reviews.csv](data/fact_reviews.csv) |
 | 7 | Odhad nákladů a složitosti globálního škálování | [docs/03-globalni-odhad.md](docs/03-globalni-odhad.md), oddíly 3.5–3.6 |
 | 8 | Kód, testy, dokumentace, historie commitů, ai-log | `investor_db/`, `tests/`, `docs/`, `git log`, [ai-log/](ai-log/) |

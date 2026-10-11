@@ -334,3 +334,63 @@ Přesnost faktů 32/34 tedy může být mírně podhodnocená. Pesimistická var
 
 1. **J&T Ventures – podíl J&T banky na kapitálu fondu.** Rozhoduje mezi `overeny` (podíl do 50 %) a `vyloucen` s důvodem `cvc` (nad 50 %). Veřejné primární zdroje (web, ARES) podíl neuvádějí.
 2. **Gain Ventures – identifikace subjektu.** Verdikt R1 je `nejiste`, status `kandidat`. Rozhodla by identifikace subjektu z článku (web, tým).
+
+## 4.7 Doplnění údajů požadovaných zadáním (11. 10. 2026)
+
+Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do čeho běžně investuje a v jaké výši, celkový investiční kapitál a zdroj. Audit 16 ověřených investorů ukázal mezery hlavně u kapitálu, který byl většinou jen volným textem ve faktu `informace_o_fondu`. Doplňování proběhlo ve čtyřech dávkách po čtyřech investorech. Platila stejná pravidla jako při sběru: jen otevřené stránky, primární zdroje přednostně, agregátory jen jako vodítko, robots.txt, ověření proti surovému textu a zápis konfliktů do `evidence_note`. Kapitál se zapisuje do nové tabulky `funds.csv` s typem částky (viz [02-metodika.md](02-metodika.md)). Údaj, který se ani po hledání nenašel, je v `search_log.csv` s `investor_id` a `target_field`.
+
+### Úplnost podle požadavků zadání – před a po
+
+„Před“ je stav dat v commitu `25fff4c` (nový kód, data beze změny), „po“ je stav po čtvrté dávce (`3c99179`).
+
+| Požadavek (ověření investoři, n = 16) | Před | Po | Chybí, hledáno a nenalezeno |
+|---|---|---|---|
+| Sektor | 13/16 | 15/16 | 1 (Reflex) |
+| Fáze | 15/16 | 16/16 | 0 |
+| Ticket (alespoň jedna mez) | 12/16 | 14/16 | 2 (Rockaway, Tachles) |
+| Ticket (obě meze) | 11/16 | 11/16 | dolní mez chybí u Soulmates, Startguide, IP Lab |
+| Kapitál (fond s částkou, AUM nebo investovaný kapitál) | 2/16 strukturovaně, 13/16 alespoň jako text | 15/16 | 1 (StartupYard) |
+| Zdroj | 16/16 | 16/16 | – |
+
+Kapitál po doplnění podle typu: uzavřený fond bez upřesnění 11, cílová velikost 4, first close 2, final close 1, závazek jednoho LP jako jediná částka fondu 1, AUM 2, investovaný kapitál v `investors.csv` 2 (Depo 9 mil. EUR, Tachles 30 mil. Kč). Celkový investiční kapitál každého investora počítá `python -m investor_db metrics`. U 9 z 16 investorů je označen jako dolní mez.
+
+### Přehled po investorech
+
+| Investor | Sektor | Ticket před → po | Celkový kapitál po (typy) | Hledáno, nenalezeno |
+|---|---|---|---|---|
+| Tensor Ventures | ✓ | beze změny | 20 mil. EUR + 1 mld. Kč (uzavřen) | – |
+| KAYA VC | – → ✓ | beze změny | 142 mil. EUR, dolní mez (final close, first close); AUM 500 mil. USD | – |
+| Depo Ventures | ✓ | beze změny | 674 mil. Kč, dolní mez (cíl, uzavřen, závazek LP); investováno 9 mil. EUR | – |
+| i&i Biotech | ✓ | beze změny | 47 mil. EUR, dolní mez (uzavřen, přibližně) | – |
+| Credo Ventures | ✓ | beze změny | 75 mil. EUR + 88 mil. USD (uzavřen) | fondy 1–3 |
+| Tilia Impact | ✓ | beze změny | 26 mil. EUR + 43 mil. Kč, dolní mez (uzavřen) | – |
+| Presto Ventures | ✓ | beze změny | 180 mil. EUR (uzavřen, cíl) | uzavření Tech Horizons |
+| Rockaway Ventures | ✓ | – → – | 55 mil. EUR, dolní mez (uzavřen, „necelých“) | ticket |
+| Purple Ventures | – → ✓ | beze změny | 700 mil. Kč, dolní mez (uzavřen, „přes“) | – |
+| Lighthouse Ventures | ✓ | beze změny | 23 mil. EUR, dolní mez (Fund II bez částky) | velikost Fund II |
+| Reflex Capital | – → – | beze změny | 22 mil. EUR (uzavřen) | sektor, fondy 1–2 |
+| Tachles | ✓ | – → – | 500 mil. Kč, dolní mez (first close); investováno 30 mil. Kč | ticket |
+| Soulmates Ventures | ✓ | ?–3 mil. EUR beze změny | 50 mil. EUR (uzavřen); AUM 62 mil. EUR | dolní mez ticketu |
+| Startguide VC | ✓ | – → ?–2 mil. EUR | 26 mil. EUR (cíle SG One a SG Two) | dolní mez ticketu |
+| StartupYard | ✓ | beze změny | neznámý | kapitál |
+| IP Lab Ventures | ✓ | – → ?–1 mil. EUR | 1,2 mld. Kč (cíl) | dolní mez ticketu |
+
+### Konflikty a rozhodnutí při doplňování
+
+- **KAYA – AUM 500 mil. USD.** Web neuvádí, co AUM zahrnuje. Vestbee (2025) uvádí hodnotu portfolia 350 mil. EUR, což je jiná veličina. AUM zůstává jako údaj správce, do celkového kapitálu se nepřičítá. Web dál uvádí „$85M Current Fund“, kdežto Vestbee first close Fund V 70 mil. EUR. Ticket je na webu v USD, ve Vestbee v EUR.
+- **Tensor – druhý fond.** CzechCrunch (2024) uvádí cíl „až 50 mil. EUR“, ale v perexu „více než miliardu korun“. Forbes (2025) uvádí closing 1 mld. Kč s plánem navýšení. Fond Forbes nejmenuje, ztotožnění proběhlo podle pořadí („druhý fond“).
+- **Lighthouse – první fond.** Článek uvádí 23 mil. EUR, rozpis vkladů ve stejném článku ale dává 20 mil. EUR.
+- **IP Lab – velikost fondu.** CzechCrunch a MPO uvádějí cíl 1,2 mld. Kč, Lupa „až 40 mil. EUR (necelá miliarda Kč)“.
+- **i&i – 50 mil. EUR.** EIF fond popisuje jako „€50 million fund“, ÚOCHB uvádí start s více než 45 mil. EUR a později přibližně 47 mil. EUR. 50 mil. EUR je proto vedeno jako cílová velikost.
+- **Credo Stage 5.** Wikipedie (f-00030) uvádí first close, Tech.eu jen „raises $88M“. V `funds.csv` je typ „uzavřen bez upřesnění“.
+- **Investovaný kapitál Purple** (čtvrt miliardy Kč) zůstává jen ve faktu. Řádek investora je v EUR a jeden řádek má jednu měnu. Tachles v `investors.csv` měnu dosud neměl, proto má `currency` = CZK.
+- **Sektory Purple** jsou mapované na slovník: creator economy → `media`, security → `kyberbezpecnost`. Mapování je v `evidence_note`.
+- **Reflex – sektory.** Webové vyhledávání vrátilo jen agregátory, které se jako zdroj nepoužívají. Sektor proto zůstává prázdný a hledání je zapsáno v `search_log`.
+
+### Pracnost
+
+Doplňování trvalo modelu 13,0 min běhu nástrojů (16 investorů, medián 0,8 min). Je evidováno v `effort_log` jako činnost `doplneni`, odděleně od původního ověření (80,1 min). Cílená hledání bez výsledku jsou zapsána v `search_log` jako s-018 až s-028.
+
+### Nové fakty ke kontrole
+
+Doplňování přidalo 40 faktů (f-00249 až f-00288). Fakty z původní kontroly se nezměnily, jen u f-00036, f-00037 a f-00038 (KAYA) přibyla do `evidence_note` poznámka o konfliktu a o významu AUM. Nové fakty nejsou ve vzorku `fact_reviews.csv`, přesnost faktů v 4.6 se proto týká jen původního sběru.
