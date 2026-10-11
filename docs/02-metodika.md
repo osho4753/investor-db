@@ -183,7 +183,7 @@ Fakt `total_fund_size` musí mít vyplněné `fund_name`.
 | `source_url` | Prohledaný seznam či stránka |
 | `query` | Dotaz, filtr nebo popis průchodu |
 | `results_count` | Počet nalezených relevantních subjektů |
-| `minutes` | Čas strávený průchodem zdroje v minutách (kladné číslo, nejvýše dvě desetinná místa) |
+| `minutes` | Změřený čas průchodu zdroje v minutách (kladné číslo, nejvýše dvě desetinná místa). Povinný u hledání kandidátů. U cílených hledání (`investor_id` vyplněno) zůstává prázdný, protože jejich čas je součástí změřeného času ověření nebo doplnění v `effort_log.csv`. |
 | `note` | Poznámka (např. omezení zdroje, nenačtená stránka) |
 | `investor_id` | Jen u cíleného hledání údaje o jednom investorovi: odkaz do `investors.csv` |
 | `target_field` | Jen u cíleného hledání: `investment_sectors`, `investment_stages`, `typical_ticket` nebo `kapital` |

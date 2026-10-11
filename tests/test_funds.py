@@ -363,3 +363,14 @@ def test_announced_fund_size_is_not_capital(dataset: Dataset) -> None:
     assert validate_dataset(dataset, TODAY) == []
     assert summary.raised == {}
     assert not requirement_completeness(dataset).filled["kapital"].numerator
+
+
+def test_search_minutes_are_required_only_for_candidate_search(dataset: Dataset) -> None:
+    targeted = dict(dataset.search_log[0], search_id="s-002", minutes="", investor_id="inv-0001", target_field="kapital")
+    dataset.search_log.append(targeted)
+    dataset.search_log[0]["minutes"] = ""
+
+    found = messages(dataset)
+
+    assert any("s-001" in issue.row_id and "minutes" in issue.message for issue in validate_dataset(dataset, TODAY)), found
+    assert not any(issue.row_id == "s-002" for issue in validate_dataset(dataset, TODAY))

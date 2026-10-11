@@ -433,7 +433,9 @@ def check_search_log(dataset: Dataset, today: date) -> Iterator[Issue]:
     yield from check_identifiers("search_log", dataset.search_log, "search_id")
     for row in dataset.search_log:
         row_id = row["search_id"]
-        yield from required_issues("search_log", row_id, row, ("source_url", "query", "results_count", "minutes"))
+        yield from required_issues("search_log", row_id, row, ("source_url", "query", "results_count"))
+        if not row["investor_id"]:
+            yield from required_issues("search_log", row_id, row, ("minutes",))
         yield from date_issues("search_log", row_id, "searched_at", row["searched_at"], today, required=True)
         if row["source_url"] and not is_valid_url(row["source_url"]):
             yield Issue("search_log", row_id, f"source_url není platná URL: {row['source_url']!r}")
