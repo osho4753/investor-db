@@ -18,6 +18,6 @@ inv-0017,R1,2026-10-09,TP,25,"Dříve kandidát. Inven Capital, SICAV, a.s. je s
 inv-0021,R1,2026-10-09,TP,20,"Dříve kandidát. N1 (dříve Nation 1) je český venture kapitálový fond založený v roce 2019 se sídlem v Praze. Spravuje kapitál institucionálních a soukromých investorů, mezi nimiž figuruje také Evropský investiční fond (EIF). V březnu 2023 spustil svůj druhý fond N1 Ventures Fund II a nadále investuje do startupů, například Ringil (2024) a Didit (2026)."
 inv-0037,R1,2026-10-09,TP,10,"Dříve kandidát. Zjistil jsem, že jde o reálný pražský VC fond podporovaný EIF. Během posledních několika let udělali spoustu investic. Zkontrolováno na Crunchbase a v českých médiích."
 inv-0039,R1,2026-10-09,TP,15,Prošel jsem to. Je to skutečná investiční společnost. Poslední tři roky se aktivně věnují venture kapitálu. Potvrdil jsem si to v obchodním rejstříku a z byznysových zpráv.
-inv-0042,R1,2026-10-09,TP,10,Ověřil jsem to. Jde o skutečné VC křídlo skupiny KKCG zaměřené na IT. Investují už déle než tři roky a jejich deals se objevují ve Forbes CZ.
-inv-0046,R1,2026-10-09,TP,20,"Podíval jsem se na ně. Je to reálná společnost (family office), která dělá VC investice. Podle rejstříků a tržní aktivity jsou činní i v posledních třech letech."
-inv-0048,R1,2026-10-09,TP,20,Zkontroloval jsem to. Opravdu existují a dělají investice do startupů. Podle databází startupových transakcí jsou aktivní i v posledních 3 letech.
+inv-0042,R1,2026-10-11,FP,5,"Původně TP. Opraveno: CVC – fond nemá cizí kapitál, investuje jen peníze skupiny KKCG (Forbes)."
+inv-0046,R1,2026-10-11,FP,5,"Původně TP. Opraveno: investuje vlastní kapitál společníků bez fondu, nespadá do definice VC."
+inv-0048,R1,2026-10-11,nejiste,5,"Původně TP. Opraveno: doloženo jen agregátory, Z1 a Z3 nejsou doloženy primárním zdrojem."
