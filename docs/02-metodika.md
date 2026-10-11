@@ -203,6 +203,8 @@ Cílené hledání chybějícího údaje se zapisuje i tehdy, když nic nenajde 
 | `amount_wording` | u `approx` = `ano` | Doslovná formulace ze zdroje, např. „téměř 55 mil. EUR“ |
 | `value_as_of` | ne | Datum, ke kterému částka platí (datum uzavření, oznámení) |
 | `fact_id` | ano | Fakt, který řádek dokládá |
+| `fundraising_open` | ne | `ano`, pokud zdroje uvádějí, že fundraising fondu pokračuje (plánované navýšení, další close); `ne` nebo prázdné jinak |
+| `conflict_note` | ne | Nevyřešený rozpor zdrojů u částky, měny nebo typu uzavření: verze, zdroje (fakty) a která verze je zapsána. Primární zdroj, který by rozpor rozhodl, nebyl nalezen. |
 
 Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří stejnému investorovi a fondu, má stejnou částku a měnu a odpovídající typ: `final_close` dokládá `fond_final_close` nebo `total_fund_size`, `uzavren_bez_upresneni` dokládá `fond_uzavren` nebo `total_fund_size`, `first_close` dokládá `fond_first_close`, `cil` dokládá `cilova_velikost_fondu`, `zavazek_jednoho_lp` dokládá `fond_zavazek_lp` a `investovano` dokládá `fond_investovano`. Fond bez částky dokládá libovolný fondový fakt (např. `informace_o_fondu`). Fond má nejvýše jeden řádek s velikostí (`final_close`, `uzavren_bez_upresneni`, `first_close`, `cil` nebo `zavazek_jednoho_lp`) a nejvýše jeden řádek `investovano`. Má-li fond doloženo více velikostí (např. first close a později final close), řádek nese nejlepší dostupný typ podle pořadí v definici získaného kapitálu; ostatní částky zůstávají jako fakty. Přibližné hodnoty se nevynechávají: číslo z formulace se zapíše s `approx` = `ano` a doslovnou formulací. Pravidlo pro `total_fund_size` v `investors.csv` (2.3) se tím nemění.
 
@@ -214,8 +216,14 @@ Každá částka má fakt se zdrojem a validátor kontroluje, že fakt patří s
 
 - **Získaný kapitál** je součet jen skutečně získaných částek fondů z `funds.csv`. U každého fondu se bere nejlepší typ: `final_close` > `uzavren_bez_upresneni` > `first_close`. Pokud je u fondu doložen jen `zavazek_jednoho_lp`, započte se jako dolní mez, protože fond získal nejméně tuto částku.
 - **Cíl** (`cil`) se nikdy nepřičítá k získanému kapitálu a uvádí se zvlášť u fondů, které nemají získanou částku. Má-li investor jen cíl, je získaný kapitál **neznámý** a vedle se ukáže cíl.
-- **Dolní mez.** Získaný kapitál je označen jako dolní mez vždy, když nejsou známé získané částky všech fondů správce, nejen fondů zapsaných ve `funds.csv`. Počet fondů správce musí doložit fakt `pocet_fondu`. Bez něj, nebo když se počet neshoduje s počtem fondů se získanou částkou, jde o dolní mez. Dolní mez platí také u přibližné částky (`approx` = `ano`) a u závazku jednoho LP.
-- **Investováno** (`investovano` ve `funds.csv` a `invested_capital` v `investors.csv`) a **AUM** se uvádějí zvlášť a do získaného kapitálu se nepřičítají. AUM může zahrnovat i jiné než vlastní fondy.
+- **Dolní mez.** Získaný kapitál je **bez** dolní meze jen tehdy, když platí všechny podmínky:
+  - počet fondů správce doložený faktem `pocet_fondu` se shoduje s počtem fondů ve `funds.csv`,
+  - všechny fondy mají získanou částku typu `final_close` nebo `uzavren_bez_upresneni` a žádná není přibližná,
+  - žádný fond podle zdrojů ještě nesbírá peníze (`fundraising_open` = `ano`),
+  - u žádného fondu není nevyřešený konflikt zdrojů (`conflict_note`).
+
+  `first_close` a `zavazek_jednoho_lp` jsou vždy dolní mez. Pokud součet obsahuje závazek jednoho LP, ukazuje se zvlášť, jakou částku závazek tvoří. Konflikty zdrojů jsou v tabulce kapitálu ve zvláštním sloupci.
+- **Investováno** (`investovano` ve `funds.csv` a `invested_capital` v `investors.csv`) a **AUM** se uvádějí zvlášť a do získaného kapitálu se nepřičítají. AUM může zahrnovat i jiné než vlastní fondy. U `invested_capital` za celého správce odkazuje tabulka kapitálu na fakt s doslovnou formulací. Pokud zdroj neuvádí, co částka zahrnuje (např. vlastní kapitál zakladatelů nebo spoluinvestice), je to uvedeno v poznámce faktu.
 - **Měny se nesčítají.** Má-li investor fondy v různých měnách, uvádějí se součty zvlášť.
 - Pro požadavek zadání „celkový investiční kapitál“ se investor počítá jako vyplněný, pokud má získaný kapitál nebo AUM. Investoři jen s cílem se vykazují zvlášť.
 

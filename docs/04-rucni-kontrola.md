@@ -342,7 +342,7 @@ Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do
 
 ### Úplnost podle požadavků zadání – před a po
 
-„Před“ je stav dat v commitu `25fff4c` (nový kód, data beze změny). „Po“ je stav po opravě definice kapitálu a druhém kole doplňování (`3ff1c1a`). Kapitál se počítá podle opravené definice v [02-metodika.md](02-metodika.md): získaná částka fondu nebo AUM, cíl se nezapočítává.
+„Před“ je stav dat v commitu `25fff4c` (nový kód, data beze změny). „Po“ je stav po opravě definice kapitálu a třetím kole oprav (`ab775d8`). Kapitál se počítá podle opravené definice v [02-metodika.md](02-metodika.md): získaná částka fondu nebo AUM, cíl se nezapočítává.
 
 | Požadavek (ověření investoři, n = 16) | Před | Po | Chybí, hledáno a nenalezeno |
 |---|---|---|---|
@@ -360,21 +360,21 @@ Zadání ([00-zadani.md](00-zadani.md)) u každého investora žádá sektor, do
 
 ### Přehled po investorech
 
-Získaný kapitál je bez dolní meze jen tam, kde fakt `pocet_fondu` dokládá počet fondů a všechny mají přesnou získanou částku. To platí u Tensoru (2 fondy) a Creda (5 fondů).
+Po zpřísnění pravidla (11. 10. 2026) je získaný kapitál u všech investorů dolní mez. Tensor má doložené oba fondy, ale fundraising druhého fondu pokračuje (plán navýšení na 1,5 mld. Kč). Credo má doloženo všech pět fondů, ale Stage 5 je first close a u Stage 3 a Stage 5 jsou nevyřešené konflikty zdrojů.
 
 | Investor | Sektor | Ticket před → po | Získaný kapitál | Cíl (nezapočten) | Investováno / AUM | Hledáno, nenalezeno |
 |---|---|---|---|---|---|---|
-| Tensor Ventures | ✓ | beze změny | 20 mil. EUR + 1 mld. Kč (2 ze 2 fondů) | – | – | – |
+| Tensor Ventures | ✓ | beze změny | 20 mil. EUR + 1 mld. Kč, dolní mez (2 ze 2 fondů, fundraising Co-investment Fund pokračuje) | – | – | – |
 | KAYA VC | – → ✓ | beze změny | 142 mil. EUR, dolní mez (ET3 bez částky, počet fondů nedoložen) | – | AUM 500 mil. USD | – |
-| Depo Ventures | ✓ | beze změny | 129 mil. Kč, dolní mez (vč. závazku NRI 94 mil. Kč) | 545 mil. Kč | investováno 9 mil. EUR | – |
+| Depo Ventures | ✓ | beze změny | 129 mil. Kč, dolní mez; **z toho 94 mil. Kč závazek jednoho LP (NRI)**, uzavřený Grouport 35 mil. Kč | 545 mil. Kč | investováno 9 mil. EUR | – |
 | i&i Biotech | ✓ | beze změny | 47 mil. EUR, dolní mez (přibližně) | – | investováno asi 7,4 mil. EUR | – |
-| Credo Ventures | ✓ | beze změny | 146 mil. EUR + 188 mil. USD (5 z 5 fondů) | – | – | – |
+| Credo Ventures | ✓ | beze změny | 146 mil. EUR + 188 mil. USD, dolní mez (5 z 5 fondů; Stage 5 first close; **konflikt**: měna Stage 3, typ uzavření Stage 5) | – | – | primární zdroj ke Stage 3 |
 | Tilia Impact | ✓ | beze změny | 26 mil. EUR + 43 mil. Kč, dolní mez | – | – | – |
 | Presto Ventures | ✓ | beze změny | 30 mil. EUR, dolní mez | 150 mil. EUR (Tech Horizons) | – | uzavření Tech Horizons |
 | Rockaway Ventures | ✓ | – → – | 55 mil. EUR, dolní mez („necelých“) | – | – | ticket |
 | Purple Ventures | – → ✓ | beze změny | 700 mil. Kč, dolní mez („přes“) | – | investováno čtvrt mld. Kč | – |
 | Lighthouse Ventures | ✓ | beze změny | 23 mil. EUR, dolní mez (Fund II bez částky) | – | – | velikost Fund II |
-| Reflex Capital | – → – | beze změny | 22 mil. EUR, dolní mez (fondy 1–2 neznámé) | – | investováno 150 mil. EUR | sektor |
+| Reflex Capital | – → – | beze změny | 22 mil. EUR, dolní mez (fondy 1–2 neznámé) | – | investováno 150 mil. EUR za celého správce, **rozsah neznámý** (web: „€150M již investováno“) | sektor, rozsah 150 mil. EUR |
 | Tachles | ✓ | – → – | 500 mil. Kč, dolní mez (first close, přibližně) | – | investováno 30 mil. Kč | ticket |
 | Soulmates Ventures | ✓ | ?–3 mil. EUR beze změny | 50 mil. EUR, dolní mez (počet fondů nedoložen) | – | AUM 62 mil. EUR | dolní mez ticketu |
 | Startguide VC | ✓ | – → ?–2 mil. EUR | neznámý | 26 mil. EUR (SG One a SG Two) | – | dolní mez ticketu |
@@ -386,18 +386,19 @@ Získaný kapitál je bez dolní meze jen tam, kde fakt `pocet_fondu` dokládá 
 - **KAYA – AUM 500 mil. USD.** Web neuvádí, co AUM zahrnuje. Vestbee (2025) uvádí hodnotu portfolia 350 mil. EUR, což je jiná veličina. AUM zůstává jako údaj správce a k získanému kapitálu se nepřičítá. Web dál uvádí „$85M Current Fund“, kdežto Vestbee first close Fund V 70 mil. EUR. Ticket je na webu v USD, ve Vestbee v EUR.
 - **Tensor – druhý fond.** Ověřeno znovu: „více než miliardou korun“ v CzechCrunch (15. 5. 2024) je plán před získáním peněz, tedy cíl, vedle cíle „až 50 mil. EUR“. Forbes (18. 9. 2025) uvádí closing 1 mld. Kč („dokázal naraisovat miliardu korun během pěti měsíců“) s plánem navýšení na 1,5 mld. Kč. 1 mld. Kč je tedy získaný kapitál typu „uzavřen bez upřesnění“, ne final close. Fond Forbes nejmenuje, ztotožnění proběhlo podle pořadí („druhý fond“).
 - **Credo – fondy 1–3.** Credo 1 má 18 mil. EUR, ale CzechCrunch (2019) uvádí start v roce 2011 a TechCrunch (2015) v roce 2010. Credo 2 mělo podle TechCrunch při uzavření v roce 2015 34 mil. EUR s cílem 40 mil. EUR, CzechCrunch (2019) uvádí 53 mil. EUR. Zapsán je pozdější údaj. Credo Stage 3 má podle money.pl (2020) 100 mil. USD, CzechCrunch a Vestbee uvádějí 100 mil. EUR. Zapsáno je USD, protože money.pl píše o získaných penězích, kdežto CzechCrunch o otevření fondu. Počet fondů 5 dokládá Tech.eu („their 5th fund“).
-- **Credo Stage 5.** Wikipedie (f-00030) uvádí first close, Tech.eu jen „raises $88M“. Ve `funds.csv` má typ „uzavřen bez upřesnění“.
+- **Credo Stage 5 – typ uzavření (konflikt).** Wikipedie (f-00030, f-00295) uvádí „first closing“ 88 mil. USD, ale zdroj, který cituje (Tech.eu, f-00266), first close neuvádí. TNW (23. 3. 2026, f-00296) píše o fondu „raised in a single closing“, tedy o jediném uzavření. Podle tvého rozhodnutí je ve `funds.csv` zapsán first close (konzervativní varianta). Rozpor je v `conflict_note` a ve sloupci Konflikt zdrojů v tabulce kapitálu.
+- **Credo Stage 3 – měna (konflikt).** USD uvádějí money.pl (10. 3. 2020, f-00291; partner Habermann v citované tiskové zprávě „blisko 100 mln USD“) a Silicon Canals. EUR uvádějí CzechCrunch (8. 11. 2019), partner Andrej Kiska v rozhovoru (11. 11. 2019, f-00297) a Vestbee (2. 4. 2020). Primární zdroj (web Credo, newsroom, EIF) se nenašel a vyhledávání vrátilo jen norský Credo III, což je jiný subjekt (s-030). Rozpor je ve `funds.csv` označený a zapsána je nižší varianta 100 mil. USD. Součet Creda proto obsahuje sporný fond.
 - **Lighthouse – první fond.** Článek uvádí 23 mil. EUR, rozpis vkladů ve stejném článku ale dává 20 mil. EUR.
 - **IP Lab – velikost fondu.** CzechCrunch a MPO uvádějí cíl 1,2 mld. Kč, Lupa „až 40 mil. EUR (necelá miliarda Kč)“.
 - **i&i – 50 mil. EUR.** EIF fond popisuje jako „€50 million fund“, ÚOCHB uvádí start s více než 45 mil. EUR a později přibližně 47 mil. EUR. 50 mil. EUR je proto vedeno jako cílová velikost.
 - **Investovaný kapitál Purple** (čtvrt miliardy Kč) je ve `funds.csv` jako `investovano` v CZK, protože tam má měnu každá částka. V `investors.csv` zůstává prázdný, protože řádek je v EUR. Stejně je zapsána investovaná částka i&i (přibližně 7,4 mil. EUR).
 - **Sektory Purple** jsou mapované na slovník: creator economy → `media`, security → `kyberbezpecnost`. Mapování je v `evidence_note`.
-- **Reflex – sektory.** Sektory byly hledány přímo na reflexcapital.com (úvodní stránka cs i en, portfolio, kontakt). Web je neuvádí a píše jen „Investujeme zejména do lidí“. Sektorovou neomezenost výslovně neuvádí, proto se `sektorove_agnosticky` nezapisuje a hledání je v `search_log` (s-029). Na úvodní stránce je „€150M již investováno“, což je doplněno jako `invested_capital`.
+- **Reflex – sektory.** Sektory byly hledány přímo na reflexcapital.com (úvodní stránka cs i en, portfolio, kontakt). Web je neuvádí a píše jen „Investujeme zejména do lidí“. Sektorovou neomezenost výslovně neuvádí, proto se `sektorove_agnosticky` nezapisuje a hledání je v `search_log` (s-029). Na úvodní stránce je doslovně „€150M již investováno“ (anglicky „€150M invested“), doplněno jako `invested_capital` (f-00294). Žádný zdroj neuvádí, co částka zahrnuje (s-031). Forbes uvádí, že Reflex začal jako family office, kde Ondřej Fryc investoval vlastní prostředky. Částka je řádově vyšší než získaný kapitál známých fondů (třetí fond 22 mil. EUR, druhý „podobný“), takže pravděpodobně nejde jen o fondy. Zdroj to ale neříká, proto je v tabulce kapitálu uvedena jako údaj za celého správce s nejasným rozsahem.
 
 ### Pracnost
 
-Doplňování trvalo modelu 13,0 min běhu nástrojů v první fázi (16 investorů, medián 0,8 min) a 7,6 min ve druhé fázi (Credo, Tensor, Reflex, Purple, i&i; společný čas rozdělen rovnoměrně po 1,51 min). Je evidováno v `effort_log` jako činnost `doplneni`, odděleně od původního ověření (80,1 min). Cílená hledání bez výsledku jsou v `search_log` jako s-018 až s-029.
+Doplňování trvalo modelu 13,0 min běhu nástrojů v první fázi (16 investorů, medián 0,8 min) 7,6 min ve druhé fázi (Credo, Tensor, Reflex, Purple, i&i; společný čas rozdělen rovnoměrně po 1,51 min) a 3,3 min ve třetí fázi (Tensor, Credo, Reflex; po 1,10 min). Je evidováno v `effort_log` jako činnost `doplneni`, odděleně od původního ověření (80,1 min). Cílená hledání bez výsledku jsou v `search_log` jako s-018 až s-031.
 
 ### Nové fakty ke kontrole
 
-Doplňování přidalo 46 faktů (f-00249 až f-00294). Všechny jsou v `fact_reviews.csv` jako samostatné kolo `po_doplneni`, kontroluje se každý fakt, ne vzorek. Původní vzorek 36 faktů (kolo `vzorek`) zůstal beze změny, přibyl mu jen sloupec `review_round`. Přesnost faktů se vykazuje zvlášť pro obě kola. Hodnoty v 4.6 platí pro kolo `vzorek`, kolo `po_doplneni` čeká na kontrolu R1. U f-00036, f-00037 a f-00038 (KAYA, původní sběr) přibyla jen poznámka v `evidence_note`. U f-00252 (Tensor) přibyla poznámka o ověření, že jde o získaný kapitál.
+Doplňování přidalo 49 faktů (f-00249 až f-00297). Všechny jsou v `fact_reviews.csv` jako samostatné kolo `po_doplneni`, kontroluje se každý fakt, ne vzorek. Původní vzorek 36 faktů (kolo `vzorek`) zůstal beze změny, přibyl mu jen sloupec `review_round`. Přesnost faktů se vykazuje zvlášť pro obě kola. Hodnoty v 4.6 platí pro kolo `vzorek`, kolo `po_doplneni` čeká na kontrolu R1. U f-00036, f-00037 a f-00038 (KAYA, původní sběr) přibyla jen poznámka v `evidence_note`. U f-00252 (Tensor) přibyla poznámka o ověření, že jde o získaný kapitál.
