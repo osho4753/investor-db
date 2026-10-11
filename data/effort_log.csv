@@ -116,3 +116,7 @@ inv-0008,overeni,model,1,2026-10-11,Náhrada faktu z agregátoru Caplight člán
 inv-0009,overeni,model,1,2026-10-11,Oprava sektorů po kontrole R1 (odebráno ai); čas odhadnut.
 inv-0038,overeni,model,2,2026-10-11,"Opětovné otevření článku CzechCrunch k ticketu; konflikt uvnitř zdroje zapsán, hodnoty ponechány; čas odhadnut."
 inv-0034,overeni,model,6,2026-10-11,"Dohledání struktury kapitálu (web Přístup, Tým, blog, ARES VR obou SICAV); čas odhadnut."
+inv-0003,doplneni,model,1.25,2026-10-11,Doplnění kapitálu: dva fondy z CzechCrunch (2024) a Forbes (2025).
+inv-0006,doplneni,model,1.09,2026-10-11,"Doplnění sektoru a kapitálu (Fund IV final close, Fund V first close), ověření významu AUM."
+inv-0008,doplneni,model,1.17,2026-10-11,"Doplnění kapitálu: čtyři fondy (CzechCrunch 2022, NRB 2026) a investovaný kapitál z webu."
+inv-0009,doplneni,model,0.80,2026-10-11,"Doplnění kapitálu fondu i&i Biotech Fund I (EIF 2021, ÚOCHB 2022)."
