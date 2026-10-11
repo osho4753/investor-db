@@ -137,10 +137,13 @@ def test_checklist_lists_review_rounds_separately() -> None:
         {"fact_id": "f-00001", "reviewer": "R1", "review_round": "vzorek"},
         {"fact_id": "f-00002", "reviewer": "R1", "review_round": "po_doplneni"},
         {"fact_id": "f-00003", "reviewer": "R1", "review_round": "po_doplneni"},
+        {"fact_id": "f-00003", "reviewer": "R1", "review_round": "po_oprave"},
     ]
 
     checklist = render_checklist(dataset)
 
+    assert "ve 3 kolech" not in checklist and "v 3 kolech" in checklist
+    assert "# Kontrola po opravě – fakty změněné po kontrole (1 faktů)" in checklist
     assert "# Původní kontrola – náhodný vzorek (1 faktů)" in checklist
     assert "# Kontrola po doplnění – všechny nové fakty (2 faktů)" in checklist
     assert checklist.index("`f-00001`") < checklist.index("## 2. `f-00002`")

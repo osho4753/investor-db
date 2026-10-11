@@ -12,6 +12,7 @@ from investor_db.schema import (
     MONEY_FACT_FIELDS,
     PRIMARY_SOURCE_TYPES,
     REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_CORRECTION,
     REVIEW_ROUND_SAMPLE,
     REVIEW_ROUNDS,
     SOURCE_TYPES,
@@ -481,6 +482,11 @@ def sampled_fact_ids(dataset: Dataset) -> list[str]:
     return sorted({row["fact_id"] for row in dataset.fact_reviews})
 
 
+def review_rounds_present(dataset: Dataset) -> list[str]:
+    present = {row["review_round"] for row in dataset.fact_reviews}
+    return [review_round for review_round in REVIEW_ROUNDS if review_round in present]
+
+
 def round_fact_ids(dataset: Dataset, review_round: str) -> list[str]:
     return sorted({row["fact_id"] for row in dataset.fact_reviews if row["review_round"] == review_round})
 
@@ -528,6 +534,11 @@ ROUND_HEADINGS: Final = {
         "Kontrola po doplnění – všechny nové fakty",
         "Všechny fakty přidané doplňováním sektorů, ticketu a kapitálu, ne vzorek. Přesnost se počítá zvlášť.",
     ),
+    REVIEW_ROUND_CORRECTION: (
+        "Kontrola po opravě – fakty změněné po kontrole",
+        "Fakty, kterým se po kontrole změnil typ, zdroj nebo hodnota, a fakty přidané při opravě. "
+        "Posuzuje se současný stav faktu; verdikt patří do řádku s kolem po_oprave. Přesnost se počítá zvlášť.",
+    ),
 }
 
 
@@ -548,10 +559,10 @@ def render_checklist(dataset: Dataset) -> str:
         "Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. "
         "Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.",
         "",
-        f"Kontrola obsahuje {len(sampled_fact_ids(dataset))} z {len(dataset.facts)} faktů ve dvou kolech. "
+        f"Kontrola obsahuje {len(sampled_fact_ids(dataset))} z {len(dataset.facts)} faktů v {len(review_rounds_present(dataset))} kolech. "
         "U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. "
         "Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš "
-        "do řádku se stejným `fact_id` v `data/fact_reviews.csv`. "
+        "do řádku se stejným `fact_id` a kolem (`review_round`) v `data/fact_reviews.csv`. "
         "Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.",
         "",
     ]

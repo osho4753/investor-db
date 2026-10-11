@@ -2,7 +2,7 @@
 
 Vygenerováno příkazem `python -m investor_db review-guide` z `data/fact_reviews.csv`. Soubor neupravuj ručně, při změně dat ho vygeneruj znovu.
 
-Kontrola obsahuje 85 z 274 faktů ve dvou kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
+Kontrola obsahuje 86 z 274 faktů v 3 kolech. U každého faktu otevři zdroj a posuď jen to, zda zdroj podporuje uvedené tvrzení. Verdikt (`spravne`, `chybne`, `nelze_overit`), datum, čas v minutách a poznámku zapiš do řádku se stejným `fact_id` a kolem (`review_round`) v `data/fact_reviews.csv`. Podrobný návod je v `docs/04-rucni-kontrola.md`, sekce „Návod pro hodnotitele“.
 
 # Původní kontrola – náhodný vzorek (36 faktů)
 
@@ -776,3 +776,70 @@ Typ zdroje: média (sekundární), vydavatel: TNW
 
 **Zdroj:** <https://cc.cz/andrej-kiska-z-credo-ventures-nejdriv-byla-slabina-ze-jsme-z-vychodni-evropy-ted-na-to-investori-v-silicon-valley-slysi/>  
 Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+# Kontrola po opravě – fakty změněné po kontrole (7 faktů)
+
+Fakty, kterým se po kontrole změnil typ, zdroj nebo hodnota, a fakty přidané při opravě. Posuzuje se současný stav faktu; verdikt patří do řádku s kolem po_oprave. Přesnost se počítá zvlášť.
+
+## 86. `f-00262` – i&i Biotech Investments (status: overeny)
+
+**Tvrzení:** Zdroj uvádí velikost fondu „i&i Biotech Fund I SCSp“ investora i&i Biotech Investments 50 000 000 EUR (stav k 24. 9. 2021), aniž rozlišuje cíl a získanou částku.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 50 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj uvádí velikost fondu bez slov jako cíl, target, „až“, uzavřen nebo získal. Chybné je, pokud zdroj typ výslovně uvádí; pak patří do cilova_velikost_fondu nebo fond_uzavren.
+
+**Zdroj:** <https://www.eif.org/press/all/eif-to-invest-25-million-to-support-biomedical-tech-transfer-in-central-europe>  
+Typ zdroje: média (sekundární), vydavatel: European Investment Fund
+
+## 87. `f-00267` – Credo Ventures (status: overeny)
+
+**Tvrzení:** Fond „CS4“ investora Credo Ventures byl uzavřen s velikostí 75 000 000 EUR (stav k 11. 10. 2022); zdroj neupřesňuje, zda šlo o final close.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 75 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí v minulém čase říkat, že fond byl uzavřen nebo upsán s touto velikostí. Chybné je, pokud jde o cíl, plán nebo first close. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://en.ain.ua/2022/10/11/credo-ventures-closes-its-fourth-fund>  
+Typ zdroje: média (sekundární), vydavatel: AIN.UA
+
+## 88. `f-00270` – Tilia Impact Ventures (status: overeny)
+
+**Tvrzení:** Fond „Tilia Impact Ventures – první fond“ investora Tilia Impact Ventures dosáhl prvního uzavření (first close) ve výši 43 000 000 CZK (stav k 28. 11. 2018).
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 43 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět first close (první uzavření), ne konečnou nebo cílovou velikost. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/silke-horakova-a-petr-vitek-z-noveho-tilia-impact-ventures-chybel-nam-rizikovy-kapital-pro-socialni-inovace/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 89. `f-00273` – Purple Ventures (status: overeny)
+
+**Tvrzení:** Zdroj uvádí velikost fondu „Purple Ventures 2“ investora Purple Ventures 40 000 000 EUR (stav k 27. 6. 2024), aniž rozlišuje cíl a získanou částku.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 40 000 000 EUR: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj uvádí velikost fondu bez slov jako cíl, target, „až“, uzavřen nebo získal. Chybné je, pokud zdroj typ výslovně uvádí; pak patří do cilova_velikost_fondu nebo fond_uzavren.
+
+**Zdroj:** <https://tech.eu/2024/06/27/purple-ventures-launches-eur40m-fund-for-early-stage-software-startups/>  
+Typ zdroje: média (sekundární), vydavatel: Tech.eu
+
+## 90. `f-00282` – Tachles (status: overeny)
+
+**Tvrzení:** Z fondu „Tachles VC“ investora Tachles bylo za období uvedené ve zdroji investováno 30 000 000 CZK (stav k 12. 2. 2025); jde o dolní mez celkové investované částky.
+
+**Co hledat ve zdroji:** Najdi ve zdroji částku 30 000 000 CZK: musí sedět číslo i měna (bez přepočtu na jinou měnu). Zdroj musí uvádět částku investovanou za vymezené období (např. „během minulého roku“). Chybné je, pokud zdroj uvádí celkovou investovanou částku nebo velikost fondu. Pokud zdroj uvádí přibližnou formulaci („téměř“, „přes“, „zhruba“), je fakt správný, když částka odpovídá číslu v této formulaci.
+
+**Zdroj:** <https://cc.cz/cesi-v-izraeli-na-lovu-miliardovych-jednorozcu-navzdory-konfliktu-se-tu-startupum-dari-hlasi/>  
+Typ zdroje: média (sekundární), vydavatel: CzechCrunch
+
+## 91. `f-00285` – Startguide VC (status: overeny)
+
+**Tvrzení:** O fondu „SG Two“ investora Startguide VC platí: plánovaný objem investic 20 mil. EUR do 15 projektů v horizontu 8+2 let.
+
+**Co hledat ve zdroji:** Zdroj potvrzuje každou část tvrzení: název fondu, uvedené částky a měny, data a role subjektů (správce, GP, AIFM). Pokud zdroj potvrzuje jen část, je verdikt chybne a do note napiš, co chybí.
+
+**Zdroj:** <https://www.startguide.cz/sgtwo/>  
+Typ zdroje: web investora (primární), vydavatel: Start Guide
+
+## 92. `f-00298` – Credo Ventures (status: overeny)
+
+**Tvrzení:** O fondu „CS4“ investora Credo Ventures platí: čtvrtý vlajkový fond Credo nese označení CS4 a uzavírá se na 75 mil. EUR; first close proběhl dříve v roce 2022.
+
+**Co hledat ve zdroji:** Zdroj potvrzuje každou část tvrzení: název fondu, uvedené částky a měny, data a role subjektů (správce, GP, AIFM). Pokud zdroj potvrzuje jen část, je verdikt chybne a do note napiš, co chybí.
+
+**Zdroj:** <https://podim.org/credo-ventures-closes-4th-fund-at-e75m/>  
+Typ zdroje: jiný zdroj (sekundární), vydavatel: Podim

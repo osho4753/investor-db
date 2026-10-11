@@ -38,7 +38,12 @@ def add_pending_reviews(
     reviewer: str,
     defaults: Row | None = None,
 ) -> list[Row]:
-    already_listed = {row[target_column] for row in existing if row["reviewer"] == reviewer}
+    review_round = (defaults or {}).get("review_round")
+    already_listed = {
+        row[target_column]
+        for row in existing
+        if row["reviewer"] == reviewer and (review_round is None or row.get("review_round") == review_round)
+    }
     pending = [
         {**dict.fromkeys(columns, ""), **(defaults or {}), target_column: target_id, "reviewer": reviewer}
         for target_id in target_ids

@@ -558,9 +558,11 @@ def check_review_rows(
         yield from vocabulary_issues(table, row_id, "verdict", row["verdict"], verdicts)
         yield from date_issues(table, row_id, "reviewed_at", row["reviewed_at"], today, required=bool(row["verdict"]))
         yield from minutes_issues(table, row_id, row["review_minutes"])
-    for (target_id, reviewer), count in Counter((row[target_column], row["reviewer"]) for row in rows).items():
+    keys = Counter((row[target_column], row["reviewer"], row.get("review_round", "")) for row in rows)
+    for (target_id, reviewer, review_round), count in keys.items():
         if count > 1:
-            yield Issue(table, f"{target_id}/{reviewer}", f"hodnotitel má více kontrol téhož záznamu ({count}×)")
+            round_suffix = f" v kole {review_round}" if review_round else ""
+            yield Issue(table, f"{target_id}/{reviewer}", f"hodnotitel má více kontrol téhož záznamu{round_suffix} ({count}×)")
 
 
 def check_candidate_sources(dataset: Dataset) -> Iterator[Issue]:

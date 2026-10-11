@@ -41,6 +41,7 @@ from investor_db.schema import (
     REVIEWER_INDEPENDENT,
     REVIEWER_PRIMARY,
     REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_CORRECTION,
     REVIEW_ROUND_SAMPLE,
     STATUSES,
 )
@@ -55,6 +56,7 @@ PROCESSING_LABELS = {
 REVIEW_ROUND_LABELS = {
     REVIEW_ROUND_SAMPLE: "Původní kontrola – náhodný vzorek faktů",
     REVIEW_ROUND_COMPLETION: "Kontrola po doplnění – všechny fakty přidané doplňováním",
+    REVIEW_ROUND_CORRECTION: "Kontrola po opravě – fakty změněné nebo přidané při opravách po kontrole",
 }
 
 REQUIREMENT_LABELS = {

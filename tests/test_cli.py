@@ -96,3 +96,22 @@ def test_completion_round_requires_first_fact(data_dir: Path) -> None:
 def test_missing_data_file_is_reported(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["--data-dir", str(tmp_path), "validate"]) == 2
     assert "Chyba načtení dat" in capsys.readouterr().out
+
+
+def test_correction_round_lists_given_facts_even_if_reviewed_before(data_dir: Path) -> None:
+    arguments = ["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1", "--round", "po_oprave"]
+
+    assert main([*arguments, "--facts", "f-00001,f-00003,f-99999"]) == 0
+
+    dataset = load_dataset(data_dir)
+    assert [row["fact_id"] for row in dataset.fact_reviews if row["review_round"] == "po_oprave"] == ["f-00001", "f-00003"]
+    assert [row["fact_id"] for row in dataset.fact_reviews if row["review_round"] == "vzorek"] == ["f-00001"]
+    assert main(["--data-dir", str(data_dir), "validate"]) == 0
+    assert main([*arguments, "--facts", "f-00001"]) == 0
+    assert len(load_dataset(data_dir).fact_reviews) == 3
+
+
+def test_correction_round_requires_facts(data_dir: Path) -> None:
+    arguments = ["--data-dir", str(data_dir), "fact-review-template", "--reviewer", "R1", "--round", "po_oprave"]
+
+    assert main(arguments) == 1

@@ -262,7 +262,7 @@ Jeden subjekt může být nalezen ve více průchodech. Každý subjekt v `inves
 
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
-Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`.
+Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`. `po_oprave` obsahuje fakty změněné nebo přidané při opravách po kontrole (`--round po_oprave --facts …`). Fakt má v každém kole vlastní řádek a přesnost se počítá pro každé kolo zvlášť.
 
 ## 2.5 Validace integrity
 

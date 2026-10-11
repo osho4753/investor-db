@@ -15,6 +15,7 @@ from investor_db.schema import (
     FACT_REVIEW_COLUMNS,
     REVIEW_COLUMNS,
     REVIEW_ROUND_COMPLETION,
+    REVIEW_ROUND_CORRECTION,
     REVIEW_ROUND_SAMPLE,
     REVIEW_ROUNDS,
     REVIEWERS,
@@ -42,6 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
         if name == "fact-review-template":
             command.add_argument("--round", dest="review_round", choices=REVIEW_ROUNDS, default=REVIEW_ROUND_SAMPLE)
             command.add_argument("--from-fact", help="u kola po_doplneni: první fact_id přidaný doplňováním")
+            command.add_argument("--facts", help="u kola po_oprave: fact_id opravených faktů oddělená čárkou")
     guide = commands.add_parser("review-guide", help="vygeneruje kontrolní list faktů pro hodnotitele")
     guide.add_argument("--output", type=Path, default=DEFAULT_CHECKLIST_PATH)
     guide.set_defaults(handler=run_review_guide)
@@ -89,6 +91,8 @@ def fact_review_targets(args: argparse.Namespace, dataset: Dataset) -> list[str]
     fact_ids = [row["fact_id"] for row in dataset.facts]
     if args.review_round == REVIEW_ROUND_COMPLETION:
         return facts_from(fact_ids, args.from_fact)
+    if args.review_round == REVIEW_ROUND_CORRECTION:
+        return sorted(set(args.facts.split(",")) & set(fact_ids))
     if has_round(dataset.fact_reviews, args.reviewer, REVIEW_ROUND_SAMPLE):
         return []
     return sample_fact_ids(fact_ids)
@@ -97,6 +101,9 @@ def fact_review_targets(args: argparse.Namespace, dataset: Dataset) -> list[str]
 def run_fact_review_template(args: argparse.Namespace) -> int:
     if args.review_round == REVIEW_ROUND_COMPLETION and not args.from_fact:
         print("Kolo po_doplneni vyžaduje --from-fact.")
+        return 1
+    if args.review_round == REVIEW_ROUND_CORRECTION and not args.facts:
+        print("Kolo po_oprave vyžaduje --facts.")
         return 1
     dataset = load_dataset(args.data_dir)
     targets = fact_review_targets(args, dataset)
