@@ -16,6 +16,8 @@ from investor_db.metrics import (
     CapitalSummary,
     RequirementCompleteness,
     category_investors,
+    category_scope,
+    category_verdicts,
     fact_accuracy,
     field_completeness,
     investor_capital,
@@ -272,12 +274,18 @@ def category_lines(dataset: Dataset, category: str) -> list[str]:
     ]
     lines += effort_table(effort)
     lines += ["", f"- Fakta z primárních zdrojů: {format_proportion(primary_fact_share(dataset, category_facts(dataset, assessed_ids)))}"]
-    result = precision(dataset, REVIEWER_PRIMARY, category)
-    if result.strict.denominator + result.unsure:
-        lines += [
-            "",
-            f"- Precision R1: TP = {result.true_positives}, FP = {result.false_positives}, nejisté = {result.unsure}; "
-            f"{format_proportion(result.strict)}",
+    scope = category_scope(dataset, category)
+    lines += [
+        f"- Ověřená pravost (skutečný investor kategorie, i mimo zemi pilotu): {scope.authentic}/{scope.assessed}",
+        f"- V rámci země pilotu (česká právnická osoba, status `overeny`): {scope.in_pilot_country}/{scope.assessed}",
+        "- Studie proveditelnosti: výsledky se uvádějí v počtech, ne jako procento.",
+    ]
+    verdicts = category_verdicts(dataset, REVIEWER_PRIMARY, category)
+    if verdicts:
+        lines += [""] + [
+            f"- Kontrola R1 u statusu `{status}`: " + ", ".join(f"{verdict} {count}" for verdict, count in sorted(counts.items()))
+            + f" (z {counts.total()})"
+            for status, counts in sorted(verdicts.items())
         ]
     else:
         lines += ["", "- Ruční kontrola R1 v této kategorii zatím není vyplněna."]

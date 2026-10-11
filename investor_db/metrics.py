@@ -7,6 +7,7 @@ from decimal import Decimal
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    EXCLUSION_FOREIGN,
     FACT_EXCLUSION_REASON,
     CATEGORY_VC,
     AMOUNT_INVESTED_PERIOD,
@@ -121,6 +122,33 @@ def category_investors(dataset: Dataset, category: str, statuses: tuple[str, ...
         if row["category"] == category and row["verification_status"] in statuses
     }
     return [row for row in dataset.investors if row["investor_id"] in assessed]
+
+
+@dataclass(frozen=True)
+class CategoryScope:
+    assessed: int
+    authentic: int
+    in_pilot_country: int
+
+
+def category_scope(dataset: Dataset, category: str) -> CategoryScope:
+    rows = [row for row in dataset.category_assessments if row["category"] == category]
+    return CategoryScope(
+        assessed=len(rows),
+        authentic=sum(
+            row["verification_status"] == STATUS_VERIFIED or row["exclusion_reason"] in OUT_OF_COUNTRY_REASONS for row in rows
+        ),
+        in_pilot_country=sum(row["verification_status"] == STATUS_VERIFIED for row in rows),
+    )
+
+
+def category_verdicts(dataset: Dataset, reviewer: str, category: str) -> dict[str, Counter[str]]:
+    statuses = {row["investor_id"]: row["verification_status"] for row in dataset.category_assessments if row["category"] == category}
+    grouped: dict[str, Counter[str]] = defaultdict(Counter)
+    for row in dataset.reviews:
+        if row["reviewer"] == reviewer and row["category"] == category and row["verdict"] and row["investor_id"] in statuses:
+            grouped[statuses[row["investor_id"]]][row["verdict"]] += 1
+    return dict(grouped)
 
 
 def eligible_for_precision(dataset: Dataset, category: str) -> set[str]:
@@ -417,6 +445,7 @@ def review_efforts(rows: list[Row]) -> list[ReviewEffort]:
     ]
 
 
+OUT_OF_COUNTRY_REASONS = (EXCLUSION_FOREIGN,)
 CAPITAL_AUM = "assets_under_management"
 CAPITAL_INVESTED = "invested_capital"
 CAPITAL_KINDS = (*FUND_AMOUNT_TYPES, CAPITAL_AUM, CAPITAL_INVESTED)

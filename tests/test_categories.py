@@ -98,3 +98,21 @@ def test_category_facts_do_not_change_vc_pilot_fact_share(dataset: Dataset) -> N
     after = render_report(dataset, TODAY)
 
     assert vc_line in after
+
+
+def test_foreign_investor_counts_as_authentic_but_outside_pilot_country(dataset: Dataset) -> None:
+    make_pe_candidate(dataset)
+    dataset.category_assessments.append(assessment())
+    dataset.investors.append(dict(dataset.investors[2], investor_id="inv-0004", registry_id="", country="PL"))
+    dataset.facts.append(fact("f-00020", "duvod_vylouceni", "zahranicni_subjekt", "src-0003", investor_id="inv-0004"))
+    dataset.investors[-1]["evidence_urls"] = "https://zpravy.example.net/fiktivni-investice"
+    dataset.category_assessments.append(dict(assessment("vyloucen", "zahranicni_subjekt"), investor_id="inv-0004"))
+    dataset.reviews.append(
+        {"investor_id": "inv-0004", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "5", "note": "", "category": "pe"}
+    )
+
+    report = render_report(dataset, TODAY)
+
+    assert "- Ověřená pravost (skutečný investor kategorie, i mimo zemi pilotu): 2/2" in report
+    assert "- V rámci země pilotu (česká právnická osoba, status `overeny`): 1/2" in report
+    assert "- Kontrola R1 u statusu `vyloucen`: TP 1 (z 1)" in report
