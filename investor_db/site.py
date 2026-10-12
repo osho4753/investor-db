@@ -5,6 +5,7 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Final
 
+from investor_db.evidence import InvestorEvidence, verified_evidence
 from investor_db.io import Dataset, Row, load_dataset
 from investor_db.markup import (
     REPOSITORY_URL,
@@ -103,6 +104,18 @@ FIELD_LABELS: Final = {
     "registrace_regulator": "Registrace u regulátora",
     "dolozena_investice": "Doložená investice",
     "duvod_vylouceni": "Důvod vyloučení",
+}
+TYPE_LABELS: Final = {
+    "vc": "VC",
+    "pe": "PE",
+    "cvc": "korporátní VC",
+    "fond_fondu": "fond fondů",
+    "statni_fond": "státní fond",
+    "business_angel": "business angel",
+    "family_office": "family office",
+    "akcelerator": "akcelerátor",
+    "crowdfunding": "crowdfunding",
+    "jiny": "jiný",
 }
 FACT_VERDICT_LABELS: Final = {"spravne": "správně", "chybne": "chybně", "nelze_overit": "nelze ověřit"}
 ROUND_LABELS: Final = {"vzorek": "vzorek", "po_doplneni": "po doplnění", "po_oprave": "po opravě"}
@@ -483,6 +496,37 @@ def investor_list(dataset: Dataset) -> str:
     return f'{filters}<div class="invlist">{head}{rows}</div>'
 
 
+def activity_text(evidence: InvestorEvidence) -> str:
+    fact = evidence.activity_fact
+    if fact is None:
+        return "–"
+    label = fact["value"] if evidence.is_investment else f"nový fond: {fact['fund_name']}"
+    return f"{label} ({fact['value_as_of']})"
+
+
+def verified_table(dataset: Dataset) -> str:
+    sources_by_id = {row["source_id"]: row for row in dataset.sources}
+    rows = []
+    for evidence in verified_evidence(dataset):
+        investor = evidence.investor
+        fact = evidence.activity_fact
+        source = (
+            f'<a href="{escape(sources_by_id[fact["source_id"]]["url"])}" rel="noopener">{escape(sources_by_id[fact["source_id"]]["publisher"])} ↗</a>'
+            if fact
+            else "–"
+        )
+        rows.append(
+            f'<tr><td><b>{escape(investor["name"])}</b></td><td class="mono">{escape(investor["registry_id"])}</td>'
+            f'<td>{escape(TYPE_LABELS[investor["investor_type"]])}</td><td>{escape(activity_text(evidence))}</td><td>{source}</td></tr>'
+        )
+    head = "<tr><th>Investor</th><th>IČO</th><th>Typ</th><th>Poslední doložená investice</th><th>Zdroj</th></tr>"
+    return (
+        f'<h3 id="overeni" class="docs">Ověření investoři ({len(rows)})</h3>'
+        f'<div class="tablewrap"><table><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>'
+        '<p class="note-small">U investorů bez doložené investice je uveden nejnovější doložený fond (kritérium Z4).</p>'
+    )
+
+
 def stories(readme: str) -> str:
     cards = "".join(
         f'<div class="story"><span class="k">chyba {escape(number)}</span><p>{inline(error)}</p>'
@@ -498,7 +542,8 @@ def data_page(sources: SiteSources) -> str:
         '<section><div class="wrap"><p class="eyebrow">Data</p><h2>Co je v databázi</h2>'
         f"{render_text(sources.texts['data'])}{funnel_svg(dataset)}"
         f'<div class="grid2">{reason_bars(dataset)}{time_panel(dataset)}</div>'
-        f"{investor_list(dataset)}"
+        f"{verified_table(dataset)}"
+        f'<h3 class="docs">Všechny nalezené subjekty</h3>{investor_list(dataset)}'
         f'<h2 id="chyby" class="spaced">Co se pokazilo a jak se to opravilo</h2>{render_text(sources.texts["chyby"])}{stories(sources.readme)}'
         f"{links([('data/', 'data/ (CSV)'), ('README.md', 'README')])}</div></section>"
     )
@@ -615,6 +660,7 @@ h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:700;margin-bottom:10px}
 h2.spaced{margin-top:56px}
 h3{font-size:1.15rem;font-weight:700}
 h3.docs{margin-top:28px;margin-bottom:10px}
+.note-small{font-size:.85rem;color:var(--muted);margin-top:8px}
 h4{margin:6px 0 0;font-size:1rem}
 .lede p{font-size:1.1rem;color:var(--muted);max-width:66ch}
 p{max-width:70ch}

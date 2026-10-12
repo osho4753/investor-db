@@ -2,6 +2,16 @@
 
 Prezentační web: https://investor-db-woad.vercel.app/
 
+## Shrnutí na jednu obrazovku
+
+Výsledkem je reprodukovatelný proces a pilotní databáze VC investorů v Česku z bezplatných veřejných zdrojů. Každý údaj má zdroj, datum přístupu a popis důkazu a ruční kontrola R1 změřila přesnost.
+
+- **16 ověřených VC investorů** z 52 nalezených subjektů (4 kandidáti, 32 vyloučených s důvodem).
+- **Precision 15/15** ověřených podle ruční kontroly R1 (95% interval 79,6–100 %).
+- **Přesnost faktů 32/34** (94,1 %) na náhodném vzorku, přísně 32/36.
+
+Tabulka 16 ověřených investorů: [web](https://investor-db-woad.vercel.app/data.html#overeni), data v [`data/investors.csv`](data/investors.csv). Jak data zkontrolovat: [Návod pro hodnotitele](#návod-pro-hodnotitele).
+
 Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařadí a ověří investory do firem. Každý údaj je fakt se zdrojem, datem přístupu a popisem důkazu. Hlavním cílem je spolehlivost dat, ne počet záznamů. Pilot pokrývá **venture kapitál (VC) v Česku**. Pro PE proběhl mini-pilot, pro family office, angel investory a velké soukromé investory studie proveditelnosti. Zadání je v [docs/00-zadani.md](docs/00-zadani.md).
 
 ## Klíčové výsledky

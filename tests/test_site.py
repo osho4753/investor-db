@@ -16,7 +16,8 @@ from investor_db.markup import (
     timeline_entries,
 )
 from investor_db.schema import CATEGORY_EXCLUSION_REASONS, FACT_FIELDS
-from investor_db.site import ERRORS_HEADING, FIELD_LABELS, REASON_LABELS, SITE_DIR, SUMMARY_HEADING, TEXTS_DIR, build_site
+from investor_db.schema import INVESTOR_TYPES
+from investor_db.site import ERRORS_HEADING, FIELD_LABELS, REASON_LABELS, SITE_DIR, SUMMARY_HEADING, TEXTS_DIR, TYPE_LABELS, build_site, verified_table
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -82,6 +83,14 @@ def test_site_is_built_from_dataset(site_root: Path) -> None:
     assert "1/1" in pages["index.html"]
 
 
+def test_verified_table_is_generated_from_data() -> None:
+    table = verified_table(build_valid_dataset())
+
+    assert "Ověření investoři (1)" in table
+    assert "<td class=\"mono\">12345679</td><td>VC</td><td>Fiktivní Startup s.r.o. (2025-11-15)</td>" in table
+    assert 'href="https://' in table
+
+
 def test_site_command_writes_files(site_root: Path) -> None:
     output = site_root / "out"
 
@@ -93,6 +102,7 @@ def test_site_command_writes_files(site_root: Path) -> None:
 def test_labels_cover_vocabularies() -> None:
     assert set(FACT_FIELDS) <= FIELD_LABELS.keys()
     assert set(CATEGORY_EXCLUSION_REASONS) <= REASON_LABELS.keys()
+    assert set(INVESTOR_TYPES) <= TYPE_LABELS.keys()
 
 
 @pytest.mark.parametrize(
