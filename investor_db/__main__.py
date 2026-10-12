@@ -26,6 +26,7 @@ from investor_db.schema import (
     REVIEWERS,
 )
 from investor_db.site import SITE_DIR, write_site
+from investor_db.tokens import render_usage, session_usage
 from investor_db.validation import validate_dataset
 
 DEFAULT_DATA_DIR = Path("data")
@@ -62,6 +63,10 @@ def build_parser() -> argparse.ArgumentParser:
     site = commands.add_parser("site", help="vygeneruje statický web z dat a dokumentace")
     site.add_argument("--output", type=Path, default=Path(SITE_DIR))
     site.set_defaults(handler=run_site)
+    tokens = commands.add_parser("tokens", help="sečte spotřebu tokenů a cenu z transkriptu Claude Code (JSONL)")
+    tokens.add_argument("transcripts", type=Path, nargs="+")
+    tokens.add_argument("--investors", type=int, required=True, help="počet ověřovaných investorů")
+    tokens.set_defaults(handler=run_tokens)
     raw = commands.add_parser("raw-text", help="stáhne surový text stránky (mimo repozitář) a vyhledá v něm výraz")
     raw.add_argument("url")
     raw.add_argument("--grep", help="regulární výraz k vyhledání")
@@ -183,6 +188,11 @@ def run_site(args: argparse.Namespace) -> int:
         return 1
     written = write_site(args.data_dir.parent, args.output)
     print(f"Web uložen do {args.output}: {', '.join(path.name for path in written)}.")
+    return 0
+
+
+def run_tokens(args: argparse.Namespace) -> int:
+    print(render_usage(session_usage(args.transcripts), args.investors), end="")
     return 0
 
 

@@ -30,5 +30,4 @@ Celá práce proběhla v jedné session Claude Code, `d385e1f5-0229-46e8-8649-3f
 | Soubor | Obsah |
 |---|---|
 | [claude-conversation-2026-10-09-d385e1f5.md](claude-conversation-2026-10-09-d385e1f5.md) | Úplný export celé session `d385e1f5` nástrojem claude-conversation-extractor bez `--detailed`: 43 zpráv uživatele od prvního zadání po prezentační web, fáze 1–8. |
-
-Měření spotřeby tokenů ze samostatné session bylo připraveno, ale zrušeno (docs/03, 3.5). Samostatná session „měření tokenů“ proto neexistuje.
+| [mereni-tokenu-2026-10-13.md](mereni-tokenu-2026-10-13.md) | Samostatná session `aba0e2c0` (13. 10. 2026) pro měření tokenů: znovu ověřila 3 investory bez přístupu k datům. Obsahuje prompt, odpověď session, výstup skriptu `tokens` a porovnání s daty. Transkript JSONL se neukládá, obsahuje texty stažených stránek. |

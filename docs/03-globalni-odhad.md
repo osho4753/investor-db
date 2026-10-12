@@ -66,11 +66,12 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pi
 | Vstup | Hodnota | Zdroj |
 |---|---|---|
 | Čas modelu na ověřeného investora (hledání, triáž, ověření, doplnění; sjednocená definice v 3.8) | (5,55 + 0,66 + 80,1 + 23,9) min / 16 = **6,9 min** | `effort_log.csv`, `search_log.csv` |
+| Tokeny a cena API na ověřeného investora (opakované ověření, n = 3) | **363 690 tokenů, 0,365 USD** | [ai-log/mereni-tokenu-2026-10-13.md](../ai-log/mereni-tokenu-2026-10-13.md) |
 | Čas člověka na kontrolu investora | **15,5 min** | `reviews.csv` (první kontrola) |
 | Čas člověka na kontrolu faktu | **0,96 min** | `fact_reviews.csv` |
 | Vzorek na region | 25 investorů a 36 faktů (±15 p. b.) | Cochran, viz [04-rucni-kontrola.md](04-rucni-kontrola.md) |
 
-Čas modelu je čas běhu nástrojů včetně čekání na stránky a omezení rychlosti. Spotřebu tokenů pilot neměřil.
+Čas modelu je čas běhu nástrojů včetně čekání na stránky a omezení rychlosti.
 
 ### Výpočet
 
@@ -84,13 +85,30 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pi
 
 Čas běhu jde paralelizovat mezi domény. Omezení rychlosti platí pro každou doménu zvlášť, celková doba sběru tedy závisí na počtu souběžných pracovníků, ne na součtu hodin.
 
-**API modelu [P].** Odhad počítá se 100 000–400 000 tokenů na ověřeného investora a cenou 3–15 USD za milion tokenů. **Měření tokenů nebylo provedeno.** Postup byl připraven: samostatná session znovu ověří 3 investory a skript sečte `usage` z transkriptů Claude Code. Zadavatel ho ale při uzávěrce projektu zrušil. Obě čísla jsou proto předpoklady a před škálováním je třeba je změřit. Vychází to na 0,30–6 USD na investora:
+**API modelu [M].** Samostatná session Claude Code (Opus 5.5) znovu ověřila 3 ověřené investory podle metodiky: Soulmates (nejsnazší podle `effort_log`), Purple (medián) a Lighthouse (nejsložitější). Skript `python -m investor_db tokens` sečetl spotřebu z transkriptu session. Postup, výstup skriptu a porovnání s daty jsou v [ai-log/mereni-tokenu-2026-10-13.md](../ai-log/mereni-tokenu-2026-10-13.md).
 
-| Scénář | API, první sběr |
-|---|---|
-| Nízký | 1 571–31 410 USD |
-| Základní | 2 175–43 506 USD |
-| Vysoký | 2 905–58 092 USD |
+| Model | Tokenů | Cena |
+|---|---|---|
+| Opus 5.5 (session): vstup 22, výstup 10 242, čtení cache 714 750, zápis cache 1h 79 620 | 804 634 | 0,985 USD |
+| Haiku 5.5 (interně ve WebFetch a WebSearch) a 7 vyhledávání | 286 436 | 0,109 USD |
+| **Celkem za 3 investory** | **1 091 070** | **1,094 USD** |
+| **Na ověřeného investora** | **363 690** | **0,365 USD** |
+
+Ceník: [platform.claude.com/docs/en/about-claude/pricing](https://platform.claude.com/docs/en/about-claude/pricing), otevřeno 13. 10. 2026. Opus 5.5 stojí 4 USD za milion vstupních tokenů, 20 USD za výstup, 0,20 USD za čtení cache a 8 USD za zápis do hodinové cache; vyhledávání 0,01 USD. Session běžela 2 min 43 s. Dřívější předpoklad byl 100 000–400 000 tokenů a 0,30–6 USD na investora. Počet tokenů vyšel u horní hranice, cena u spodní, protože 66 % tokenů tvoří levné čtení z cache.
+
+**Cena na záznam v databázi.** Měření pokrývá jen opakované ověření hotového investora. Při prvním sběru se navíc ověřují subjekty, které skončí jako kandidáti nebo vyloučení, a zapisují se fakta:
+
+- **nízký:** 0,36 USD [M] – jen ověření jednoho investora;
+- **základní:** 0,36 × 30 posouzených / 16 ověřených = **0,68 USD** [M] – ověření i subjektů, které se do databáze nedostanou (poměr z pilotu);
+- **vysoký:** 0,68 × 2 = 1,37 USD [M+P] – zdvojnásobení za zápis dat, doplnění polí a opravy po kontrole je předpoklad.
+
+| Scénář počtu VC | Investorů | API, první sběr (0,36 / 0,68 / 1,37 USD na záznam) |
+|---|---|---|
+| Nízký | 5 235 | 1 909 / 3 579 / 7 159 USD |
+| Základní | 7 251 | 2 644 / 4 958 / 9 916 USD |
+| Vysoký | 9 682 | 3 531 / 6 620 / 13 240 USD |
+
+Omezení: n = 3, jeden běh a jedna země. Session neověřovala proti surovému textu stránek, takže úroveň ověření je nižší než v pilotu.
 
 **Člověk.** Ruční kontrola je výběrová, její rozsah proto závisí na počtu regionů, ne na počtu investorů:
 - 25 × 15,5 + 36 × 0,96 = **422 min (7,0 h) na region a hodnotitele**;
@@ -206,7 +224,7 @@ Svět: USA 2 984 [Z: G1], Evropa = 3 095 [Z: G3] × podíl VC 0,4–0,6 [P], zby
 
 Pole zadání [M]: sektor 15/16, ticket 14/16, kapitál 13/16.
 
-**Náklady [M]:** model 6,9 min na ověřený záznam (sjednocená definice). Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
+**Náklady [M]:** model 6,9 min na ověřený záznam (sjednocená definice). API 0,68 USD na záznam (0,36–1,37, viz 3.5). Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
 
 ### PE
 
@@ -244,7 +262,7 @@ Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v p
 
 **Přesnost faktů:** kontrolou faktů neměřena. Očekává se 85–95 % jako u VC [P], protože jde o stejnou metodiku.
 
-**Náklady [M]:** model 1,15 min na pravého PE investora (sjednocená definice, n = 5).
+**Náklady [M]:** model 1,15 min na pravého PE investora (sjednocená definice, n = 5). API 0,11 USD na záznam [M+P]: cena VC × 1,15 / 6,9 min.
 
 ### Family office
 
@@ -266,7 +284,7 @@ Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v p
 
 **Spolehlivost [P]:** 70–90 %. Hlavním rizikem je klasifikace: vlastní, nebo cizí kapitál; přímá investice, nebo LP. Stejný typ chyby převažoval v kole `po_doplneni` (6/7 nálezů [M]). Pole zadání: kapitál 0/5 [M], sektor a výše zřídka.
 
-**Náklady [P]:** model 2–4× čas ověření a doplnění u VC, tedy 14–28 min na záznam (střed 21 min). Chybí registr i seznam kandidátů. Člověk 15–30 min.
+**Náklady [P]:** model 2–4× čas ověření a doplnění u VC, tedy 14–28 min na záznam (střed 21 min). Chybí registr i seznam kandidátů. API 2,08 USD na záznam [P]: cena VC × 21 / 6,9 min. Člověk 15–30 min.
 
 ### Angel investoři
 
@@ -282,7 +300,7 @@ Při 5 záznamech jde o studii proveditelnosti, výsledek se proto neuvádí v p
 
 **Spolehlivost [P]:** 80–95 % u identity a investice, pokud stojí na vlastním zveřejnění. Pole zadání [M]: sektor a ticket 2/11 profilů v CBAA, kapitál se neukládá.
 
-**Náklady [P]:** model 14–28 min na záznam. Navíc informační povinnost podle čl. 14 GDPR, 5–10 min na osobu. Člověk 15–30 min.
+**Náklady [P]:** model 14–28 min na záznam. Navíc informační povinnost podle čl. 14 GDPR, 5–10 min na osobu. API 2,82 USD na záznam [P]: cena VC × 28,5 / 6,9 min. Člověk 15–30 min.
 
 **Omezení:** CBAA záměrně brání indexaci seznamu členů (1.12).
 
@@ -300,19 +318,19 @@ Kategorie se částečně překrývá s family office.
 
 **Spolehlivost [P]:** 70–90 %.
 
-**Náklady [P]:** model 14–28 min a GDPR 5–10 min jako u angelů. Člověk 15–30 min.
+**Náklady [P]:** model 14–28 min a GDPR 5–10 min jako u angelů. API 2,82 USD na záznam [P] jako u angelů. Člověk 15–30 min.
 
 ### Souhrnná tabulka (základní scénář, v závorce nízký – vysoký)
 
 Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpočet z obou.
 
-| Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | Člověk na kontrolu záznamu |
-|---|---|---|---|---|---|---|
-| VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision 15/15 [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 15,5 min [M] |
-| PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 9 min [M, n = 5] |
-| Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 15–30 min [P] |
-| Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
-| Velký soukromý investor | 21 (11–42) [Z: E8 × P] | 62 600 (31 300–125 200) [Z: E7 × P] | 20 % (10–30 %) [P] | 70–90 % [P] | 14–28 + GDPR 5–10 min [P] | 15–30 min [P] |
+| Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | API na záznam | Člověk na kontrolu záznamu |
+|---|---|---|---|---|---|---|---|
+| VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision 15/15 [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 0,68 USD (0,36–1,37) [M] | 15,5 min [M] |
+| PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 0,11 USD (0,06–0,23) [M+P] | 9 min [M, n = 5] |
+| Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 2,08 USD (1,11–4,16) [P] | 15–30 min [P] |
+| Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 2,82 USD (1,51–5,65) [P] | 15–30 min [P] |
+| Velký soukromý investor | 21 (11–42) [Z: E8 × P] | 62 600 (31 300–125 200) [Z: E7 × P] | 20 % (10–30 %) [P] | 70–90 % [P] | 14–28 + GDPR 5–10 min [P] | 2,82 USD (1,51–5,65) [P] | 15–30 min [P] |
 
 **Čas modelu na získatelné záznamy ve světě, základní scénář** (bez koeficientů regionů z 3.4):
 
@@ -323,6 +341,19 @@ Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpo�
 | Family office | 4 015 × 0,15 × 21 min [P] | 211 |
 | Angel investor | 197 000 × 0,1 × (21 + 7,5) min [P] | 9 358 |
 | Velký soukromý investor | 62 600 × 0,2 × (21 + 7,5) min [P] | 5 947 |
+
+**Náklady API na získatelné záznamy ve světě, základní scénář počtu** (bez koeficientů regionů z 3.4). Cena na záznam u kategorií mimo VC = měřená cena VC × poměr času modelu ke 6,9 min. Předpoklad [P] je, že tokeny rostou úměrně času modelu; u PE stojí na měřeném čase (n = 5), u family office, angelů a velkých soukromých investorů na předpokládaném čase.
+
+| Kategorie | Záznamů | Poměr času k VC | USD na záznam (nízký / základní / vysoký) | API celkem, USD (nízký / základní / vysoký) |
+|---|---|---|---|---|
+| VC | 5 801 [Z+M] | 1,00 [M] | 0,36 / 0,68 / 1,37 [M] | 2 115 / 3 966 / 7 933 |
+| PE | 9 812 [Z+P] | 0,17 [M] | 0,06 / 0,11 / 0,23 [M+P] | 596 / 1 118 / 2 236 |
+| Family office | 602 [Z×P] | 3,04 [P] | 1,11 / 2,08 / 4,16 [P] | 668 / 1 253 / 2 507 |
+| Angel investor | 19 700 [P] | 4,13 [P] | 1,51 / 2,82 / 5,65 [P] | 29 673 / 55 637 / 111 273 |
+| Velký soukromý investor | 12 520 [Z×P] | 4,13 [P] | 1,51 / 2,82 / 5,65 [P] | 18 858 / 35 359 / 70 718 |
+| **Celkem** | 48 435 | | | **51 911 / 97 333 / 194 667** |
+
+Angelé a velcí soukromí investoři tvoří 94 % nákladu na API, ale jejich počty i čas na záznam jsou předpoklady. Spolehlivé jsou jen řádky VC a PE.
 
 **Jak číst výsledek:**
 
