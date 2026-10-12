@@ -9,7 +9,6 @@ Exporty konverzací s agentem Claude Code, ve kterých vznikl plán, data, kód 
   - **Velikost.** Detailní export obsahuje plné výstupy nástrojů. Transkript má 18,9 MB, většinu tvoří stažené stránky a výpisy příkazů.
   - **Autorská práva.** Plné výstupy obsahují texty stažených stránek (média, weby investorů). Ty se do repozitáře neukládají, stejně jako cache surového textu. Fakta odkazují na zdroj URL a krátce parafrázují důkaz.
 - Export bez `--detailed` obsahuje zprávy uživatele a odpovědi agenta. Volání nástrojů a jejich výstupy v něm nejsou, ty dokládají commity a data.
-- Exporty vkládá autor projektu.
 
 ## Sessions a fáze
 
@@ -30,7 +29,6 @@ Celá práce proběhla v jedné session Claude Code, `d385e1f5-0229-46e8-8649-3f
 
 | Soubor | Obsah |
 |---|---|
-| [export-2026-10-11-faze-1-4.md](export-2026-10-11-faze-1-4.md) | Export pořízený 11. 10. 2026 (commit `64d0fe1`), pokrývá fáze 1–4. Dříve uložen jako `ai-log/README.md`. |
-| další exporty | vloží autor projektu (fáze 5–8 nebo celá session) |
+| [claude-conversation-2026-10-09-d385e1f5.md](claude-conversation-2026-10-09-d385e1f5.md) | Úplný export celé session `d385e1f5` nástrojem claude-conversation-extractor bez `--detailed`: 43 zpráv uživatele od prvního zadání po prezentační web, fáze 1–8. |
 
 Měření spotřeby tokenů ze samostatné session bylo připraveno, ale zrušeno (docs/03, 3.5). Samostatná session „měření tokenů“ proto neexistuje.

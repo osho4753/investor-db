@@ -1,5 +1,7 @@
 # Investor Intelligence Database
 
+Prezentační web: https://investor-db-woad.vercel.app/
+
 Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařadí a ověří investory do firem. Každý údaj je fakt se zdrojem, datem přístupu a popisem důkazu. Hlavním cílem je spolehlivost dat, ne počet záznamů. Pilot pokrývá **venture kapitál (VC) v Česku**. Pro PE proběhl mini-pilot, pro family office, angel investory a velké soukromé investory studie proveditelnosti. Zadání je v [docs/00-zadani.md](docs/00-zadani.md).
 
 ## Klíčové výsledky
@@ -49,7 +51,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
 | Jen veřejně dostupná data | splněno | [docs/02](docs/02-metodika.md) 2.2, 2.8 | Jedno porušení `robots.txt` bylo zjištěno a opraveno (níže). |
 | Veřejný repozitář: plán, data se zdrojem u každého údaje, výsledek měření | splněno | tento repozitář | Validátor vynucuje fakt se zdrojem u každé vyplněné hodnoty. |
 | Kód s průběžnou historií commitů | splněno | `investor_db/`, `tests/`, `git log` | 76+ commitů od 9. 10. 2026 |
-| `ai-log` s exportem konverzací | **částečně** | [ai-log/](ai-log/) | Popis a mapování sessions jsou hotové, exporty vloží autor. |
+| `ai-log` s exportem konverzací | **splněno** | [ai-log/](ai-log/) | Úplný export celé session bez `--detailed`, popis a mapování fází na commity. |
 | README: práce s AI, rozhodnutí v nejasnostech, co chybí | splněno | níže | |
 
 ## Práce s AI
