@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Final
 
+from investor_db.evidence import InvestorEvidence, ares_url, verified_evidence
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
     EXCLUSION_REASONS,
@@ -628,3 +629,73 @@ def render_checklist(dataset: Dataset) -> str:
         body += lines
     body += render_exclusion_review(dataset)
     return "\n".join(header + body)
+
+
+INVESTOR_REVIEW_INTRO: Final = (
+    "Nové kolo kontroly R1-v2 u všech ověřených VC investorů. U každého investora ověř kritéria Z1–Z4 "
+    "(docs/01, oddíl 1.3) a rozhodni, zda jde o skutečného VC investora se sídlem v ČR."
+)
+INVESTOR_REVIEW_RULES: Final = (
+    "- **Povolené zdroje** podle docs/02: veřejné rejstříky (ARES), regulátor, web investora, výroční zprávy, asociace a média.",
+    "- **Nepoužívej** Crunchbase, LinkedIn ani agregátory (Dealroom, PitchBook, CB Insights, Caplight, Altss, Seedtable, Superscout). "
+    "Nejsou to povolené zdroje ani pro kontrolu.",
+    f"- **Odkaz ARES u Z1:** {ARES_JSON_HINT}",
+    "- Odkazy níže jsou z našich zdrojů. Můžeš hledat i vlastní povolené zdroje, pak je uveď v kolonce „Co přesně jsem viděl“.",
+    "- **Verdikt:** `TP` = skutečný VC investor v ČR (Z1–Z4 platí), `FP` = nepatří mezi ověřené VC, `nejiste` = zdroje nestačí.",
+    "- **Čas** zapiš skutečný v minutách od otevření prvního odkazu po verdikt, bez zaokrouhlování.",
+    "- Nepiš jména fyzických osob.",
+)
+REVIEW_BLANKS: Final = (
+    "| Kolonka (vyplní hodnotitel) | Hodnota |",
+    "|---|---|",
+    "| Verdikt (`TP` / `FP` / `nejiste`) | |",
+    "| Co přesně jsem viděl (zdroj, údaj, datum) | |",
+    "| Čas v minutách (skutečný, nezaokrouhlený) | |",
+)
+
+
+def evidence_line(label: str, fact: Row | None, investor: Row, sources: dict[str, Row]) -> list[str]:
+    if fact is None:
+        return [f"- **{label}:** v našich zdrojích chybí."]
+    source = sources[fact["source_id"]]
+    guide = build_fact_guide(fact, investor, source)
+    return [f"- **{label}:** {guide.claim} Fakt `{fact['fact_id']}`, zdroj: <{source['url']}> ({guide.source_label})."]
+
+
+def registry_url(evidence: InvestorEvidence, sources: dict[str, Row]) -> str:
+    if evidence.registry_fact:
+        return sources[evidence.registry_fact["source_id"]]["url"]
+    return ares_url(evidence.investor["registry_id"])
+
+
+def render_investor_review(index: int, evidence: InvestorEvidence, sources: dict[str, Row]) -> list[str]:
+    investor = evidence.investor
+    registry_id = investor["registry_id"]
+    activity_label = "Nejnovější doložená investice (Z4)" if evidence.is_investment else "Nejnovější doložený fond (Z4, investice chybí)"
+    lines = [
+        f"## {index}. {investor['name']} (`{investor['investor_id']}`)",
+        "",
+        f"- **Z1 – registr:** IČO {registry_id}, ARES: <{registry_url(evidence, sources)}>",
+    ]
+    lines += evidence_line("Z3 – kapitál třetích osob", evidence.fund_fact, investor, sources)
+    lines += evidence_line(activity_label, evidence.activity_fact, investor, sources)
+    return lines + ["", *REVIEW_BLANKS, ""]
+
+
+def render_investor_checklist(dataset: Dataset) -> str:
+    evidence = verified_evidence(dataset)
+    sources = {row["source_id"]: row for row in dataset.sources}
+    lines = [
+        f"# Kontrolní list R1-v2: ověření VC investoři ({len(evidence)})",
+        "",
+        "Vygenerováno příkazem `python -m investor_db investor-review-guide` z `data/*.csv`. "
+        "Odkazy a doklady neupravuj ručně, při změně dat list vygeneruj znovu. Vyplňuj jen kolonky v tabulkách.",
+        "",
+        INVESTOR_REVIEW_INTRO,
+        "",
+        *INVESTOR_REVIEW_RULES,
+        "",
+    ]
+    for index, item in enumerate(evidence, start=1):
+        lines += render_investor_review(index, item, sources)
+    return "\n".join(lines)

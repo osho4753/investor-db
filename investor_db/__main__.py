@@ -10,7 +10,7 @@ from investor_db.metrics import verified_ids
 from investor_db.rawtext import fetch_raw_text, find_first
 from investor_db.report import render_report
 from investor_db.review import add_pending_reviews, facts_from, has_round, sample_excluded_ids, sample_fact_ids
-from investor_db.review_guide import GuideTemplateError, render_checklist, sampled_fact_ids
+from investor_db.review_guide import GuideTemplateError, render_checklist, render_investor_checklist, sampled_fact_ids
 from investor_db.schema import (
     CATEGORY_VC_EXCLUDED,
     EXCLUDED_SAMPLE_SIZE,
@@ -31,6 +31,7 @@ from investor_db.validation import validate_dataset
 DEFAULT_DATA_DIR = Path("data")
 DEFAULT_RAW_CACHE_DIR = Path(tempfile.gettempdir()) / "investor-db-raw"
 DEFAULT_CHECKLIST_PATH = Path("review") / "kontrolni-list-faktu.md"
+DEFAULT_INVESTOR_CHECKLIST_PATH = Path("review") / "kontrolni-list-r1-v2.md"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -55,6 +56,9 @@ def build_parser() -> argparse.ArgumentParser:
     guide = commands.add_parser("review-guide", help="vygeneruje kontrolní list faktů pro hodnotitele")
     guide.add_argument("--output", type=Path, default=DEFAULT_CHECKLIST_PATH)
     guide.set_defaults(handler=run_review_guide)
+    investor_guide = commands.add_parser("investor-review-guide", help="vygeneruje kontrolní list R1-v2 ověřených investorů")
+    investor_guide.add_argument("--output", type=Path, default=DEFAULT_INVESTOR_CHECKLIST_PATH)
+    investor_guide.set_defaults(handler=run_investor_review_guide)
     site = commands.add_parser("site", help="vygeneruje statický web z dat a dokumentace")
     site.add_argument("--output", type=Path, default=Path(SITE_DIR))
     site.set_defaults(handler=run_site)
@@ -157,6 +161,19 @@ def run_review_guide(args: argparse.Namespace) -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(checklist, encoding="utf-8", newline="\n")
     print(f"Kontrolní list {len(sampled_fact_ids(dataset))} faktů uložen do {args.output}.")
+    return 0
+
+
+def run_investor_review_guide(args: argparse.Namespace) -> int:
+    dataset = load_dataset(args.data_dir)
+    try:
+        checklist = render_investor_checklist(dataset)
+    except GuideTemplateError as error:
+        print(f"Kontrolní list nelze vygenerovat: {error}")
+        return 1
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(checklist, encoding="utf-8", newline="\n")
+    print(f"Kontrolní list R1-v2 uložen do {args.output}.")
     return 0
 
 
