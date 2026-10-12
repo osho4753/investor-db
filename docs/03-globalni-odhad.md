@@ -84,7 +84,7 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pi
 
 Čas běhu jde paralelizovat mezi domény. Omezení rychlosti platí pro každou doménu zvlášť, celková doba sběru tedy závisí na počtu souběžných pracovníků, ne na součtu hodin.
 
-**API modelu (předpoklad).** Odhad počítá se 100 000–400 000 tokenů na ověřeného investora a cenou 3–15 USD za milion tokenů. Pilot tokeny neměřil, proto jde o předpoklad, který je při škálování třeba měřit. Vychází to na 0,30–6 USD na investora:
+**API modelu [P].** Odhad počítá se 100 000–400 000 tokenů na ověřeného investora a cenou 3–15 USD za milion tokenů. **Měření tokenů nebylo provedeno.** Postup byl připraven: samostatná session znovu ověří 3 investory a skript sečte `usage` z transkriptů Claude Code. Zadavatel ho ale při uzávěrce projektu zrušil. Obě čísla jsou proto předpoklady a před škálováním je třeba je změřit. Vychází to na 0,30–6 USD na investora:
 
 | Scénář | API, první sběr |
 |---|---|

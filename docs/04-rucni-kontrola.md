@@ -537,3 +537,22 @@ Pokud zdroj důvod nedokládá, ale subjekt přesto do VC nepatří (jiný důvo
 
 Odhad false negatives ve všech 32 vyloučených = podíl chybných vyloučení × 32. Při vzorku 10 je interval široký.
 
+### Výsledek kontroly vyloučených (R1, 12. 10. 2026)
+
+| Ukazatel | Výsledek |
+|---|---|
+| Zkontrolováno | 10 z 32 vyloučených (seed 2026) |
+| Vyloučení správně (`TP`) | 9 |
+| Subjekt patří do VC pilotu (`FP`) | 0 |
+| Nejisté | 1 |
+| Podíl správných vyloučení TP / (TP + FP) | **9/9** (95% Wilsonův interval 70,1–100 %) |
+| Pesimisticky, nejisté jako chybné | 9/10 (59,6–98,2 %) |
+| Možné false negatives ve vzorku | 1 z 10 |
+| Čas R1 | 36 min, 3,6 min na subjekt |
+
+**Nejistý případ: Fond rizikového kapitálu, s.r.o. (`zanikly_subjekt`).** Důvod vyloučení dokládá jen vyhledávací API ARES (POST `/vyhledat`). R1 ho nemohl otevřít v prohlížeči ani výsledek zopakovat. Neaktivitu R1 považuje za pravděpodobnou, ale z uvedeného zdroje ji ověřit nešlo. Doklad „nic nenalezeno“ přes POST API je tedy pro hodnotitele nereprodukovatelný. Kontrolní list sice obsahuje nápovědu „vyhledej název na ares.gov.cz“, ale to stejný dotaz nezaručuje.
+
+**Odhad false negatives mezi 32 vyloučenými.** Ve vzorku nebyl žádný `FP`. Bodový odhad je tedy 0. Horní mez 95% intervalu pro podíl chybných vyloučení je 29,9 %, tj. nejvýš zhruba 10 z 32 subjektů. Pesimisticky (nejisté jako chybné) je bodový odhad 1/10, tj. asi 3 subjekty. Hodnotitel u vzorku našel jen jeden nejistý doklad, ne subjekt, který by do VC patřil.
+
+**Shrnutí kontrol false negatives.** Nenáhodná kontrola R1 v 4.6 našla dva false negatives (Lighthouse, Tachles). Oba byli kandidáti, ne vyloučení, a byly opraveny. Náhodný vzorek vyloučených žádný false negative nenašel.
+

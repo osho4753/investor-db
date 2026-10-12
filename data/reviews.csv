@@ -26,13 +26,13 @@ inv-0015,R1,2026-10-12,TP,10,"CVCA i web uvádějí jen Varšavu (Varso Tower) a
 inv-0018,R1,2026-10-12,TP,5,"Kontakt na webu: poradenská kancelář Varšava a general partner Lucemburk; CVCA jen Varšava. Česká entita nenalezena (ARES podle názvu jsem nespouštěl, vycházím z f-00319). Skutečný PE investor: ano (mid-market buyouty, Innova/7 407 mil. EUR).",pe
 inv-0023,R1,2026-10-12,TP,10,"IČO 03965953 v ARES sedí (VERSUTE INVESTMENTS a.s., Vodičkova 709/33, Praha 1). CVCA: growth capital, LBO, MBO/MBI. Z4: Unipap 24. 9. 2025 – Deloitte M&A: BHS Private Equity Fund (poradce Versute, aktiva 1,5 mld. Kč) získává polovinu. versute.cz zakazuje robotům přístup, stránku podfondu ani článek Forbes jsem neotevřel; Z3 opírám o fondovou strukturu BHS.",pe
 inv-0024,R1,2026-10-12,TP,15,"Kontakt: V4C General Partner II Sarl (Lucemburk), V4C Advisers Sp. z o.o. (Varšava), kancelář Bukurešť; česká entita neuvedena. V4C, s.r.o. (IČO 27657981, Praha 9) má předmět hostinská činnost a prodej lihovin, jediná společnice Diana Suchá – se značkou nesouvisí. Skutečný PE investor: ano (buyout fondy V4C Poland Plus).",pe
-inv-0005,R1,,,,,vc_vyloucene
-inv-0012,R1,,,,,vc_vyloucene
-inv-0016,R1,,,,,vc_vyloucene
-inv-0024,R1,,,,,vc_vyloucene
-inv-0025,R1,,,,,vc_vyloucene
-inv-0030,R1,,,,,vc_vyloucene
-inv-0031,R1,,,,,vc_vyloucene
-inv-0040,R1,,,,,vc_vyloucene
-inv-0046,R1,,,,,vc_vyloucene
-inv-0051,R1,,,,,vc_vyloucene
+inv-0005,R1,2026-10-12,TP,4,"CVCA: Praha 6; growth financing, financování akvizic, restrukturalizace vlastnictví, MBO; ticket 1–3 mil. EUR. Venture ani seed neuvádí, vyloučení jako PE sedí.",vc_vyloucene
+inv-0012,R1,2026-10-12,TP,3,"CVCA: Budapešť; typ investic „Private Equity“, ticket 5–15 mil. EUR. Vyloučení jako PE sedí (navíc zahraniční sídlo).",vc_vyloucene
+inv-0016,R1,2026-10-12,TP,3,"CVCA: Praha 10; akvizice, MBO, konsolidace, growth capital, sekundární buyouty; equity ticket 10–35 mil. EUR. Vyloučení jako PE sedí.",vc_vyloucene
+inv-0024,R1,2026-10-12,TP,3,"CVCA: V4C Investment Advisers Limited, Lucemburk; buyouty a expanzní kapitál. PE, ne VC; česká entita neexistuje (viz řádek pe).",vc_vyloucene
+inv-0025,R1,2026-10-12,TP,6,"Tech.eu 2. 7. 2026: second closing Growth Debt Fund II 107 mil. EUR, nezřeďující financování 3–15 mil. EUR, 5 investic. Vyloučení jako dluhový fond sedí. CVCA uvádí i growth equity „scaling to EUR 200 million“ (Praha 4), uzavření equity fondu ani equity investice zdroje nedokládají.",vc_vyloucene
+inv-0030,R1,2026-10-12,TP,3,"Wikipedie: Miton investuje výhradně vlastní kapitál bez externích LP (portfolio Rohlik, Rossum). Z3 nesplněno. Jen sekundární zdroj.",vc_vyloucene
+inv-0031,R1,2026-10-12,nejiste,5,"Zdroj je POST endpoint ARES /vyhledat, v prohlížeči nejde otevřít, výsledek hledání nelze zopakovat. Wikipedie zmiňuje fond jen historicky (výnosy do roku 2000). Neaktivita je pravděpodobná, ale z uvedeného zdroje nedoložitelná.",vc_vyloucene
+inv-0040,R1,2026-10-12,TP,3,"E15 22. 11. 2023: titulek „Do světa kryptoměn vstupuje další český miliardář. Ondřej Tomek rozjíždí nový fond“; e15 podcast označuje IVBF jako kryptofond. Fond digitálních aktiv, ne podíly ve firmách.",vc_vyloucene
+inv-0046,R1,2026-10-12,TP,4,"ARES: Patero s.r.o. (dříve Logio Holding), pět fyzických osob po 20 %, předmět mj. nabývání účastí. Web žádný fond ani kapitál třetích osob neuvádí. Z3 nesplněno; investice do Flowpay (2024) ale doložena.",vc_vyloucene
+inv-0051,R1,2026-10-12,TP,2,Ellty uvádí fond jako „Nation 1 (N1)“; N1 je zkratka značky Nation1 (inv-0021). Duplicita sedí.,vc_vyloucene
