@@ -144,7 +144,10 @@ Další incidenty (soubor zamčený Excelem, nesoulad popisu commitu, data v nes
 - **Family office, angel investoři a velcí soukromí investoři** mají jen pravidla a studii proveditelnosti se sondou v počtech, žádná data. Odhady jejich počtu jsou z velké části předpoklady.
 - **PE jen jako mini-pilot (n = 5).** Výsledky jsou orientační a uvádějí se v počtech.
 - **6 kandidátů** (Inven, J&T, Nation1, Gain Ventures, i&i Biotech, Tilia) zůstává nerozhodnutých. Chybí doklad podílu korporace (CVC), identifikace české entity nebo primární zdroj investice.
-- **Jeden hodnotitel.** Chybí nezávislý R2 a shoda hodnotitelů.
+- **Jeden hodnotitel.** Chybí nezávislý R2 a shoda hodnotitelů. Přísnost jednoho hodnotitele nejde oddělit od kvality dat.
+- **Z3 nevyžaduje doklad kapitálu třetích osob** (zjištění R1-v2). Stačí fakt o fondu. U 5 z 11 investorů potvrzených v R1-v2 zdroj investory fondu nejmenuje.
+- **Z4 uznává nový fond místo investice.** U IP Lab a StartupYard Z4 plní nový fond nebo vehikl, ne datovaná investice.
+- **Hodnotitel byl přísnější než pravidla.** R1-v2 označil jako nejisté i případy, které pravidla formálně splňují. Pravidla se zpětně neměnila, zjištění jsou popsaná v [docs/01](docs/01-plan-a-kriteria.md) 1.3.
 
 ## Reprodukovatelnost
 

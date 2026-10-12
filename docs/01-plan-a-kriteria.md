@@ -65,6 +65,15 @@ Záznam může mít status `overeny`, jen pokud platí **všechna** kritéria a 
 
 Hranice 36 měsíců je **předpoklad**: odpovídá typické investiční periodě, kdy VC fond aktivně vybírá nové investice. Lze ji změnit v `investor_db/schema.py`.
 
+### Zjištění z kontroly R1-v2 (13. 10. 2026)
+
+Kontrola R1-v2 (docs/04, 4.11) ukázala slabiny operacionalizace kritérií. Pravidla se zpětně nemění, zjištění jsou jen popsaná:
+
+- **Z3 nevyžaduje doklad kapitálu třetích osob.** Stačí fakt o fondu s `fund_name`. U 5 z 11 investorů, které R1-v2 potvrdil (KAYA, Presto, Purple, Soulmates, Tachles), zdroj investory fondu nejmenuje, takže kapitál třetích osob doložen není. U Startguide stojí Z3 jen na cílové velikosti fondu s naplněním 30 %.
+- **Z4 uznává nový fond místo investice.** U IP Lab a StartupYard plní Z4 nový fond nebo vehikl, ne datovaná investice do firmy. Aktivita fondu tím doložená není.
+- **Hodnotitel byl přísnější než pravidla.** R1-v2 označil jako nejisté i případy, které pravidla formálně splňují (Startguide, IP Lab, StartupYard). Precision se proto uvádí přísně (11/16) i jen pro rozhodnuté případy (11/11).
+- **Kontroloval jeden hodnotitel.** Shoda hodnotitelů se nepočítá a přísnost jednoho hodnotitele nelze oddělit od kvality dat.
+
 ## 1.4 Kritéria vyloučení
 
 Subjekt je vyloučen (`vyloucen`) s jedním z těchto důvodů (`exclusion_reason`):
