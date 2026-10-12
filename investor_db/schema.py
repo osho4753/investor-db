@@ -44,7 +44,7 @@ SEARCH_LOG_COLUMNS: Final = (
     "investor_id",
     "target_field",
 )
-REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note", "category")
+REVIEW_COLUMNS: Final = ("investor_id", "reviewer", "reviewed_at", "verdict", "review_minutes", "note", "category", "review_round")
 FACT_REVIEW_COLUMNS: Final = (
     "fact_id",
     "reviewer",
@@ -205,6 +205,9 @@ REVIEW_ROUND_SAMPLE: Final = "vzorek"
 REVIEW_ROUND_COMPLETION: Final = "po_doplneni"
 REVIEW_ROUND_CORRECTION: Final = "po_oprave"
 REVIEW_ROUNDS: Final = (REVIEW_ROUND_SAMPLE, REVIEW_ROUND_COMPLETION, REVIEW_ROUND_CORRECTION)
+INVESTOR_ROUND_FIRST: Final = "r1"
+INVESTOR_ROUND_SECOND: Final = "r1_v2"
+INVESTOR_REVIEW_ROUNDS: Final = (INVESTOR_ROUND_FIRST, INVESTOR_ROUND_SECOND)
 
 EFFORT_TRIAGE: Final = "triaz"
 EFFORT_VERIFICATION: Final = "overeni"

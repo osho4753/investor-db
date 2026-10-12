@@ -32,6 +32,8 @@ from investor_db.schema import (
     INVESTOR_COLUMNS,
     MONEY_FIELDS,
     REVIEWER_INDEPENDENT,
+    INVESTOR_ROUND_FIRST,
+    INVESTOR_ROUND_SECOND,
     REVIEWER_PRIMARY,
     REVIEW_ROUND_SAMPLE,
     STATUS_CANDIDATE,
@@ -192,13 +194,28 @@ def eligible_for_precision(dataset: Dataset, category: str) -> set[str]:
     return {row["investor_id"] for row in category_investors(dataset, category)}
 
 
-def investor_verdicts(dataset: Dataset, reviewer: str, category: str = CATEGORY_VC) -> dict[str, str]:
+def investor_verdicts(
+    dataset: Dataset, reviewer: str, category: str = CATEGORY_VC, review_round: str = INVESTOR_ROUND_FIRST
+) -> dict[str, str]:
     eligible = eligible_for_precision(dataset, category)
     return {
         row["investor_id"]: row["verdict"]
-        for row in dataset.reviews
-        if row["reviewer"] == reviewer and row["verdict"] and row["category"] == category and row["investor_id"] in eligible
+        for row in round_reviews(dataset, reviewer, category, review_round)
+        if row["investor_id"] in eligible
     }
+
+
+def round_reviews(dataset: Dataset, reviewer: str, category: str, review_round: str) -> list[Row]:
+    return [
+        row
+        for row in dataset.reviews
+        if row["reviewer"] == reviewer and row["verdict"] and row["category"] == category and row["review_round"] == review_round
+    ]
+
+
+def review_round_precision(dataset: Dataset, review_round: str = INVESTOR_ROUND_SECOND, reviewer: str = REVIEWER_PRIMARY) -> PrecisionResult:
+    counts = Counter(row["verdict"] for row in round_reviews(dataset, reviewer, CATEGORY_VC, review_round))
+    return PrecisionResult(counts[VERDICT_TRUE_POSITIVE], counts[VERDICT_FALSE_POSITIVE], counts[VERDICT_UNSURE])
 
 
 def precision(dataset: Dataset, reviewer: str = REVIEWER_PRIMARY, category: str = CATEGORY_VC) -> PrecisionResult:

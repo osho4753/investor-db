@@ -28,6 +28,7 @@ from investor_db.metrics import (
     investment_activity_share,
     population_estimates,
     precision,
+    review_round_precision,
     primary_fact_share,
     category_facts,
     vc_pilot_facts,
@@ -42,6 +43,8 @@ from investor_db.metrics import (
 from investor_db.schema import (
     ASSESSED_CATEGORIES,
     CATEGORY_VC,
+    INVESTOR_ROUND_FIRST,
+    INVESTOR_ROUND_SECOND,
     EFFORT_CATEGORY_VERIFICATION,
     EFFORT_COMPLETION,
     SEARCH_TARGET_CAPITAL,
@@ -113,6 +116,7 @@ def render_report(dataset: Dataset, today: date) -> str:
         [f"# Metriky kvality dat k {today.isoformat()}"],
         status_section(dataset),
         funnel_section(dataset),
+        second_round_section(dataset),
         precision_section(dataset),
         exclusion_review_section(dataset),
         agreement_section(dataset),
@@ -158,15 +162,35 @@ def funnel_section(dataset: Dataset) -> list[str]:
     return lines
 
 
+FIRST_ROUND_CAVEAT = (
+    "Původní kolo (v době kontroly 15/15) má jen historickou hodnotu: poznámky se opíraly o Crunchbase, LinkedIn a agregátory "
+    "v rozporu s metodikou, časy byly zaokrouhlené a Springtide, Patero a Gain byly nejdřív TP a podle pravidel pak FP nebo nejisté."
+)
+
+
+def second_round_section(dataset: Dataset) -> list[str]:
+    result = review_round_precision(dataset, INVESTOR_ROUND_SECOND)
+    lines = ["## Precision – kolo R1-v2 (hlavní metrika)", ""]
+    if result.pessimistic.denominator == 0:
+        return lines + ["Kolo R1-v2 zatím není vyplněno."]
+    return lines + [
+        f"- TP = {result.true_positives}, FP = {result.false_positives}, nejisté = {result.unsure}",
+        f"- Přísně, nejisté = nepotvrzeno: {format_proportion(result.pessimistic)}",
+        f"- Jen rozhodnuté případy TP / (TP + FP): {format_proportion(result.strict)}",
+        "- Počítá se ze všech investorů zkontrolovaných v kole, tedy ze stavu v době kontroly.",
+    ]
+
+
 def precision_section(dataset: Dataset) -> list[str]:
     result = precision(dataset, REVIEWER_PRIMARY)
-    lines = ["## Precision (ověření investoři, hodnotitel R1)", ""]
+    lines = ["## Precision – původní kolo R1 (historie, podle současných statusů)", ""]
     if result.strict.denominator + result.unsure == 0:
         return lines + ["Ruční kontrola R1 zatím není vyplněna."]
     return lines + [
         f"- TP = {result.true_positives}, FP = {result.false_positives}, nejisté = {result.unsure}",
         f"- Precision TP / (TP + FP): {format_proportion(result.strict)}",
         f"- Pesimistická varianta (nejisté jako FP): {format_proportion(result.pessimistic)}",
+        f"- {FIRST_ROUND_CAVEAT}",
     ]
 
 
@@ -408,8 +432,9 @@ def effort_section(dataset: Dataset) -> list[str]:
     lines += ["", "Čas modelu je čas běhu nástrojů včetně čekání na stránky a není přímo srovnatelný s časem člověka."]
     lines += ["", "### Člověk", ""]
     lines += effort_table([row for row in dataset.effort_log if row["actor"] != EFFORT_ACTOR_MODEL])
-    vc_reviews = [row for row in dataset.reviews if row["category"] == CATEGORY_VC]
-    for label, rows in (("Kontrola investorů (VC)", vc_reviews), ("Kontrola faktů", dataset.fact_reviews)):
+    vc_reviews = [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_FIRST]
+    second_reviews = [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_SECOND]
+    for label, rows in (("Kontrola investorů (VC)", vc_reviews), ("Kontrola investorů (VC, kolo R1-v2)", second_reviews), ("Kontrola faktů", dataset.fact_reviews)):
         efforts = review_efforts(rows)
         if not efforts:
             lines.append(f"- {label}: zatím neprovedena.")

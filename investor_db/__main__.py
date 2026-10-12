@@ -17,6 +17,8 @@ from investor_db.schema import (
     STATUS_EXCLUDED,
     CATEGORY_VC,
     REVIEW_CATEGORIES,
+    INVESTOR_REVIEW_ROUNDS,
+    INVESTOR_ROUND_FIRST,
     FACT_REVIEW_COLUMNS,
     REVIEW_COLUMNS,
     REVIEW_ROUND_COMPLETION,
@@ -50,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
         command.set_defaults(handler=handler)
         if name == "review-template":
             command.add_argument("--category", choices=REVIEW_CATEGORIES, default=CATEGORY_VC)
+            command.add_argument("--round", dest="investor_round", choices=INVESTOR_REVIEW_ROUNDS, default=INVESTOR_ROUND_FIRST)
         if name == "fact-review-template":
             command.add_argument("--round", dest="review_round", choices=REVIEW_ROUNDS, default=REVIEW_ROUND_SAMPLE)
             command.add_argument("--from-fact", help="u kola po_doplneni: první fact_id přidaný doplňováním")
@@ -113,7 +116,7 @@ def run_review_template(args: argparse.Namespace) -> int:
     dataset = load_dataset(args.data_dir)
     target_ids = review_targets(dataset, args.category)
     rows = add_pending_reviews(
-        dataset.reviews, REVIEW_COLUMNS, "investor_id", target_ids, args.reviewer, {"category": args.category}
+        dataset.reviews, REVIEW_COLUMNS, "investor_id", target_ids, args.reviewer, {"category": args.category, "review_round": args.investor_round}
     )
     write_table(table_path(args.data_dir, "reviews"), REVIEW_COLUMNS, rows)
     print(f"Přidáno {len(rows) - len(dataset.reviews)} řádků ke kontrole pro {args.reviewer}.")

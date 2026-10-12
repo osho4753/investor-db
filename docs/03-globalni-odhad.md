@@ -46,7 +46,7 @@ Dokument pokrývá výstupy 3 (odhad globálního pokrytí, počtu investorů a 
 ## 3.4 Spolehlivost dat podle regionů
 
 Výchozím bodem je pilot:
-- precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %);
+- precision z kola R1-v2: **11/16 = 68,8 %** přísně (95% Wilsonův interval 44,4–85,8 %) a **11/11** jen u rozhodnutých případů (74,1–100 %). Původní kolo 15/15 je jen historie (docs/04, 4.6 a 4.11);
 - přesnost faktů **32/34 = 94,1 %** (80,9–98,4 %), pesimisticky 88,9 %.
 
 Hodnoty pro ostatní regiony jsou **předpoklady**, které je nutné změřit ruční kontrolou vzorku v každém regionu.
@@ -57,7 +57,7 @@ Hodnoty pro ostatní regiony jsou **předpoklady**, které je nutné změřit ru
 | 2 | EU a EHP | Registr ESMA (API), národní registry s různou dostupností (CAPTCHA, robots.txt), více jazyků | 85–95 % | 1,0–1,5 |
 | 3 | Asie, Izrael, Latinská Amerika, Blízký východ, Afrika | Místní jazyky a písma, registry často placené nebo bez API, méně médií | 75–90 % | 2,0–3,0 |
 
-Precision ve smyslu „ověřený záznam je skutečně aktivní VC“ byla v pilotu vysoká, protože se zařazovalo jen s primárním dokladem (ARES). Kde takový registr chybí (úroveň 3), přibude kandidátů. V pilotu skončilo jako kandidát 4 z 20 VC subjektů, tedy 20 %.
+Precision ve smyslu „ověřený záznam je skutečně aktivní VC“: kolo R1-v2 nenašlo žádný FP, ale u 5 z 16 záznamů nestačily doklady (Z1, Z3 nebo Z4), takže přísná precision je 11/16. Identitu (Z1) drželo hlavně zařazování jen s primárním dokladem z ARES. Kde takový registr chybí (úroveň 3), přibude kandidátů. V pilotu skončilo jako kandidát 4 z 20 VC subjektů, tedy 20 %.
 
 ## 3.5 Náklady škálování
 
@@ -217,7 +217,7 @@ Svět: USA 2 984 [Z: G1], Evropa = 3 095 [Z: G3] × podíl VC 0,4–0,6 [P], zby
 
 **Spolehlivost [M]:**
 
-- precision 15/15;
+- precision R1-v2: 11/16 přísně, 11/11 rozhodnuté;
 - přesnost faktů – vzorek 32/34, přísně 32/36;
 - přesnost faktů – doplňování 42/44, přísně 42/49;
 - opravy 7/7.
@@ -326,7 +326,7 @@ Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpo�
 
 | Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | API na záznam | Člověk na kontrolu záznamu |
 |---|---|---|---|---|---|---|---|
-| VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision 15/15 [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 0,68 USD (0,36–1,37) [M] | 15,5 min [M] |
+| VC | 20 (16–25) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 80 % [M] | precision R1-v2 11/16 přísně, 11/11 rozhodnuté [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 6,9 min [M] | 0,68 USD (0,36–1,37) [M] | 15,5 min [M] |
 | PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 0,11 USD (0,06–0,23) [M+P] | 9 min [M, n = 5] |
 | Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 2,08 USD (1,11–4,16) [P] | 15–30 min [P] |
 | Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 2,82 USD (1,51–5,65) [P] | 15–30 min [P] |

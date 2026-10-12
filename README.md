@@ -7,7 +7,7 @@ Prezentační web: https://investor-db-woad.vercel.app/
 Výsledkem je reprodukovatelný proces a pilotní databáze VC investorů v Česku z bezplatných veřejných zdrojů. Každý údaj má zdroj, datum přístupu a popis důkazu a ruční kontrola R1 změřila přesnost.
 
 - **16 ověřených VC investorů** z 52 nalezených subjektů (4 kandidáti, 32 vyloučených s důvodem).
-- **Precision 15/15** ověřených podle ruční kontroly R1 (95% interval 79,6–100 %).
+- **Precision (kolo R1-v2): 11/16** přísně, nejisté = nepotvrzeno (95% interval 44,4–85,8 %); **11/11** jen rozhodnuté případy (74,1–100 %).
 - **Přesnost faktů 32/34** (94,1 %) na náhodném vzorku, přísně 32/36.
 
 Tabulka 16 ověřených investorů: [web](https://investor-db-woad.vercel.app/data.html#overeni), data v [`data/investors.csv`](data/investors.csv). Jak data zkontrolovat: [Návod pro hodnotitele](#návod-pro-hodnotitele).
@@ -20,7 +20,8 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   - 16 ověřených VC investorů;
   - 4 kandidáti, kterým chybí doklad některého kritéria;
   - 32 vyloučených s konkrétním důvodem, z toho 17 PE.
-- **Precision:** ruční kontrola R1 dala 15/15 ověřených (95% interval 79,6–100 %) ze stavu dat v době kontroly. Report teď ukazuje 16/16, protože se statusy později změnily: Lighthouse a Tachles jsou nově ověření, J&T přešel mezi kandidáty.
+- **Precision (kolo R1-v2, 13. 10. 2026):** 11 TP, 0 FP, 5 nejistých ze 16 tehdy ověřených. Přísně (nejisté = nepotvrzeno) 11/16 = 68,8 % (95% interval 44,4–85,8 %), jen rozhodnuté případy 11/11 (74,1–100 %). Nejisté případy jsou vady dokladů, ne vyvrácené záznamy ([docs/04](docs/04-rucni-kontrola.md) 4.11).
+- **Původní kolo R1 (historie):** 15/15 v době kontroly. Poznámky se ale opíraly o Crunchbase, LinkedIn a agregátory v rozporu s metodikou, časy byly zaokrouhlené a Springtide, Patero a Gain byly nejdřív TP a podle pravidel pak FP nebo nejisté.
 - **Recall:** ze dvou nezávislých seznamů českých VC (Vestbee 2021/2023, AIN.UA 2022), které hledání nepoužilo, máme **14 z 18** subjektů, které seznamy uvádějí jako VC v ČR (bez Pale Fire Capital, který investuje vlastní peníze partnerů): 8 ověřených, 3 kandidáti, 3 vyloučení s důvodem). Chybí Longevitytech.fund, Y Soft Ventures, Koopeo Ventures a Air Ventures ([docs/04](docs/04-rucni-kontrola.md) 4.10).
 - **Capture–recapture (doplňkový, málo informativní odhad):** Chapmanovy odhady 7–25 ověřitelných VC v ČR jsou jen dolní mez, protože zdroje hledání nejsou nezávislé. Ověřených je už 16, tedy víc než dolní hodnoty odhadu. Lepší představu o úplnosti dává recall proti nezávislým seznamům.
 - **Kontrola vyloučených:** náhodný vzorek 10 z 32 dal 9 správných vyloučení a 1 nejistý případ. False negative se ve vzorku nenašel.
@@ -51,7 +52,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
 | Požadavek zadání | Stav | Kde | Poznámka |
 |---|---|---|---|
 | Databáze investorů: VC, PE, family office, angelé, velcí soukromí investoři | **částečně** | [data/](data/), [docs/01](docs/01-plan-a-kriteria.md) 1.10–1.12 | Data: VC v ČR (pilot) a PE (mini-pilot n = 5). Ostatní kategorie mají plán, pravidla a studii proveditelnosti, ale ne data. |
-| Každý záznam je skutečný investor, ne náhodná firma | splněno | [docs/04](docs/04-rucni-kontrola.md) 4.6, 4.8, 4.9 | precision 15/15, PE 5/5, vyloučení 9/9 + 1 nejisté |
+| Každý záznam je skutečný investor, ne náhodná firma | splněno | [docs/04](docs/04-rucni-kontrola.md) 4.6, 4.8, 4.9 | precision R1-v2 11/16 přísně, 11/11 rozhodnuté; PE 5/5, vyloučení 9/9 + 1 nejisté |
 | U investora: sektor, do čeho investuje a v jaké výši, celkový kapitál, zdroj | **částečně** | [docs/04](docs/04-rucni-kontrola.md) 4.7, report `metrics` | Vyplněno sektor 15/16, ticket 14/16, kapitál 13/16, zdroj 16/16. Co chybí, je zapsáno jako „hledáno, nenalezeno“. |
 | Plán: kdo v databázi bude a kdo ne, pravidla zařazení a vyřazení | splněno | [docs/01](docs/01-plan-a-kriteria.md) | Z1–Z4 pro VC, P/F/A/S pro ostatní kategorie, kódy vyloučení |
 | Jak se ověří pravost a správné zařazení | splněno | [docs/01](docs/01-plan-a-kriteria.md), [docs/02](docs/02-metodika.md), [docs/04](docs/04-rucni-kontrola.md) | validátor, primární zdroje, ruční kontrola R1 |
@@ -165,7 +166,7 @@ Ověřeno 12. 10. 2026 na čistém klonu z GitHubu (commit `190e7e6`) v dočasn�
 | Kontrola vyloučených | 9 TP a 1 nejisté |
 | PE | pravost 5/5, v zemi 2/5, R1 2/2 a 3/3 TP |
 
-Report počítá precision ze současných statusů (16/16). Hodnota 15/15 ze stavu v době kontroly je doložena v [docs/04](docs/04-rucni-kontrola.md), 4.6, a v historii Gitu (commit `18877a1`). Instalace `pip install -e ".[dev]"` se v klonu nespouštěla, protože pytest byl v prostředí už nainstalovaný.
+Hlavní precision je z kola R1-v2 (11/16 přísně, 11/11 rozhodnuté) ze stavu v době kontroly. Původní kolo R1 report počítá ze současných statusů (16/16), hodnota 15/15 z doby kontroly je v [docs/04](docs/04-rucni-kontrola.md), 4.6, a v historii Gitu (commit `18877a1`). Instalace `pip install -e ".[dev]"` se v klonu nespouštěla, protože pytest byl v prostředí už nainstalovaný.
 
 ## Návod pro hodnotitele
 

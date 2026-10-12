@@ -277,7 +277,7 @@ Jeden řádek = hodnocení jednoho investora podle pravidel jiné kategorie než
 
 ### `reviews.csv` a `fact_reviews.csv` – ruční kontrola
 
-Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`. `po_oprave` obsahuje fakty změněné nebo přidané při opravách po kontrole (`--round po_oprave --facts …`). Fakt má v každém kole vlastní řádek a přesnost se počítá pro každé kolo zvlášť.
+Popsány v `docs/04-rucni-kontrola.md`. Verdikty vyplňuje výhradně člověk. Sloupec `review_round` v `fact_reviews.csv` odlišuje kola kontroly faktů. `vzorek` je původní náhodný vzorek 36 faktů a jeho řádky se nemění. `po_doplneni` zahrnuje všechny fakty přidané doplňováním (f-00249 a dál), ne vzorek. Řádky kola zakládá `python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249`. `po_oprave` obsahuje fakty změněné nebo přidané při opravách po kontrole (`--round po_oprave --facts …`). Fakt má v každém kole vlastní řádek a přesnost se počítá pro každé kolo zvlášť. Sloupec `review_round` v `reviews.csv` odlišuje kola kontroly investorů: `r1` je původní kolo, `r1_v2` nové kolo podle kontrolního listu R1-v2 (docs/04, 4.11). Řádky kola zakládá `python -m investor_db review-template --reviewer R1 --round r1_v2`.
 
 ## 2.5 Validace integrity
 

@@ -1,11 +1,13 @@
+from dataclasses import replace
 from datetime import date
 from decimal import Decimal
 
 import pytest
-from conftest import TODAY, fact
+from conftest import TODAY, build_valid_dataset, fact
 
 from investor_db.io import Dataset
 from investor_db.metrics import (
+    review_round_precision,
     Proportion,
     PopulationEstimate,
     cohen_kappa,
@@ -28,7 +30,7 @@ from investor_db.report import render_report
 
 
 def review(investor_id: str, reviewer: str, verdict: str) -> dict[str, str]:
-    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc"}
+    return {"investor_id": investor_id, "reviewer": reviewer, "reviewed_at": "2026-10-05", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc", "review_round": "r1"}
 
 
 def test_wilson_interval_matches_reference_values() -> None:
@@ -257,3 +259,19 @@ def test_search_minutes_accepts_decimals(dataset: Dataset) -> None:
     dataset.search_log[0]["minutes"] = "0.48"
 
     assert search_minutes(dataset.search_log) == Decimal("0.48")
+
+
+def test_second_round_precision_counts_review_time_snapshot() -> None:
+    dataset = build_valid_dataset()
+    second = [
+        {**review("inv-0001", "R1", "TP"), "review_round": "r1_v2"},
+        {**review("inv-0002", "R1", "nejiste"), "review_round": "r1_v2"},
+    ]
+    dataset = replace(dataset, reviews=[*dataset.reviews, *second])
+
+    result = review_round_precision(dataset, "r1_v2")
+
+    assert (result.true_positives, result.false_positives, result.unsure) == (1, 0, 1)
+    assert (result.pessimistic.numerator, result.pessimistic.denominator) == (1, 2)
+    assert (result.strict.numerator, result.strict.denominator) == (1, 1)
+    assert precision(dataset).true_positives == 1

@@ -35,6 +35,7 @@ from investor_db.schema import (
     FUND_SCOPED_FACT_FIELDS,
     ID_PATTERNS,
     INVESTOR_TYPE_VC,
+    INVESTOR_REVIEW_ROUNDS,
     INVESTOR_TYPES,
     INVESTOR_VERDICTS,
     LIST_FIELD_VOCABULARIES,
@@ -540,8 +541,9 @@ def check_reviews(dataset: Dataset, today: date) -> Iterator[Issue]:
     investors_by_id = {row["investor_id"]: row for row in dataset.investors}
     for row in dataset.reviews:
         row_id = f"{row['investor_id']}/{row['reviewer']}"
-        yield from required_issues("reviews", row_id, row, ("category",))
+        yield from required_issues("reviews", row_id, row, ("category", "review_round"))
         yield from vocabulary_issues("reviews", row_id, "category", row["category"], REVIEW_CATEGORIES)
+        yield from vocabulary_issues("reviews", row_id, "review_round", row["review_round"], INVESTOR_REVIEW_ROUNDS)
         investor = investors_by_id.get(row["investor_id"])
         if row["category"] == CATEGORY_VC_EXCLUDED and investor and investor["verification_status"] != STATUS_EXCLUDED:
             yield Issue("reviews", row_id, "kontrola vyloučených se týká jen subjektů se statusem vyloucen")
@@ -581,7 +583,7 @@ def check_review_rows(
 
 
 def review_scope(row: Row) -> str:
-    return row.get("review_round") or row.get("category") or ""
+    return " / ".join(value for value in (row.get("category"), row.get("review_round")) if value)
 
 
 def check_category_assessments(dataset: Dataset, today: date) -> Iterator[Issue]:

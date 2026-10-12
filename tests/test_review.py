@@ -27,7 +27,7 @@ def test_add_pending_reviews_keeps_existing_and_skips_listed() -> None:
     rows = add_pending_reviews(existing, REVIEW_COLUMNS, "investor_id", ["inv-0001", "inv-0002"], "R1")
 
     assert rows[0] == existing[0]
-    assert rows[1:] == [{"investor_id": "inv-0002", "reviewer": "R1", "reviewed_at": "", "verdict": "", "review_minutes": "", "note": "", "category": ""}]
+    assert rows[1:] == [{"investor_id": "inv-0002", "reviewer": "R1", "reviewed_at": "", "verdict": "", "review_minutes": "", "note": "", "category": "", "review_round": ""}]
 
 
 def test_add_pending_reviews_is_per_reviewer() -> None:

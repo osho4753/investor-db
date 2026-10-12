@@ -177,6 +177,8 @@ Kontrolu provedl hodnotitel R1 9. a 10. 10. 2026. R2 se kontroly neúčastnil, s
 | `nejiste` počítáno jako FP | 15/15 = 100,0 % (žádný verdikt `nejiste`) | 79,6 % – 100,0 % |
 | Pro informaci: aktuální stav (16 ověřených: přibyli Lighthouse a Tachles, J&T Ventures přešel po kontrole do kandidátů) | 16/16 = 100,0 % | 80,6 % – 100,0 % |
 
+**Historie.** Toto kolo nahradilo kolo R1-v2 (4.11): poznámky se opíraly o Crunchbase, LinkedIn a agregátory v rozporu s metodikou, časy byly zaokrouhlené a Springtide, Patero a Gain byly nejdřív TP a podle pravidel pak FP nebo nejisté.
+
 Do precision vstupují jen řádky investorů, kteří měli v době kontroly status `overeny`. Při 15 záznamech je interval široký. Spodní mez 79,6 % je pesimistický odhad, ne naměřená chybovost.
 
 ### Nesouhlas hodnotitele se statusem (možné false negatives)
@@ -596,4 +598,39 @@ Kolik VC subjektů z veřejných seznamů, které pilot při hledání nepoužil
 - Recall pilotu vůči redakčním seznamům je kolem 78 %. Ze 4 chybějících je jeden pravděpodobný VC v ČR (Longevitytech.fund), dva by byli kandidáti a jeden je nejasný. Žádný chybějící subjekt není zjevně ověřitelný bez dalšího hledání.
 - Hledání pilotu stálo hlavně na CVCA a médiích z let 2024–2026. Seznamy z let 2021–2022 obsahují fondy, které v CVCA nejsou a v nových článcích se neobjevují.
 - Seznamy jsou staré a mají jen 19 subjektů, interval je proto široký. Nejde o náhodný vzorek všech VC v ČR, ale o viditelné fondy.
+
+## 4.11 Kolo R1-v2 – nová kontrola ověřených investorů (13. 10. 2026)
+
+**Proč nové kolo.** Původní kontrola R1 (4.6) nebyla provedena podle metodiky:
+
+- poznámky 8 z 22 kontrol VC se odvolávají na Crunchbase nebo LinkedIn (Crunchbase 6×, LinkedIn 3×), další na nejmenované „databáze“. Agregátory jsou podle docs/02 jen vodítko a LinkedIn není povolený zdroj;
+- časy jsou zaokrouhlené na 5 minut (5–25 min), nejde tedy o měření;
+- Springtide, Patero a Gain dostaly nejdřív verdikt TP a teprve podle pravidel byly opraveny na FP, FP a nejisté.
+
+Původní výsledek 15/15 (v době kontroly) proto zůstává jen jako historie. Hlavní metrikou je kolo R1-v2.
+
+**Postup.** Hodnotitel R1 prošel všech 16 tehdy ověřených investorů podle kontrolního listu [`review/kontrolni-list-r1-v2.md`](../review/kontrolni-list-r1-v2.md): Z1 v ARES, doklad Z3 a nejnovější doložená investice (Z4), jen povolené zdroje. Výsledky jsou v [`review/r1-v2-vysledky.csv`](../review/r1-v2-vysledky.csv) a v `data/reviews.csv` s `review_round` = `r1_v2`. Původní řádky mají `review_round` = `r1` a jinak se nezměnily. Jména fyzických osob v poznámkách hodnotitele nahradil agent popisem role, protože databáze osobní údaje neukládá (docs/01, 1.10).
+
+**Výsledek** (`python -m investor_db metrics`, oddíl „Precision – kolo R1-v2“; stav v době kontroly, tedy všech 16 tehdy ověřených):
+
+| Ukazatel | Výsledek | 95% Wilsonův interval |
+|---|---|---|
+| TP / FP / nejisté | 11 / 0 / 5 | |
+| **Přísně, nejisté = nepotvrzeno** | **11/16 = 68,8 %** | 44,4 % – 85,8 % |
+| **Jen rozhodnuté případy, TP / (TP + FP)** | **11/11 = 100,0 %** | 74,1 % – 100,0 % |
+| Čas R1 | 59 min, 3,7 min na investora (1,2–7,8 min, nezaokrouhleno) | |
+
+**Nejisté případy:**
+
+| Investor | Důvod podle R1 |
+|---|---|
+| i&i Biotech Investments | Z1: IČO vede na Biotech Investments s.r.o., vazba na značku i&i není v rejstříku ověřena. |
+| IP Lab Ventures | Z4: uložený fakt je závazek EIF do fondu, ne investice do firmy. |
+| Startguide VC | Z3: web uvádí jen cílovou velikost SG One a naplnění 30 %. |
+| StartupYard | Z4: uložený fakt je tentýž vehikl jako u Z3, datovaná investice chybí. |
+| Tilia Impact Ventures | Z4: zdrojem investice do Flox Intelligence je agregátor. |
+
+FP hodnotitel nenašel. Nejisté případy nejsou vyvrácené záznamy, ale vady dokladů. Jejich opravy jsou popsané v 4.12.
+
+**Kapitál třetích osob (Z3).** U 5 z 11 TP (KAYA, Presto, Purple, Soulmates, Tachles) hodnotitel investory fondu ve zdroji nenašel („peníze třetích stran: nevím“). Pravidla Z3 to připouštějí, protože vyžadují fakt o fondu, ne doklad, kdo do něj vložil peníze (viz docs/01, 1.3).
 

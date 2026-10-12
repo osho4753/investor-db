@@ -72,7 +72,7 @@ def test_precision_is_computed_per_category(dataset: Dataset) -> None:
     make_pe_candidate(dataset)
     dataset.category_assessments.append(assessment())
     dataset.reviews.append(
-        {"investor_id": "inv-0003", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "FP", "review_minutes": "5", "note": "", "category": "pe"}
+        {"investor_id": "inv-0003", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "FP", "review_minutes": "5", "note": "", "category": "pe", "review_round": "r1"}
     )
 
     assert precision(dataset, "R1").false_positives == 0
@@ -108,7 +108,7 @@ def test_foreign_investor_counts_as_authentic_but_outside_pilot_country(dataset:
     dataset.investors[-1]["evidence_urls"] = "https://zpravy.example.net/fiktivni-investice"
     dataset.category_assessments.append(dict(assessment("vyloucen", "zahranicni_subjekt"), investor_id="inv-0004"))
     dataset.reviews.append(
-        {"investor_id": "inv-0004", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "5", "note": "", "category": "pe"}
+        {"investor_id": "inv-0004", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "5", "note": "", "category": "pe", "review_round": "r1"}
     )
 
     report = render_report(dataset, TODAY)
@@ -141,7 +141,7 @@ def test_unknown_pe_stage_is_reported(dataset: Dataset) -> None:
 
 
 def excluded_review(verdict: str, investor_id: str = "inv-0003") -> Row:
-    return {"investor_id": investor_id, "reviewer": "R1", "reviewed_at": "2026-10-05" if verdict else "", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc_vyloucene"}
+    return {"investor_id": investor_id, "reviewer": "R1", "reviewed_at": "2026-10-05" if verdict else "", "verdict": verdict, "review_minutes": "", "note": "", "category": "vc_vyloucene", "review_round": "r1"}
 
 
 def test_exclusion_review_counts_correct_exclusions(dataset: Dataset) -> None:

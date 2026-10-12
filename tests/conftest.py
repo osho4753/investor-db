@@ -132,7 +132,7 @@ def build_valid_dataset() -> Dataset:
             }
         ],
         reviews=[
-            {"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "20", "note": "", "category": "vc"}
+            {"investor_id": "inv-0001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "TP", "review_minutes": "20", "note": "", "category": "vc", "review_round": "r1"}
         ],
         fact_reviews=[
             {"fact_id": "f-00001", "reviewer": "R1", "reviewed_at": "2026-10-05", "verdict": "spravne", "review_minutes": "3", "note": "", "review_round": "vzorek"}

@@ -30,10 +30,11 @@ from investor_db.metrics import (
     investor_capital,
     precision,
     requirement_completeness,
+    review_round_precision,
     review_efforts,
     status_counts,
 )
-from investor_db.report import format_amount, format_amounts, format_percent, format_raised
+from investor_db.report import FIRST_ROUND_CAVEAT, format_amount, format_amounts, format_percent, format_proportion, format_raised
 from investor_db.review_guide import LIST_LABELS
 from investor_db.schema import (
     CATEGORY_PE,
@@ -42,6 +43,8 @@ from investor_db.schema import (
     EFFORT_CATEGORY_VERIFICATION,
     EFFORT_COMPLETION,
     EFFORT_TRIAGE,
+    INVESTOR_ROUND_FIRST,
+    INVESTOR_ROUND_SECOND,
     EFFORT_VERIFICATION,
     MONEY_FACT_FIELDS,
     REVIEW_ROUNDS,
@@ -182,14 +185,18 @@ def stat(number: str, label: str, detail: str) -> str:
 
 
 def headline_stats(dataset: Dataset) -> str:
-    vc_precision = precision(dataset, REVIEWER_PRIMARY)
+    second = review_round_precision(dataset, INVESTOR_ROUND_SECOND)
     sample = fact_accuracy(dataset, REVIEWER_PRIMARY, REVIEW_ROUNDS[0]).accuracy
     completion = fact_accuracy(dataset, REVIEWER_PRIMARY, REVIEW_ROUNDS[1]).accuracy
     counts = status_counts(dataset.investors)
     excluded = exclusion_review(dataset, REVIEWER_PRIMARY)
     pe = category_scope(dataset, CATEGORY_PE)
     tiles = [
-        stat(share_text(vc_precision.strict), "precision VC", f"ověření investoři potvrzení ruční kontrolou R1 podle současných statusů ({percent_text(vc_precision.strict)})"),
+        stat(
+            share_text(second.pessimistic),
+            "precision VC (kolo R1-v2)",
+            f"přísně, nejisté = nepotvrzeno: {format_proportion(second.pessimistic)}; jen rozhodnuté případy: {format_proportion(second.strict)}",
+        ),
         stat(share_text(sample), "přesnost faktů", f"náhodný vzorek; všechna doplněná fakta {share_text(completion)}"),
         stat(f"{len(dataset.investors)} → {counts[STATUS_VERIFIED]}", "nalezeno → ověřeno", f"{counts[STATUS_CANDIDATE]} kandidáti, {counts[STATUS_EXCLUDED]} vyloučeno s doloženým důvodem"),
         stat(f"{excluded.correct}/{excluded.reviewed}", "správná vyloučení", f"náhodný vzorek {excluded.reviewed} z {excluded.excluded} vyloučených; nejisté {excluded.unsure}"),
@@ -292,11 +299,16 @@ def pe_list(dataset: Dataset) -> str:
 
 def results_body(sources: SiteSources) -> str:
     dataset = sources.dataset
-    vc_precision = precision(dataset, REVIEWER_PRIMARY)
+    second = review_round_precision(dataset, INVESTOR_ROUND_SECOND)
+    first = precision(dataset, REVIEWER_PRIMARY)
     summary = render_table(first_table(section_lines(sources.estimate, SUMMARY_HEADING)), "docs")
     return "".join([
         render_text(sources.texts["vysledky"]),
-        f"<h4>VC pilot ČR</h4><p>Precision podle současných statusů {share_text(vc_precision.strict)}. Přesnost faktů po kolech kontroly:</p>",
+        "<h4>VC pilot ČR</h4><p>Precision z kola R1-v2 (hlavní metrika, stav v době kontroly):</p>",
+        f'<ul class="clean"><li>přísně, nejisté = nepotvrzeno: {escape(format_proportion(second.pessimistic))}</li>'
+        f"<li>jen rozhodnuté případy: {escape(format_proportion(second.strict))}</li></ul>",
+        f"<p>Původní kolo R1 podle současných statusů {share_text(first.strict)}. {escape(FIRST_ROUND_CAVEAT)}</p>",
+        "<p>Přesnost faktů po kolech kontroly:</p>",
         accuracy_list(dataset),
         "<p>Pole zadání u ověřených VC investorů:</p>",
         requirement_list(dataset),
@@ -378,7 +390,8 @@ def time_panel(dataset: Dataset) -> str:
             lines.append(f"<span>{escape(label)}</span><b>{format_amount_decimal(Decimal(str(summary.mean_minutes)))} min</b>")
     lines.append('<span class="h">Člověk (R1), průměr</span>')
     for label, rows in (
-        ("kontrola investora VC", [row for row in dataset.reviews if row["category"] == CATEGORY_VC]),
+        ("kontrola investora VC (R1)", [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_FIRST]),
+        ("kontrola investora VC (R1-v2)", [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_SECOND]),
         ("kontrola investora PE", [row for row in dataset.reviews if row["category"] == CATEGORY_PE]),
         ("kontrola faktu", dataset.fact_reviews),
     ):
@@ -463,9 +476,11 @@ def investor_contexts(dataset: Dataset) -> dict[str, dict[str, str]]:
     for row in dataset.category_assessments:
         if row["category"] == CATEGORY_PE:
             contexts[row["investor_id"]]["pe"] = row["verification_status"]
-    for row in dataset.reviews:
-        if row["verdict"] and row["reviewer"] == REVIEWER_PRIMARY and row["category"] == CATEGORY_VC:
-            contexts[row["investor_id"]]["review"] = f"R1: {INVESTOR_VERDICT_LABELS[row['verdict']]}"
+    labels = {INVESTOR_ROUND_FIRST: "R1", INVESTOR_ROUND_SECOND: "R1-v2"}
+    for review_round in (INVESTOR_ROUND_FIRST, INVESTOR_ROUND_SECOND):
+        for row in dataset.reviews:
+            if row["verdict"] and row["reviewer"] == REVIEWER_PRIMARY and row["category"] == CATEGORY_VC and row["review_round"] == review_round:
+                contexts[row["investor_id"]]["review"] = f"{labels[review_round]}: {INVESTOR_VERDICT_LABELS[row['verdict']]}"
     return contexts
 
 
