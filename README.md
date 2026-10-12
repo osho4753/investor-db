@@ -1,123 +1,183 @@
 # Investor Intelligence Database
 
-Reprodukovatelný proces vyhledávání, klasifikace a ověřování reálných investorů z veřejně dostupných dat. Hlavní prioritou je spolehlivost dat, ne počet záznamů.
-
-**Pilot:** venture kapitálové (VC) značky s českou právnickou osobou, 20–30 kandidátů.
-
-## Principy
-
-- Pouze bezplatné veřejné zdroje.
-- CSV soubory v Gitu jsou jediným zdrojem pravdy; integritu hlídá validační skript a testy.
-- Každá vyplněná hodnota je doložena faktem se zdrojem, datem přístupu a popisem důkazu.
-- Neznámé hodnoty zůstávají prázdné; nic se neodhaduje ani nepřepočítává mezi měnami.
-- Ruční kontrolu provádí člověk, ne model, který data sbíral.
+Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařadí a ověří investory do firem. Každý údaj je fakt se zdrojem, datem přístupu a popisem důkazu. Hlavním cílem je spolehlivost dat, ne počet záznamů. Pilot pokrývá **venture kapitál (VC) v Česku**. Pro PE proběhl mini-pilot, pro family office, angel investory a velké soukromé investory studie proveditelnosti. Zadání je v [docs/00-zadani.md](docs/00-zadani.md).
 
 ## Klíčové výsledky
 
-Pilot v ČR našel 52 subjektů: 16 je ověřených VC investorů, 4 zůstávají kandidáty a 32 je vyloučených s konkrétním důvodem. Ruční kontrola hodnotitele R1 dala precision **15/15 = 100 %** (95% Wilsonův interval 79,6–100 %) a přesnost vzorku faktů **32/34 = 94,1 %** (80,9–98,4 %, pesimisticky 88,9 %), obojí ze stavu dat v době kontroly. Kontrola odhalila dva false negatives, Lighthouse a Tachles, které jsou už opravené. Capture–recapture dává dolní mez nejméně 16 VC v ČR. Model potřeboval 6,9 min na ověřeného investora (hledání, triáž, ověření a doplnění), člověk 15,5 min na kontrolu investora a 0,96 min na fakt. Globální odhad vychází na 5 235 / 7 251 / 9 682 VC firem (nízký, základní a vysoký scénář). Po doplnění podle požadavků zadání má z 16 ověřených investorů 15 sektor, 14 ticket a 13 získaný kapitál nebo AUM. Dva investoři mají doloženou jen cílovou velikost fondu, která se ke kapitálu nepřičítá. Kapitál je v [data/funds.csv](data/funds.csv) po fondech s typem částky. U všech investorů je získaný kapitál dolní mez. Bez ní by byl jen tehdy, kdyby byl doložen počet fondů, všechny fondy měly final close nebo uzavřenou částku, žádný ještě nesbíral peníze a nebyl u nich konflikt zdrojů. Konflikty zdrojů (Credo, i&i) jsou v tabulce kapitálu vidět. Chybějící údaje jsou zapsány jako „hledáno, nenalezeno“. Samostatná kontrola všech 49 faktů z doplňování (kolo „po doplnění“) dala přesnost **42/44 = 95,5 %** (84,9–98,7 %), v přísné variantě s neověřitelnými jako chybnými **42/49 = 85,7 %** (73,3–92,9 %). Šest ze sedmi nálezů se týkalo typu částky (cíl × získaná částka × first close), ne částky samotné. Opravy jsou provedeny po kontrole a metriku nemění (viz [docs/04](docs/04-rucni-kontrola.md), 4.7). Plán pokrývá všechny kategorie zadání (VC, PE, family office, angel, velcí soukromí investoři) včetně GDPR ([docs/01](docs/01-plan-a-kriteria.md), 1.10). Mini-pilot PE na 5 náhodně vybraných PE členech CVCA: 2 ověřeni, 3 vyloučeni jako zahraniční subjekty bez české entity. Sektor a ticket byly dostupné u 5/5, získaný kapitál podle přísné definice jen u 1/5. Model potřeboval 1,15 min na pravého PE investora (stejná definice jako u VC). PE je uloženo jako samostatné hodnocení, takže VC čísla se nemění (1.11). Kontrola R1: 5/5 TP, pravost 5/5, v zemi pilotu 2/5. Studie proveditelnosti pro family office, angely a velké soukromé investory (1.12) a odhad počtů, spolehlivosti a nákladů pro všech pět kategorií jsou v [docs/03](docs/03-globalni-odhad.md), 3.7–3.8. U těchto tří kategorií je většina vstupů předpoklad a podíl záznamů získatelných z veřejných zdrojů je nízký.
+- **Trychtýř:** pilot našel 52 subjektů.
+  - 16 ověřených VC investorů;
+  - 4 kandidáti, kterým chybí doklad některého kritéria;
+  - 32 vyloučených s konkrétním důvodem, z toho 17 PE.
+- **Precision:** ruční kontrola R1 dala 15/15 ověřených (95% interval 79,6–100 %) ze stavu dat v době kontroly. Report teď ukazuje 16/16, protože se statusy později změnily: Lighthouse a Tachles jsou nově ověření, J&T přešel mezi kandidáty.
+- **Kontrola vyloučených:** náhodný vzorek 10 z 32 dal 9 správných vyloučení a 1 nejistý případ. False negative se ve vzorku nenašel.
+- **Přesnost faktů po kolech:**
 
-## Povinné výstupy
+  | Kolo | Výsledek | Přísně (neověřitelné = chybné) |
+  |---|---|---|
+  | Náhodný vzorek | 32/34 = 94,1 % | 32/36 = 88,9 % |
+  | Všechna doplněná fakta | 42/44 = 95,5 % | 42/49 = 85,7 % |
+  | Fakta změněná opravami | 7/7 | 7/7 |
 
-| # | Výstup | Kde ho najít |
+- **Pole zadání u 16 ověřených VC:**
+  - sektor 15/16, fáze 16/16;
+  - ticket 14/16 (obě meze 11/16);
+  - kapitál 13/16: získaná částka fondu nebo AUM;
+  - zdroj 16/16.
+
+  Kapitál je ve [`funds.csv`](data/funds.csv) po fondech a s typem částky. Získaný kapitál je všude dolní mez. Cíl fondu se do kapitálu nepočítá a konflikty zdrojů jsou v reportu vidět.
+- **PE mini-pilot (5 náhodných PE členů CVCA):**
+  - pravost 5/5 a status správně 5/5 podle kontroly R1;
+  - českou právnickou osobu mají 2/5;
+  - sektor a ticket má 5/5, získaný kapitál jen 1/5.
+- **Globální odhad VC:** 5 235 / 7 251 / 9 682 firem ve scénářích nízký / základní / vysoký.
+- **Čas:** model 6,9 min na ověřený VC záznam. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
+
+## Splnění zadání
+
+| Požadavek zadání | Stav | Kde | Poznámka |
+|---|---|---|---|
+| Databáze investorů: VC, PE, family office, angelé, velcí soukromí investoři | **částečně** | [data/](data/), [docs/01](docs/01-plan-a-kriteria.md) 1.10–1.12 | Data: VC v ČR (pilot) a PE (mini-pilot n = 5). Ostatní kategorie mají plán, pravidla a studii proveditelnosti, ale ne data. |
+| Každý záznam je skutečný investor, ne náhodná firma | splněno | [docs/04](docs/04-rucni-kontrola.md) 4.6, 4.8, 4.9 | precision 15/15, PE 5/5, vyloučení 9/9 + 1 nejisté |
+| U investora: sektor, do čeho investuje a v jaké výši, celkový kapitál, zdroj | **částečně** | [docs/04](docs/04-rucni-kontrola.md) 4.7, report `metrics` | Vyplněno sektor 15/16, ticket 14/16, kapitál 13/16, zdroj 16/16. Co chybí, je zapsáno jako „hledáno, nenalezeno“. |
+| Plán: kdo v databázi bude a kdo ne, pravidla zařazení a vyřazení | splněno | [docs/01](docs/01-plan-a-kriteria.md) | Z1–Z4 pro VC, P/F/A/S pro ostatní kategorie, kódy vyloučení |
+| Jak se ověří pravost a správné zařazení | splněno | [docs/01](docs/01-plan-a-kriteria.md), [docs/02](docs/02-metodika.md), [docs/04](docs/04-rucni-kontrola.md) | validátor, primární zdroje, ruční kontrola R1 |
+| Odhad dosažitelného okruhu, počtu a spolehlivosti s uvedením, z čeho vychází | splněno | [docs/03](docs/03-globalni-odhad.md) 3.1–3.4, 3.7–3.8 | Každé číslo má značku: změřeno, zdroj, nebo předpoklad. |
+| Ověření na vzorku (VC v jedné zemi) | splněno | [data/](data/) | 52 subjektů v ČR |
+| Zdroj a datum dokládající, že subjekt investuje | splněno | `facts.csv` (Z4), `investors.csv` (`evidence_urls`) | Doložená investice za 36 měsíců u 13/16, u ostatních nový fond. |
+| Přesnost změřená na ručně ověřeném vzorku | splněno | [docs/04](docs/04-rucni-kontrola.md) | Jen jeden hodnotitel (R1), shoda hodnotitelů se nepočítá. |
+| Odhad nákladů na rozšíření na celý svět | **částečně** | [docs/03](docs/03-globalni-odhad.md) 3.5, 3.8 | Čas modelu a člověka je změřený. Tokeny a cena API jsou předpoklad, měření nebylo provedeno. |
+| Jen veřejně dostupná data | splněno | [docs/02](docs/02-metodika.md) 2.2, 2.8 | Jedno porušení `robots.txt` bylo zjištěno a opraveno (níže). |
+| Veřejný repozitář: plán, data se zdrojem u každého údaje, výsledek měření | splněno | tento repozitář | Validátor vynucuje fakt se zdrojem u každé vyplněné hodnoty. |
+| Kód s průběžnou historií commitů | splněno | `investor_db/`, `tests/`, `git log` | 76+ commitů od 9. 10. 2026 |
+| `ai-log` s exportem konverzací | **částečně** | [ai-log/](ai-log/) | Popis a mapování sessions jsou hotové, exporty vloží autor. |
+| README: práce s AI, rozhodnutí v nejasnostech, co chybí | splněno | níže | |
+
+## Práce s AI
+
+Data sbíral, kód psal a dokumentaci připravoval agent **Claude Code**. Pokyny pro Claude Code jsem připravoval s pomocí chatového asistenta. Rozhodoval jsem sám a výstupy jsem sám kontroloval. Ruční kontrolu dat dělal člověk (R1), ne model.
+
+### Hlavní pokyny pro agenta
+
+- Používat jen bezplatné veřejné zdroje. Respektovat `robots.txt`, omezovat rychlost požadavků a cachovat stažené stránky. Ochrany (CAPTCHA, 403) neobcházet.
+- Každý fakt musí pocházet ze stránky, kterou agent v té session skutečně otevřel. Nic nedoplňovat z vlastních znalostí, nic neodhadovat. Co nejde doložit, zůstává „neznámé“ a hledání se zapíše do `search_log`.
+- Nevymýšlet investory, odkazy, hodnoty ani domény. Web hledat přes zdroje.
+- Agregátory (Crunchbase, Dealroom apod.) slouží jen jako vodítko, fakta stojí na primárních zdrojích nebo médiích.
+- Konflikty zdrojů zapisovat viditelně, ne vybírat jednu verzi potichu. Chyby nalezené kontrolou jen navrhovat, ne opravovat potichu.
+- Verdikty ruční kontroly mění jen hodnotitel. Pushnutou historii nepřepisovat.
+- Kód bez komentářů, jen standardní knihovna Pythonu (pytest pro testy). Malé commity a push po úspěšných testech a validaci.
+
+### Jak se kontroloval výstup
+
+1. **Validátor** (`python -m investor_db validate`) kontroluje integritu:
+   - každá vyplněná hodnota má podpůrný fakt a každý fakt zdroj a datum přístupu;
+   - ověřený investor má doložena kritéria Z1–Z4;
+   - vyloučený má důvod doložený faktem;
+   - částky ve `funds.csv` odpovídají faktům;
+   - zdroj z agregátoru se hlásí jako chyba.
+
+   `metrics` nad nevalidními daty odmítne běžet.
+2. **Kontrola proti surovému textu.** Nástroj pro čtení webu vrací shrnutí jazykovým modelem. Částky, data a citace se proto ověřovaly proti surovému textu stránky (`investor_db/rawtext.py`).
+3. **Ruční kontroly R1 po kolech:**
+   - investoři (precision);
+   - náhodný vzorek faktů;
+   - všechna doplněná fakta;
+   - fakta změněná opravami;
+   - mini-pilot PE;
+   - náhodný vzorek vyloučených.
+
+   Pro hodnotitele je vygenerovaný kontrolní list s tvrzením, tím, co ve zdroji hledat, a odkazem na zdroj. Přesnost se počítá pro každé kolo zvlášť a opravy po kontrole metriku zpětně nemění.
+4. **Testy** (364) nad fiktivními daty, každé validační pravidlo má pozitivní i negativní test.
+
+### Kde se agent (a zadání) mýlil
+
+| # | Chyba | Jak se našla | Oprava |
+|---|---|---|---|
+| 1 | **`robots.txt`:** obchodní rejstřík se četl přes cestu `/ias/` na or.justice.cz, kterou `robots.txt` zakazuje. | Kontrola surového textu odmítla stažení. | 23 faktů nahrazeno ARES; kontrola `robots.txt` v kódu před každým požadavkem |
+| 2 | **Pravidlo (c):** shoda obchodní firmy s názvem značky stačila k přiřazení IČO. | Při ověřování Techstars by pravidlo přiřadilo nesouvisející firmu stejného jména. | Pravidlo zrušeno, platí jen doložená spojení (a), (b), (d). |
+| 3 | **CVC:** J&T Ventures byl ověřen, ačkoli vazba na skupinu J&T existuje a podíl skupiny doložen nebyl. Springtide (kapitál jen od KKCG) dostal od R1 nejdřív `TP`. | Poznámka R1 „fond patřící pod J&T“ a souhrn rozporů | J&T přeřazen mezi kandidáty (fakt z webu fondu), Springtide vyloučen jako `cvc`. Pravidlo CVC (> 50 % kapitálu od jedné skupiny) se uplatňuje i u ověřených. |
+| 4 | **Lighthouse:** „poslední investice 2019“ převzata z jediného článku, novější se nehledaly. | R1: false negative | Doplněny investice z roku 2025. Absenci aktivity tvrdit jen po cíleném hledání. |
+| 5 | **Tachles:** validátor vyžadoval nepovinné pole `investment_stages`, subjekt zůstal kandidátem. | R1: false negative | Požadavek odstraněn a pokryt testem. Validátor vynucuje jen Z1–Z4. |
+| 6 | **Obecný kód vyloučení** `mimo_definici_pilotu`: konkrétní důvod byl jen v poznámce, hodnotitel ho nemohl ověřit. | Při přípravě kontrolního listu | Rozdělen na 6 konkrétních kódů (`cvc`, `fond_fondu`, …). Validátor starý kód odmítá. |
+| 7 | **Agregátory:** fakt Startguide stál na Caplight. Gain Ventures dostal od R1 `TP` na základě databází transakcí. | Kontrola zdrojů a souhrn rozporů | Zdroj nahrazen CzechCrunch, Gain přeřazen na `nejiste`. Validátor hlásí agregátor jako zdroj. |
+| 8 | **Cíl fondu započítaný jako kapitál** – chyba v mém zadání, ne agenta. | Při revizi tabulky kapitálu | Nová definice: získaný kapitál × cíl × investováno × AUM zvlášť. Kapitál klesl z 15/16 na 13/16. Přísnější pravidlo pro dolní mez. |
+| 9 | **Typ částky odvozený z kontextu:** cíl odvozen z pozdějšího zdroje, „první kolo“ zapsané jako uzavřený fond, plán investic jako cíl. | Kontrola R1 všech doplněných faktů: 6 ze 7 nálezů | Opraveno 7 faktů (kolo po opravě 7/7). Nové typy `oznamena_velikost_fondu` a `fond_investovano_za_obdobi`. Pravidlo: typ jen z formulace zdroje. |
+| 10 | **Odhadnuté minuty:** u 18 cílených hledání agent zapsal kulaté odhady času jako měření. | Agent sám, při sjednocování definice času | Hodnoty smazány s poznámkou „čas nebyl měřen“. Minuty jsou povinné jen tam, kde se měří. |
+| 11 | **Odhadnuté domény:** při sondě angel sítí agent zkusil uhodnout adresy webů (jedna patřila nesouvisejícímu e-shopu). | Agent sám, výsledek nepoužil | Do dat ani dokumentace se nic nedostalo. Agent chybu nahlásil. |
+| 12 | **Credo Stage 5:** můj pokyn „first close → dolní mez“ agent ověřil proti zdrojům. | Agent: Wikipedie cituje Tech.eu, který first close neuvádí; TNW píše „single closing“. | Pokyn provedl konzervativně, konflikt označil a upozornil na něj. Kontrola R1 Wikipedii vyřadila, fond je teď final close. |
+| 13 | **Nereprodukovatelný doklad:** zánik subjektu doložen dotazem na vyhledávací API ARES (POST), který hodnotitel nemůže zopakovat. | Kontrola vyloučených: 1 nejistý | Zapsáno jako omezení. Doklad „nic nenalezeno“ potřebuje otevíratelný zdroj. |
+
+Další incidenty (soubor zamčený Excelem, nesoulad popisu commitu, data v nesouvisejícím commitu) jsou v [docs/02](docs/02-metodika.md), 2.8.
+
+## Rozhodnutí v nejasných bodech zadání
+
+| Bod | Rozhodnutí | Proč |
 |---|---|---|
-| 1 | Plán výzkumu a kritéria zařazení a vyloučení | [docs/01-plan-a-kriteria.md](docs/01-plan-a-kriteria.md) |
-| 2 | Metodika vyhledávání a ověřování | [docs/02-metodika.md](docs/02-metodika.md) |
-| 3 | Odhad globálního pokrytí, počtu investorů a spolehlivosti | [docs/03-globalni-odhad.md](docs/03-globalni-odhad.md), oddíly 3.1–3.4 |
-| 4 | Pilotní vzorek v ČR a zdůvodnění výběru země | [data/investors.csv](data/investors.csv), [docs/01-plan-a-kriteria.md](docs/01-plan-a-kriteria.md) |
-| 5 | Zdroje a data ověření záznamů i faktů | [data/facts.csv](data/facts.csv), [data/funds.csv](data/funds.csv), [data/sources.csv](data/sources.csv), [data/search_log.csv](data/search_log.csv), [data/effort_log.csv](data/effort_log.csv) |
-| 6 | Ruční kontrola vzorku a precision | [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), [review/kontrolni-list-faktu.md](review/kontrolni-list-faktu.md), [data/reviews.csv](data/reviews.csv), [data/fact_reviews.csv](data/fact_reviews.csv) |
-| 7 | Odhad nákladů a složitosti globálního škálování | [docs/03-globalni-odhad.md](docs/03-globalni-odhad.md), oddíly 3.5–3.6 |
-| 8 | Kód, testy, dokumentace, historie commitů, ai-log | `investor_db/`, `tests/`, `docs/`, `git log`, [ai-log/](ai-log/) |
+| Typ investora pro pilot | VC | Má právní formu a regulatorní stopu a veřejně komunikuje portfolio. Doložitelnost je nejlepší. PE se míchá s jinou strategií (většinové podíly). |
+| Země | Česká republika | Bezplatný ARES s API, asociace CVCA se seznamem členů, malý trh vhodný pro ruční kontrolu, jazyk, který hodnotitel ovládá |
+| Jednotka záznamu | VC značka (tým, který rozhoduje), ne právní správce | Jeden licencovaný správce často spravuje mnoho nesouvisejících strategií. Správce se ukládá jako fakt. |
+| Corporate VC | Vyloučeno při > 50 % kapitálu fondu od jedné skupiny. Bez doloženého podílu kandidát. | Takový fond investuje převážně peníze korporace. |
+| Aktivita | Investice nebo nový fond za 36 měsíců | Odpovídá investiční periodě VC fondu. Hodnota je předpoklad nastavitelný v `schema.py`. |
+| Celkový investiční kapitál | Získaný kapitál po fondech podle typu částky. Cíl, investováno a AUM zvlášť. Měny se nesčítají ani nepřepočítávají. | „Kapitál“ v zadání je nejednoznačný. Sčítat cíle a získané částky by výsledek nadsadilo (chyba 8). |
+| Hodnotitelé | Jeden hodnotitel R1, R2 nebyl k dispozici | Přesnost má proto široké intervaly a shoda hodnotitelů se nepočítá. Proces R2 podporuje (šablony, Cohenovo κ). |
+| Úložiště | CSV v Gitu | Data jsou čitelná a verzovaná s historií, kterou hodnotitel zkontroluje. Pro tisíce záznamů by bylo potřeba přejít na databázi (docs/03). |
+| Jazyk | Čeština, kódy slovníků ASCII | Jazyk zadavatele a zdrojů. ASCII kódy jsou stabilní pro strojové zpracování. |
+| Osobní údaje | Fyzické osoby (angelé, soukromí investoři) se do dat neukládají | GDPR: v plánu je popsán oprávněný zájem, minimalizace a informační povinnost (docs/01 1.10). |
 
-## Hlavní omezení
+## Co v řešení chybí
 
-- Jen bezplatné veřejné zdroje. Úplnost nepovinných polí je proto nízká: ticket má 69–75 % ověřených investorů, velikost fondu 12,5 %.
-- Některé primární zdroje jsou nedostupné: JERRS ČNB je za CAPTCHA, or.justice.cz zakazuje `/ias/` v robots.txt a část webů vrací HTTP 403 nebo 429. Ochrany se neobcházejí.
-- Nástroj pro čtení webu vrací shrnutí, proto se částky a data ověřují proti surovému textu. Stránky vykreslované JavaScriptem surový text neposkytnou.
-- Pravidlo CVC často nejde rozhodnout, protože podíl korporace na kapitálu fondu zdroje neuvádějí (Inven, J&T).
-- Precision vychází z 15 záznamů a jednoho hodnotitele, interval je široký a shoda hodnotitelů se nepočítá.
-- Globální odhad stojí na předpokladech, hlavně na podílu VC mezi firmami PE a VC v Evropě a na zbytku světa. Ty jsou v [docs/03](docs/03-globalni-odhad.md) označené a mají rozsah.
+- **Spotřeba tokenů a cena API nebyly změřeny.** V odhadu nákladů jsou předpokladem [P]. Postup měření je v docs/03 3.5.
+- **Family office, angel investoři a velcí soukromí investoři** mají jen pravidla a studii proveditelnosti se sondou v počtech, žádná data. Odhady jejich počtu jsou z velké části předpoklady.
+- **PE jen jako mini-pilot (n = 5).** Výsledky jsou orientační a uvádějí se v počtech.
+- **4 kandidáti** (Inven, J&T, Nation1, Gain Ventures) zůstávají nerozhodnutí. Chybí doklad podílu korporace (CVC) nebo identifikace české entity.
+- **Jeden hodnotitel.** Chybí nezávislý R2 a shoda hodnotitelů.
+
+## Reprodukovatelnost
+
+Ověřeno 12. 10. 2026 na čistém klonu z GitHubu (podrobnosti níže v této sekci po dokončení kontroly).
 
 ## Návod pro hodnotitele
 
-1. **Instalace.** Je potřeba Python 3.11 nebo novější. Kód používá jen standardní knihovnu, pytest je volitelná závislost `dev`.
+1. **Instalace.** Je potřeba Python 3.11 nebo novější. Kód používá jen standardní knihovnu, pytest je jen pro testy.
 
    ```
-   git clone git@github.com:osho4753/investor-db.git
+   git clone https://github.com/osho4753/investor-db.git
    cd investor-db
-   python -m pip install -e ".[dev]"      # jen kvůli testům (pytest)
+   python -m pip install -e ".[dev]"
    ```
 
-2. **Kontrola integrity dat.** Příkaz musí skončit hláškou „Validace prošla bez chyb.“
+2. **Kontrola integrity.** Musí skončit hláškou „Validace prošla bez chyb.“
 
    ```
    python -m investor_db validate
    ```
 
-3. **Kontrolní list a šablony pro ruční kontrolu.** Postup je v [docs/04-rucni-kontrola.md](docs/04-rucni-kontrola.md), oddíl 4.2.
-
-   ```
-   python -m investor_db review-guide                          # review/kontrolni-list-faktu.md
-   python -m investor_db review-template --reviewer R2         # řádky pro kontrolu investorů
-   python -m investor_db fact-review-template --reviewer R2    # řádky pro kontrolu vzorku faktů
-   python -m investor_db fact-review-template --reviewer R1 --round po_doplneni --from-fact f-00249  # kolo po doplnění
-   python -m investor_db fact-review-template --reviewer R1 --round po_oprave --facts f-00262,f-00267  # kolo po opravě (výběr faktů)
-   python -m investor_db review-template --reviewer R1 --category pe            # mini-pilot PE
-   python -m investor_db review-template --reviewer R1 --category vc_vyloucene  # náhodný vzorek 10 vyloučených VC
-   ```
-
-   CSV upravujte v textovém editoru (UTF-8), ne v Excelu. Excel mění kódování a ořezává úvodní nuly v IČO.
-
-4. **Metriky** (precision, přesnost faktů, úplnost, trychtýř, pracnost, capture–recapture):
+3. **Metriky:** precision, přesnost faktů po kolech, úplnost, kapitál, trychtýř, pracnost a kategorie.
 
    ```
    python -m investor_db metrics
    ```
 
-5. **Testy:**
+4. **Testy:**
 
    ```
    python -m pytest
    ```
 
-## Práce s AI
+5. **Ruční kontrola.** Návod je v [docs/04](docs/04-rucni-kontrola.md) a kontrolní list v [review/kontrolni-list-faktu.md](review/kontrolni-list-faktu.md) (`python -m investor_db review-guide`). Šablony se zakládají příkazy `review-template` a `fact-review-template` (parametry v docs/04 4.4, 4.8, 4.9).
 
-Data sbíral, kód psal a dokumentaci připravoval agent Claude Code podle pokynů autora. Ruční kontrolu dělá člověk. Celý průběh je v [ai-log/](ai-log/).
-
-### Příklad: agent ověřil pokyn proti zdrojům a neprovedl ho slepě
-
-Autor při revizi kapitálu nařídil: „Credo Stage 5 (88 mil. USD) je first close → dolní mez.“ Agent pokyn ověřil proti zdrojům a zjistil, že má slabou oporu:
-
-- „First close“ uvádí jen Wikipedie a článek Tech.eu, který Wikipedie cituje, first close nezmiňuje.
-- TNW (23. 3. 2026) naopak píše, že fond byl získán v jediném uzavření („raised in a single closing“).
-
-Agent pokyn provedl, protože first close je konzervativní varianta. Rozpor ale nezamlčel:
-
-- zapsal oba zdroje jako samostatné fakty (f-00295, f-00296),
-- konflikt označil ve `funds.csv` (`conflict_note`), takže je vidět v tabulce kapitálu,
-- autora výslovně upozornil, že zdroje jeho premisu nepodporují, a nabídl změnu typu na „uzavřen“.
-
-Autor rozhodl, že zápis zůstává. Credo je dolní mezí tak jako tak kvůli nevyřešenému konfliktu měny u Credo Stage 3 (100 mil. USD podle money.pl, 100 mil. EUR podle CzechCrunch, Vestbee a partnera Creda; primární zdroj se nenašel). Typ uzavření Stage 5 tedy výsledek nemění. Rozbor je v [docs/04](docs/04-rucni-kontrola.md), 4.7.
-
-### Příklad chyby: agent zapsal odhadnutý čas jako měření
-
-U 18 cílených hledání (`search_log.csv`, s-018 až s-035) agent při zápisu vyplnil sloupec `minutes` kulatými hodnotami 0,5–2 min. Ty nebyly změřené, byly odhadnuté. Sloupec přitom podle metodiky obsahuje změřený čas a report je sčítal do času hledání: 27,6 min místo změřených 5,6 min.
-
-Chybu agent sám odhalil, když autor chtěl sjednotit definici času modelu pro VC a PE. Změřené časy ze záznamů začátku a konce mají dvě desetinná místa, kdežto odhady byly kulaté.
-
-Oprava: hodnoty jsou smazané a v poznámce řádku je uvedeno, že čas nebyl měřen. Validace teď vyžaduje `minutes` jen u hledání kandidátů. Čas modelu se počítá jen ze změřených dat (sjednocená definice v [docs/03](docs/03-globalni-odhad.md), 3.8).
-
-**Poučení:** u každého čísla v datech musí být jasné, zda je změřené, převzaté ze zdroje, nebo odhadnuté. Platí to i pro údaje o vlastní práci agenta.
+> **Neupravujte CSV v Excelu.** Excel mění kódování (Windows-1250), formát dat a ořezává úvodní nuly v IČO. CSV upravujte v textovém editoru v UTF-8. Validátor takové poškození zachytí a `metrics` pak neběží.
 
 ## Struktura
 
 ```
-data/          CSV tabulky (jediný zdroj pravdy)
-docs/          plán, metodika, odhady, ruční kontrola
-investor_db/   schéma, validace, metriky, CLI
-review/        vygenerovaný kontrolní list faktů pro hodnotitele
-tests/         testy nad fiktivními daty
-ai-log/        exporty dialogů s AI
+docs/00-zadani.md         zadání
+docs/01-plan-a-kriteria   plán, kritéria, kategorie, PE mini-pilot, studie proveditelnosti
+docs/02-metodika          zdroje, postup, datové schéma, validace, incidenty
+docs/03-globalni-odhad    globální odhad, spolehlivost, náklady, odhad po kategoriích
+docs/04-rucni-kontrola    návod pro hodnotitele a výsledky všech kol kontroly
+data/                     CSV tabulky (jediný zdroj pravdy)
+investor_db/              schéma, validace, metriky, CLI
+review/                   vygenerovaný kontrolní list
+tests/                    testy nad fiktivními daty
+ai-log/                   exporty konverzací s Claude Code
 ```
-
-Pytest je zvolen místo `unittest`, protože parametrizované testy validačních pravidel a dočasné složky (`tmp_path`) jsou s ním výrazně kratší a čitelnější; samotný kód na něm nezávisí.
