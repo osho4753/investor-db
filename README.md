@@ -86,7 +86,7 @@ Data sbíral, kód psal a dokumentaci připravoval agent **Claude Code**. Pokyny
    - náhodný vzorek vyloučených.
 
    Pro hodnotitele je vygenerovaný kontrolní list s tvrzením, tím, co ve zdroji hledat, a odkazem na zdroj. Přesnost se počítá pro každé kolo zvlášť a opravy po kontrole metriku zpětně nemění.
-4. **Testy** (364) nad fiktivními daty, každé validační pravidlo má pozitivní i negativní test.
+4. **Testy** (376) nad fiktivními daty, každé validační pravidlo má pozitivní i negativní test.
 
 ### Kde se agent (a zadání) mýlil
 
@@ -185,6 +185,27 @@ Report počítá precision ze současných statusů (16/16). Hodnota 15/15 ze st
 
 > **Neupravujte CSV v Excelu.** Excel mění kódování (Windows-1250), formát dat a ořezává úvodní nuly v IČO. CSV upravujte v textovém editoru v UTF-8. Validátor takové poškození zachytí a `metrics` pak neběží.
 
+## Prezentační web
+
+Statický web s výsledky, daty a příběhy chyb je ve složce [`site/`](site/). Generuje ho příkaz:
+
+```
+python -m investor_db site
+```
+
+- **Zdroj dat:** čísla a záznamy počítají stejné funkce jako `metrics` z `data/*.csv`.
+- **Převzaté tabulky:** souhrnná tabulka odhadů se načítá z docs/03, příběhy chyb z tabulky v tomto README.
+- **Krátké texty:** jsou v [`site_texts/`](site_texts/) a dají se upravit bez zásahu do kódu.
+- **Kontrola:** test ověřuje, že commitnutý `site/` odpovídá novému vygenerování a že odkazy na soubory v repozitáři existují. Po změně dat nebo textů je proto potřeba web přegenerovat a commitnout.
+
+**Nasazení na Vercel:**
+
+1. Na vercel.com zvolte Add New → Project a importujte repozitář `osho4753/investor-db`.
+2. Nic dalšího nenastavujte. [`vercel.json`](vercel.json) vypíná instalaci i build a jako výstup používá složku `site`.
+3. Deploy. Každý push do `main` web znovu nasadí ze commitnutého `site/`.
+
+Bez Vercelu stačí otevřít `site/index.html` v prohlížeči.
+
 ## Struktura
 
 ```
@@ -196,6 +217,8 @@ docs/04-rucni-kontrola    návod pro hodnotitele a výsledky všech kol kontroly
 data/                     CSV tabulky (jediný zdroj pravdy)
 investor_db/              schéma, validace, metriky, CLI
 review/                   vygenerovaný kontrolní list
+site/                     vygenerovaný prezentační web (python -m investor_db site)
+site_texts/               krátké texty webu k úpravě
 tests/                    testy nad fiktivními daty
 ai-log/                   exporty konverzací s Claude Code
 ```
