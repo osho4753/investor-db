@@ -6,24 +6,24 @@ Prezentační web: https://investor-db-woad.vercel.app/
 
 Výsledkem je reprodukovatelný proces a pilotní databáze VC investorů v Česku z bezplatných veřejných zdrojů. Každý údaj má zdroj, datum přístupu a popis důkazu a ruční kontrola R1 změřila přesnost.
 
-- **16 ověřených VC investorů** z 52 nalezených subjektů (4 kandidáti, 32 vyloučených s důvodem).
+- **14 ověřených VC investorů** z 52 nalezených subjektů (6 kandidátů, 32 vyloučených s důvodem); stav po opravách po kontrole R1-v2.
 - **Precision (kolo R1-v2): 11/16** přísně, nejisté = nepotvrzeno (95% interval 44,4–85,8 %); **11/11** jen rozhodnuté případy (74,1–100 %).
 - **Přesnost faktů 32/34** (94,1 %) na náhodném vzorku, přísně 32/36.
 
-Tabulka 16 ověřených investorů: [web](https://investor-db-woad.vercel.app/data.html#overeni), data v [`data/investors.csv`](data/investors.csv). Jak data zkontrolovat: [Návod pro hodnotitele](#návod-pro-hodnotitele).
+Tabulka 14 ověřených investorů: [web](https://investor-db-woad.vercel.app/data.html#overeni), data v [`data/investors.csv`](data/investors.csv). Jak data zkontrolovat: [Návod pro hodnotitele](#návod-pro-hodnotitele).
 
 Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařadí a ověří investory do firem. Každý údaj je fakt se zdrojem, datem přístupu a popisem důkazu. Hlavním cílem je spolehlivost dat, ne počet záznamů. Pilot pokrývá **venture kapitál (VC) v Česku**. Pro PE proběhl mini-pilot, pro family office, angel investory a velké soukromé investory studie proveditelnosti. Zadání je v [docs/00-zadani.md](docs/00-zadani.md).
 
 ## Klíčové výsledky
 
 - **Trychtýř:** pilot našel 52 subjektů.
-  - 16 ověřených VC investorů;
-  - 4 kandidáti, kterým chybí doklad některého kritéria;
+  - 14 ověřených VC investorů;
+  - 6 kandidátů, kterým chybí doklad některého kritéria (i&i Biotech a Tilia přešly mezi kandidáty po kontrole R1-v2);
   - 32 vyloučených s konkrétním důvodem, z toho 17 PE.
 - **Precision (kolo R1-v2, 13. 10. 2026):** 11 TP, 0 FP, 5 nejistých ze 16 tehdy ověřených. Přísně (nejisté = nepotvrzeno) 11/16 = 68,8 % (95% interval 44,4–85,8 %), jen rozhodnuté případy 11/11 (74,1–100 %). Nejisté případy jsou vady dokladů, ne vyvrácené záznamy ([docs/04](docs/04-rucni-kontrola.md) 4.11).
 - **Původní kolo R1 (historie):** 15/15 v době kontroly. Poznámky se ale opíraly o Crunchbase, LinkedIn a agregátory v rozporu s metodikou, časy byly zaokrouhlené a Springtide, Patero a Gain byly nejdřív TP a podle pravidel pak FP nebo nejisté.
 - **Recall:** ze dvou nezávislých seznamů českých VC (Vestbee 2021/2023, AIN.UA 2022), které hledání nepoužilo, máme **14 z 18** subjektů, které seznamy uvádějí jako VC v ČR (bez Pale Fire Capital, který investuje vlastní peníze partnerů): 8 ověřených, 3 kandidáti, 3 vyloučení s důvodem). Chybí Longevitytech.fund, Y Soft Ventures, Koopeo Ventures a Air Ventures ([docs/04](docs/04-rucni-kontrola.md) 4.10).
-- **Capture–recapture (doplňkový, málo informativní odhad):** Chapmanovy odhady 7–25 ověřitelných VC v ČR jsou jen dolní mez, protože zdroje hledání nejsou nezávislé. Ověřených je už 16, tedy víc než dolní hodnoty odhadu. Lepší představu o úplnosti dává recall proti nezávislým seznamům.
+- **Capture–recapture (doplňkový, málo informativní odhad):** Chapmanovy odhady 9–29 ověřitelných VC v ČR jsou jen dolní mez, protože zdroje hledání nejsou nezávislé. Pro samotné ověřené vychází 13,7, tedy méně, než kolik jich už je (14). Lepší představu o úplnosti dává recall proti nezávislým seznamům.
 - **Kontrola vyloučených:** náhodný vzorek 10 z 32 dal 9 správných vyloučení a 1 nejistý případ. False negative se ve vzorku nenašel.
 - **Přesnost faktů po kolech:**
 
@@ -33,11 +33,11 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   | Všechna doplněná fakta | 42/44 = 95,5 % | 42/49 = 85,7 % |
   | Fakta změněná opravami | 7/7 | 7/7 |
 
-- **Pole zadání u 16 ověřených VC:**
-  - sektor 15/16, fáze 16/16;
-  - ticket 14/16 (obě meze 11/16);
-  - kapitál 13/16: získaná částka fondu nebo AUM;
-  - zdroj 16/16.
+- **Pole zadání u 14 ověřených VC:**
+  - sektor 13/14, fáze 14/14;
+  - ticket 12/14 (obě meze 9/14);
+  - kapitál 11/14: získaná částka fondu nebo AUM;
+  - zdroj 14/14.
 
   Kapitál je ve [`funds.csv`](data/funds.csv) po fondech a s typem částky. Získaný kapitál je všude dolní mez. Cíl fondu se do kapitálu nepočítá a konflikty zdrojů jsou v reportu vidět.
 - **PE mini-pilot (5 náhodných PE členů CVCA):**
@@ -45,7 +45,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   - českou právnickou osobu mají 2/5;
   - sektor a ticket má 5/5, získaný kapitál jen 1/5.
 - **Globální odhad VC:** 5 235 / 7 251 / 9 682 firem ve scénářích nízký / základní / vysoký.
-- **Čas a cena:** model 6,9 min na ověřený VC záznam, API 0,365 USD na investora (měřeno, n = 3) a 0,68 USD na záznam v databázi. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
+- **Čas a cena:** model 7,9 min na ověřený VC záznam, API 0,365 USD na investora (měřeno, n = 3) a 0,78 USD na záznam v databázi. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
 
 ## Splnění zadání
 
@@ -53,12 +53,12 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
 |---|---|---|---|
 | Databáze investorů: VC, PE, family office, angelé, velcí soukromí investoři | **částečně** | [data/](data/), [docs/01](docs/01-plan-a-kriteria.md) 1.10–1.12 | Data: VC v ČR (pilot) a PE (mini-pilot n = 5). Ostatní kategorie mají plán, pravidla a studii proveditelnosti, ale ne data. |
 | Každý záznam je skutečný investor, ne náhodná firma | splněno | [docs/04](docs/04-rucni-kontrola.md) 4.6, 4.8, 4.9 | precision R1-v2 11/16 přísně, 11/11 rozhodnuté; PE 5/5, vyloučení 9/9 + 1 nejisté |
-| U investora: sektor, do čeho investuje a v jaké výši, celkový kapitál, zdroj | **částečně** | [docs/04](docs/04-rucni-kontrola.md) 4.7, report `metrics` | Vyplněno sektor 15/16, ticket 14/16, kapitál 13/16, zdroj 16/16. Co chybí, je zapsáno jako „hledáno, nenalezeno“. |
+| U investora: sektor, do čeho investuje a v jaké výši, celkový kapitál, zdroj | **částečně** | [docs/04](docs/04-rucni-kontrola.md) 4.7, report `metrics` | Vyplněno sektor 13/14, ticket 12/14, kapitál 11/14, zdroj 14/14. Co chybí, je zapsáno jako „hledáno, nenalezeno“. |
 | Plán: kdo v databázi bude a kdo ne, pravidla zařazení a vyřazení | splněno | [docs/01](docs/01-plan-a-kriteria.md) | Z1–Z4 pro VC, P/F/A/S pro ostatní kategorie, kódy vyloučení |
 | Jak se ověří pravost a správné zařazení | splněno | [docs/01](docs/01-plan-a-kriteria.md), [docs/02](docs/02-metodika.md), [docs/04](docs/04-rucni-kontrola.md) | validátor, primární zdroje, ruční kontrola R1 |
 | Odhad dosažitelného okruhu, počtu a spolehlivosti s uvedením, z čeho vychází | splněno | [docs/03](docs/03-globalni-odhad.md) 3.1–3.4, 3.7–3.8 | Každé číslo má značku: změřeno, zdroj, nebo předpoklad. |
 | Ověření na vzorku (VC v jedné zemi) | splněno | [data/](data/) | 52 subjektů v ČR |
-| Zdroj a datum dokládající, že subjekt investuje | splněno | `facts.csv` (Z4), `investors.csv` (`evidence_urls`) | Doložená investice za 36 měsíců u 13/16, u ostatních nový fond. |
+| Zdroj a datum dokládající, že subjekt investuje | splněno | `facts.csv` (Z4), `investors.csv` (`evidence_urls`) | Doložená investice za 36 měsíců u 11/14, u ostatních nový fond nebo vehikl. |
 | Přesnost změřená na ručně ověřeném vzorku | splněno | [docs/04](docs/04-rucni-kontrola.md) | Jen jeden hodnotitel (R1), shoda hodnotitelů se nepočítá. |
 | Odhad nákladů na rozšíření na celý svět | splněno | [docs/03](docs/03-globalni-odhad.md) 3.5, 3.8 | Čas modelu a člověka je změřený. Tokeny a cena API jsou změřené na 3 investorech (0,365 USD na investora), přepočet na ostatní kategorie je předpoklad. |
 | Jen veřejně dostupná data | splněno | [docs/02](docs/02-metodika.md) 2.2, 2.8 | Jedno porušení `robots.txt` bylo zjištěno a opraveno (níže). |
@@ -143,7 +143,7 @@ Další incidenty (soubor zamčený Excelem, nesoulad popisu commitu, data v nes
 - **Spotřeba tokenů je změřená jen na 3 investorech** (opakované ověření, jeden běh). Cena API pro family office, angely a velké soukromé investory je předpoklad odvozený z času modelu.
 - **Family office, angel investoři a velcí soukromí investoři** mají jen pravidla a studii proveditelnosti se sondou v počtech, žádná data. Odhady jejich počtu jsou z velké části předpoklady.
 - **PE jen jako mini-pilot (n = 5).** Výsledky jsou orientační a uvádějí se v počtech.
-- **4 kandidáti** (Inven, J&T, Nation1, Gain Ventures) zůstávají nerozhodnutí. Chybí doklad podílu korporace (CVC) nebo identifikace české entity.
+- **6 kandidátů** (Inven, J&T, Nation1, Gain Ventures, i&i Biotech, Tilia) zůstává nerozhodnutých. Chybí doklad podílu korporace (CVC), identifikace české entity nebo primární zdroj investice.
 - **Jeden hodnotitel.** Chybí nezávislý R2 a shoda hodnotitelů.
 
 ## Reprodukovatelnost
@@ -166,7 +166,7 @@ Ověřeno 12. 10. 2026 na čistém klonu z GitHubu (commit `190e7e6`) v dočasn�
 | Kontrola vyloučených | 9 TP a 1 nejisté |
 | PE | pravost 5/5, v zemi 2/5, R1 2/2 a 3/3 TP |
 
-Hlavní precision je z kola R1-v2 (11/16 přísně, 11/11 rozhodnuté) ze stavu v době kontroly. Původní kolo R1 report počítá ze současných statusů (16/16), hodnota 15/15 z doby kontroly je v [docs/04](docs/04-rucni-kontrola.md), 4.6, a v historii Gitu (commit `18877a1`). Instalace `pip install -e ".[dev]"` se v klonu nespouštěla, protože pytest byl v prostředí už nainstalovaný.
+Hlavní precision je z kola R1-v2 (11/16 přísně, 11/11 rozhodnuté) ze stavu v době kontroly. Původní kolo R1 report počítá ze současných statusů (14/14), hodnota 15/15 z doby kontroly je v [docs/04](docs/04-rucni-kontrola.md), 4.6, a v historii Gitu (commit `18877a1`). Instalace `pip install -e ".[dev]"` se v klonu nespouštěla, protože pytest byl v prostředí už nainstalovaný.
 
 ## Návod pro hodnotitele
 

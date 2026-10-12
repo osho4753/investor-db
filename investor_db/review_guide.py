@@ -2,11 +2,12 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Final
 
-from investor_db.evidence import InvestorEvidence, ares_url, verified_evidence
+from investor_db.evidence import InvestorEvidence, ares_url, round_evidence
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
     EXCLUSION_REASONS,
     FACT_EXCLUSION_REASON,
+    INVESTOR_ROUND_SECOND,
     FACT_FIELDS,
     INVESTMENT_SECTORS,
     INVESTMENT_STAGES,
@@ -683,13 +684,14 @@ def render_investor_review(index: int, evidence: InvestorEvidence, sources: dict
 
 
 def render_investor_checklist(dataset: Dataset) -> str:
-    evidence = verified_evidence(dataset)
+    evidence = round_evidence(dataset, INVESTOR_ROUND_SECOND)
     sources = {row["source_id"]: row for row in dataset.sources}
     lines = [
         f"# Kontrolní list R1-v2: ověření VC investoři ({len(evidence)})",
         "",
         "Vygenerováno příkazem `python -m investor_db investor-review-guide` z `data/*.csv`. "
-        "Odkazy a doklady neupravuj ručně, při změně dat list vygeneruj znovu. Vyplňuj jen kolonky v tabulkách.",
+        "Odkazy a doklady neupravuj ručně, při změně dat list vygeneruj znovu. Vyplňuj jen kolonky v tabulkách. "
+        "Po vyplnění kola obsahuje list investory zkontrolované v kole R1-v2, i když se jejich status později změnil.",
         "",
         INVESTOR_REVIEW_INTRO,
         "",

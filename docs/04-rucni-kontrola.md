@@ -634,3 +634,28 @@ FP hodnotitel nenašel. Nejisté případy nejsou vyvrácené záznamy, ale vady
 
 **Kapitál třetích osob (Z3).** U 5 z 11 TP (KAYA, Presto, Purple, Soulmates, Tachles) hodnotitel investory fondu ve zdroji nenašel („peníze třetích stran: nevím“). Pravidla Z3 to připouštějí, protože vyžadují fakt o fondu, ne doklad, kdo do něj vložil peníze (viz docs/01, 1.3).
 
+## 4.12 Opravy po kontrole R1-v2 (13. 10. 2026)
+
+U každé vady agent zkusil najít primární zdroj nejvýše jednou. Když se to nepovedlo, dostal investor status `kandidat` s důvodem v poznámce faktu.
+
+| Investor | Vada podle R1-v2 | Co se stalo | Status |
+|---|---|---|---|
+| Reflex Capital | Z4 (grid.online, 2/2025) měl jako zdroj blog J&T Ventures. | Fakt `f-00147` přepojen na [CzechCrunch z 12. 2. 2025](https://cc.cz/hodne-jsem-se-ucil-a-podnikatelsky-jeste-nevyhral-rika-kratky-pro-startup-po-liftagu-ziskal-miliony/), který jmenuje Reflex Capital mezi investory; ověřeno proti surovému textu. | `overeny` |
+| Tilia Impact Ventures | Z4 (Flox Intelligence, 2/2026) stojí na databázi investic (agregátor). | Primární zdroj (web Tilie, tisková zpráva) jedním hledáním nenalezen, výsledky vedly jen na databáze. Důvod je v poznámce `f-00084`. | **`kandidat`** |
+| i&i Biotech Investments | IČO vede na Biotech Investments s.r.o., vazba na značku i&i neověřena. | Veřejný rejstřík (ARES VR) uvádí jako společníky jen holdingové společnosti s.r.o. bez názvu i&i. Vazbu dokládá jen web fondu, rejstřík ji nepotvrzuje. Důvod je v poznámce `f-00211`. | **`kandidat`** |
+| IP Lab Ventures | Z4 je stejný fakt jako Z3 (závazek EIF). | Podle docs/01 (1.3) Z4 formálně splňuje nový fond za 36 měsíců: závazek EIF do IP Lab Ventures Fund z 23. 9. 2026. Zapsáno výslovně do `f-00153`. Datovaná investice fondu jedním hledáním nenalezena. | `overeny` |
+| StartupYard | Z4 je stejný fakt jako Z3 (vehikl Batch 15). | Z4 formálně splňuje nový vehikl StartupYard Batch 15 s.r.o. zapsaný 14. 11. 2024. Zapsáno výslovně do `f-00228`. Datovaná investice z let 2024+ jedním hledáním nenalezena. | `overeny` |
+| Startguide VC | Z3 je jen cílová velikost SG One s naplněním 30 %. | Pravidla Z3 to připouštějí (fakt o fondu s `fund_name`). Uvedeno v poznámce `f-00284`. | `overeny` |
+
+**Nový trychtýř** (`python -m investor_db metrics`): 52 nalezených, **14 ověřených, 6 kandidátů, 32 vyloučených**. Precision kola R1-v2 (11/16 a 11/11) se nemění, protože se počítá ze stavu v době kontroly.
+
+**Přepočtené hodnoty** podle 14 ověřených:
+
+- pole zadání: sektor 13/14, fáze 14/14, ticket 12/14 (obě meze 9/14), kapitál 11/14, zdroj 14/14;
+- doložená investice za 36 měsíců 11/14 (u IP Lab, StartupYard a Tachles Z4 plní nový fond, vehikl nebo souhrnný údaj o investicích);
+- čas modelu na ověřený záznam 7,9 min místo 6,9 min (docs/03, 3.5 a 3.8);
+- získatelné z veřejných zdrojů 14 z 20 VC subjektů = 70 % (dříve 80 %);
+- capture–recapture: Chapman pro samotné ověřené 13,7 (interval 12,0–17,3), s kandidáty 9,5–29,3 (intervaly 9,0–49,0).
+
+Tabulky v 4.6 a 4.7 zachycují stav ke dni své kontroly a nepřepisují se.
+

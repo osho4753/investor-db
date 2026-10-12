@@ -1,6 +1,6 @@
 # Kontrolní list R1-v2: ověření VC investoři (16)
 
-Vygenerováno příkazem `python -m investor_db investor-review-guide` z `data/*.csv`. Odkazy a doklady neupravuj ručně, při změně dat list vygeneruj znovu. Vyplňuj jen kolonky v tabulkách.
+Vygenerováno příkazem `python -m investor_db investor-review-guide` z `data/*.csv`. Odkazy a doklady neupravuj ručně, při změně dat list vygeneruj znovu. Vyplňuj jen kolonky v tabulkách. Po vyplnění kola obsahuje list investory zkontrolované v kole R1-v2, i když se jejich status později změnil.
 
 Nové kolo kontroly R1-v2 u všech ověřených VC investorů. U každého investora ověř kritéria Z1–Z4 (docs/01, oddíl 1.3) a rozhodni, zda jde o skutečného VC investora se sídlem v ČR.
 
@@ -112,7 +112,7 @@ Nové kolo kontroly R1-v2 u všech ověřených VC investorů. U každého inves
 
 - **Z1 – registr:** IČO 24269158, ARES: <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/24269158>
 - **Z3 – kapitál třetích osob:** Fond „Reflex Capital – třetí fond“ investora Reflex Capital byl uzavřen s konečnou velikostí 22 000 000 EUR (stav k 22. 12. 2023). Fakt `f-00204`, zdroj: <https://cc.cz/nova-sila-pro-reflex-capital-ondreje-fryce-ve-tretim-fondu-ma-na-startupy-pres-pul-miliardy/> (média (sekundární), vydavatel: CzechCrunch).
-- **Nejnovější doložená investice (Z4):** Reflex Capital investoval do společnosti grid.online (oznámeno 3. 3. 2025). Fakt `f-00147`, zdroj: <https://www.jtventures.cz/blog> (web investora (primární), vydavatel: J&T Ventures).
+- **Nejnovější doložená investice (Z4):** Reflex Capital investoval do společnosti grid.online (oznámeno 12. 2. 2025). Fakt `f-00147`, zdroj: <https://cc.cz/hodne-jsem-se-ucil-a-podnikatelsky-jeste-nevyhral-rika-kratky-pro-startup-po-liftagu-ziskal-miliony/> (média (sekundární), vydavatel: CzechCrunch).
 
 | Kolonka (vyplní hodnotitel) | Hodnota |
 |---|---|

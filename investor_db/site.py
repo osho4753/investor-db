@@ -198,7 +198,7 @@ def headline_stats(dataset: Dataset) -> str:
             f"přísně, nejisté = nepotvrzeno: {format_proportion(second.pessimistic)}; jen rozhodnuté případy: {format_proportion(second.strict)}",
         ),
         stat(share_text(sample), "přesnost faktů", f"náhodný vzorek; všechna doplněná fakta {share_text(completion)}"),
-        stat(f"{len(dataset.investors)} → {counts[STATUS_VERIFIED]}", "nalezeno → ověřeno", f"{counts[STATUS_CANDIDATE]} kandidáti, {counts[STATUS_EXCLUDED]} vyloučeno s doloženým důvodem"),
+        stat(f"{len(dataset.investors)} → {counts[STATUS_VERIFIED]}", "nalezeno → ověřeno", f"kandidáti: {counts[STATUS_CANDIDATE]}, vyloučeno s doloženým důvodem: {counts[STATUS_EXCLUDED]}"),
         stat(f"{excluded.correct}/{excluded.reviewed}", "správná vyloučení", f"náhodný vzorek {excluded.reviewed} z {excluded.excluded} vyloučených; nejisté {excluded.unsure}"),
         stat(f"{pe.authentic}/{pe.assessed}", "PE mini-pilot: pravost", f"v zemi pilotu {pe.in_pilot_country}/{pe.assessed}"),
     ]

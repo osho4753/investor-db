@@ -286,7 +286,7 @@ Angel síť nebo syndikát (právnická osoba) se ověřuje podle A2–A3 a nav�
 
 | Kategorie | Sektor | Typická investice a výše | Celkový kapitál | Zdroj |
 |---|---|---|---|---|
-| VC (pilot, změřeno) | 15/16 | 14/16 alespoň jedna mez | 13/16 (získaný nebo AUM) | 16/16 |
+| VC (pilot, změřeno, 14 ověřených po kontrole R1-v2) | 13/14 | 12/14 alespoň jedna mez | 11/14 (získaný nebo AUM) | 14/14 |
 | PE | změří mini-pilot 1.11 | | | |
 | Family office | částečně | zřídka | zřídka (hodnota aktiv se obvykle nezveřejňuje) | ano |
 | Angel | částečně (jen vlastní zveřejnění) | zřídka | neukládá se | ano |
@@ -446,4 +446,4 @@ Samostatná sonda neproběhla. Studie vychází ze stavu zdrojů:
 | Angel investor | CBAA (11 členů, záměrně neindexováno), tiskové zprávy o kolech | nízká až střední, závisí na vlastním zveřejnění | 2/11 | 2/11 | neukládá se | ano | Jen se souhlasem nebo přes asociaci; osobní údaje podle GDPR v 1.10 |
 | Velký soukromý investor | ARES, tiskové zprávy, ručně Sbírka listin | nízká (**předpoklad**, bez sondy) | částečně | zřídka | jen vlastní kapitál holdingu, ručně | ano | Záznamem je holding, ne osoba. Žebříčky slouží jen k hledání. |
 
-**Závěr.** U VC a PE stojí databáze na registrech a vlastních webech fondů. Pole zadání jsou tam dostupná (VC 13/16 kapitál, PE 5/5 sektor a ticket). U family office, angelů a velkých soukromých investorů veřejné zdroje doloží **existenci** subjektu častěji než pole zadání. Kapitál a výše investic chybí téměř vždy. U fyzických osob navíc GDPR a vůle vydavatelů omezují automatický sběr. Tyto kategorie proto doporučuji v globální databázi vést jako **doplňkové s nižší úplností**, ne se stejnými cíli úplnosti jako VC a PE.
+**Závěr.** U VC a PE stojí databáze na registrech a vlastních webech fondů. Pole zadání jsou tam dostupná (VC 11/14 kapitál, PE 5/5 sektor a ticket). U family office, angelů a velkých soukromých investorů veřejné zdroje doloží **existenci** subjektu častěji než pole zadání. Kapitál a výše investic chybí téměř vždy. U fyzických osob navíc GDPR a vůle vydavatelů omezují automatický sběr. Tyto kategorie proto doporučuji v globální databázi vést jako **doplňkové s nižší úplností**, ne se stejnými cíli úplnosti jako VC a PE.

@@ -71,7 +71,7 @@ def test_committed_investor_checklist_is_current_and_unfilled() -> None:
     committed = (ROOT / DEFAULT_INVESTOR_CHECKLIST_PATH).read_text(encoding="utf-8")
 
     assert committed == render_investor_checklist(dataset)
-    assert committed.count("| Verdikt (`TP` / `FP` / `nejiste`) | |") == len(verified_evidence(dataset))
+    assert committed.count("| Verdikt (`TP` / `FP` / `nejiste`) | |") == 16
     urls = re.findall(r"<(https?://[^>]+)>", committed)
     assert urls
     assert not [url for url in urls if any(name in url.lower() for name in (*AGGREGATOR_NAMES, "linkedin"))]

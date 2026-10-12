@@ -3,6 +3,7 @@ from typing import Final
 
 from investor_db.io import Dataset, Row
 from investor_db.schema import (
+    CATEGORY_VC,
     FACT_DOCUMENTED_INVESTMENT,
     FUND_ACTIVITY_FACT_FIELDS,
     FUND_AMOUNT_FACT_FIELDS,
@@ -64,10 +65,16 @@ def registry_evidence(investor: Row, facts: list[Row], sources_by_id: dict[str, 
 
 
 def verified_evidence(dataset: Dataset) -> list[InvestorEvidence]:
-    investors = sorted(
-        (row for row in dataset.investors if row["verification_status"] == STATUS_VERIFIED),
-        key=lambda row: row["name"].lower(),
-    )
+    return investor_evidence(dataset, {row["investor_id"] for row in dataset.investors if row["verification_status"] == STATUS_VERIFIED})
+
+
+def round_evidence(dataset: Dataset, review_round: str) -> list[InvestorEvidence]:
+    reviewed = {row["investor_id"] for row in dataset.reviews if row["review_round"] == review_round and row["category"] == CATEGORY_VC}
+    return investor_evidence(dataset, reviewed) if reviewed else verified_evidence(dataset)
+
+
+def investor_evidence(dataset: Dataset, investor_ids: set[str]) -> list[InvestorEvidence]:
+    investors = sorted((row for row in dataset.investors if row["investor_id"] in investor_ids), key=lambda row: row["name"].lower())
     sources_by_id = {row["source_id"]: row for row in dataset.sources}
     result = []
     for investor in investors:
