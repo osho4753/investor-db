@@ -25,6 +25,7 @@ from investor_db.schema import (
     REVIEW_ROUNDS,
     REVIEWERS,
 )
+from investor_db.site import SITE_DIR, write_site
 from investor_db.validation import validate_dataset
 
 DEFAULT_DATA_DIR = Path("data")
@@ -54,6 +55,9 @@ def build_parser() -> argparse.ArgumentParser:
     guide = commands.add_parser("review-guide", help="vygeneruje kontrolní list faktů pro hodnotitele")
     guide.add_argument("--output", type=Path, default=DEFAULT_CHECKLIST_PATH)
     guide.set_defaults(handler=run_review_guide)
+    site = commands.add_parser("site", help="vygeneruje statický web z dat a dokumentace")
+    site.add_argument("--output", type=Path, default=Path(SITE_DIR))
+    site.set_defaults(handler=run_site)
     raw = commands.add_parser("raw-text", help="stáhne surový text stránky (mimo repozitář) a vyhledá v něm výraz")
     raw.add_argument("url")
     raw.add_argument("--grep", help="regulární výraz k vyhledání")
@@ -153,6 +157,15 @@ def run_review_guide(args: argparse.Namespace) -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(checklist, encoding="utf-8", newline="\n")
     print(f"Kontrolní list {len(sampled_fact_ids(dataset))} faktů uložen do {args.output}.")
+    return 0
+
+
+def run_site(args: argparse.Namespace) -> int:
+    if not report_issues(args.data_dir):
+        print("Web se negeneruje, dokud data neprojdou validací.")
+        return 1
+    written = write_site(args.data_dir.parent, args.output)
+    print(f"Web uložen do {args.output}: {', '.join(path.name for path in written)}.")
     return 0
 
 
