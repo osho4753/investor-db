@@ -390,8 +390,7 @@ def time_panel(dataset: Dataset) -> str:
             lines.append(f"<span>{escape(label)}</span><b>{format_amount_decimal(Decimal(str(summary.mean_minutes)))} min</b>")
     lines.append('<span class="h">Člověk (R1), průměr</span>')
     for label, rows in (
-        ("kontrola investora VC (R1)", [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_FIRST]),
-        ("kontrola investora VC (R1-v2)", [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_SECOND]),
+        ("kontrola investora VC (R1-v2, připravené doklady)", [row for row in dataset.reviews if row["category"] == CATEGORY_VC and row["review_round"] == INVESTOR_ROUND_SECOND]),
         ("kontrola investora PE", [row for row in dataset.reviews if row["category"] == CATEGORY_PE]),
         ("kontrola faktu", dataset.fact_reviews),
     ):

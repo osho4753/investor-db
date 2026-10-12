@@ -45,7 +45,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   - českou právnickou osobu mají 2/5;
   - sektor a ticket má 5/5, získaný kapitál jen 1/5.
 - **Globální odhad VC:** 5 235 / 7 251 / 9 682 firem ve scénářích nízký / základní / vysoký.
-- **Čas a cena:** model 7,9 min na ověřený VC záznam, API od 0,365 USD na investora (měřeno, n = 3, spíš dolní mez: session jen četla a vyhledávala, nic nezapisovala, neověřovala proti surovému textu, trvala 2 min 43 s a u Lighthouse měla nápovědu domény) a 0,78 USD na záznam v databázi. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
+- **Čas a cena:** model 7,9 min na ověřený VC záznam, API od 0,365 USD na investora (měřeno, n = 3, spíš dolní mez: session jen četla a vyhledávala, nic nezapisovala, neověřovala proti surovému textu, trvala 2 min 43 s a u Lighthouse měla nápovědu domény) a 0,78 USD na záznam v databázi. Člověk 3,7 min na kontrolu investora (kolo R1-v2, kontrola připravených dokladů, ne samostatné dohledání; původních zaokrouhlených 15,5 min je jen historie), u PE 9 min a 0,8–1,0 min na fakt.
 
 ## Splnění zadání
 

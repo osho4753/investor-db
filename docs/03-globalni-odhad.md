@@ -67,7 +67,7 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“: kolo R1-
 |---|---|---|
 | Čas modelu na ověřeného investora (hledání, triáž, ověření, doplnění; sjednocená definice v 3.8) | (5,55 + 0,66 + 80,1 + 23,9) min / 14 = **7,9 min** | `effort_log.csv`, `search_log.csv` |
 | Tokeny a cena API na ověřeného investora (opakované ověření, n = 3) | **363 690 tokenů, od 0,365 USD** (spíš dolní mez) | [ai-log/mereni-tokenu-2026-10-13.md](../ai-log/mereni-tokenu-2026-10-13.md) |
-| Čas člověka na kontrolu investora | **15,5 min** | `reviews.csv` (první kontrola) |
+| Čas člověka na kontrolu investora (kontrola připravených dokladů, ne samostatné dohledání) | **3,7 min** (59 min / 16) | `reviews.csv`, kolo R1-v2 (`review_round` = `r1_v2`) |
 | Čas člověka na kontrolu faktu | **0,96 min** | `fact_reviews.csv` |
 | Vzorek na region | 25 investorů a 36 faktů (±15 p. b.) | Cochran, viz [04-rucni-kontrola.md](04-rucni-kontrola.md) |
 
@@ -110,10 +110,12 @@ Ceník: [platform.claude.com/docs/en/about-claude/pricing](https://platform.clau
 
 **Měření je spíš dolní mez.** Session jen četla a vyhledávala, nic nezapisovala (fakta, zdroje, status), neověřovala proti surovému textu stránek, trvala jen 2 min 43 s a u Lighthouse měla v docs/02 nápovědu domény (lhv.vc). Skutečný sběr s ověřením a zápisem dat bude dražší. Navíc jde o n = 3, jeden běh a jednu zemi.
 
-**Člověk.** Ruční kontrola je výběrová, její rozsah proto závisí na počtu regionů, ne na počtu investorů:
-- 25 × 15,5 + 36 × 0,96 = **422 min (7,0 h) na region a hodnotitele**;
-- při 8–15 regionech to dává **56–106 h** na jednoho hodnotitele a jedno kolo; druhý hodnotitel (R2) čas zdvojnásobí;
-- **hodinová sazba (předpoklad)** 25–60 EUR/h znamená 1 407–6 331 EUR za kolo;
+**Člověk.** Čas 3,7 min na investora je změřený v kole R1-v2 (nezaokrouhlené časy, 1,2–7,8 min). Jde o **kontrolu připravených dokladů** podle kontrolního listu (odkazy na ARES, doklad Z3 a investici), ne o samostatné dohledání investora. Původních 15,5 min z prvního kola R1 je jen historie: časy byly zaokrouhlené na 5 minut a kontrola nešla podle metodiky (docs/04, 4.11).
+
+Ruční kontrola je výběrová, její rozsah proto závisí na počtu regionů, ne na počtu investorů:
+- 25 × 3,7 + 36 × 0,96 = **127 min (2,1 h) na region a hodnotitele**;
+- při 8–15 regionech to dává **17–32 h** na jednoho hodnotitele a jedno kolo; druhý hodnotitel (R2) čas zdvojnásobí;
+- **hodinová sazba (předpoklad)** 25–60 EUR/h znamená 424–1 906 EUR za kolo (dříve s 15,5 min 1 407–6 331 EUR);
 - kolo se opakuje při každé roční aktualizaci;
 - navíc je potřeba čas na rozhodnutí kandidátů (v pilotu 20 % VC subjektů), který pilot neměřil.
 
@@ -224,7 +226,7 @@ Svět: USA 2 984 [Z: G1], Evropa = 3 095 [Z: G3] × podíl VC 0,4–0,6 [P], zby
 
 Pole zadání [M]: sektor 13/14, ticket 12/14, kapitál 11/14.
 
-**Náklady [M]:** model 7,9 min na ověřený záznam (sjednocená definice). API 0,78 USD na záznam (0,36–1,56, viz 3.5). Člověk 15,5 min na kontrolu investora a 0,82–0,96 min na fakt.
+**Náklady [M]:** model 7,9 min na ověřený záznam (sjednocená definice). API 0,78 USD na záznam (0,36–1,56, viz 3.5). Člověk 3,7 min na kontrolu investora (R1-v2, kontrola připravených dokladů; dříve zaokrouhlených 15,5 min) a 0,82–0,96 min na fakt.
 
 ### PE
 
@@ -326,7 +328,7 @@ Typ údaje: [M] změřeno, [Z] zdroj, [P] předpoklad; kombinace znamená výpo�
 
 | Kategorie | ČR | Svět | Získatelné z veřejných zdrojů | Spolehlivost | Model na záznam | API na záznam | Člověk na kontrolu záznamu |
 |---|---|---|---|---|---|---|---|
-| VC | 20 (14–29) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 70 % [M] | precision R1-v2 11/16 přísně, 11/11 rozhodnuté [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 7,9 min [M] | 0,78 USD (0,36–1,56) [M] | 15,5 min [M] |
+| VC | 20 (14–29) [M] | 7 251 (5 235–9 682) [Z: G1, G3 + P] | 70 % [M] | precision R1-v2 11/16 přísně, 11/11 rozhodnuté [M]; fakta 32/34 a 42/44, přísně 32/36 a 42/49 [M] | 7,9 min [M] | 0,78 USD (0,36–1,56) [M] | 3,7 min [M, R1-v2] |
 | PE | 9 (3–16) s českou entitou [M+P]; 22 (17–27) aktivních v ČR [M+P] | 9 812 (7 000–12 571) [Z: E1, G3 + P] | pravost 5/5, v zemi pilotu 2/5 [M: kontrola R1] | status 5/5 TP [M: R1]; fakta 85–95 % [P] | 1,15 min [M, n = 5] | 0,11 USD (0,05–0,23) [M+P] | 9 min [M, n = 5] |
 | Family office | 15 (3–42) přímých investorů [P] | 4 015 (2 409–7 504) [Z: E3 × P] | 15 % (0–30 %) [P; sonda 0/5 M] | 70–90 % [P] | 14–28 min [P] | 2,08 USD (0,97–4,17) [P] | 15–30 min [P] |
 | Angel investor | 30 (7–100) s vlastním zveřejněním [P; 7 M] | 197 000 (118 200–394 000) [P: Evropa E5 × 3–10] | 10 % (5–20 %) [P] | 80–95 % [P] | 14–28 + GDPR 5–10 min [P] | 2,83 USD (1,32–5,66) [P] | 15–30 min [P] |
