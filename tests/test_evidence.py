@@ -75,3 +75,24 @@ def test_committed_investor_checklist_is_current_and_unfilled() -> None:
     urls = re.findall(r"<(https?://[^>]+)>", committed)
     assert urls
     assert not [url for url in urls if any(name in url.lower() for name in (*AGGREGATOR_NAMES, "linkedin"))]
+
+
+def test_registry_link_points_to_ares_even_when_website_fact_comes_first() -> None:
+    dataset = build_valid_dataset()
+    website_source = {"source_id": "src-0009", "url": "https://fiktivni-ventures.example.com/kontakt", "publisher": "Fiktivní Ventures", "source_type": "web_investora"}
+    website_fact = fact("f-00000", "registry_id", "12345679", "src-0009")
+    dataset = replace(dataset, facts=[website_fact, *dataset.facts], sources=[*dataset.sources, website_source])
+
+    checklist = render_investor_checklist(dataset)
+
+    assert verified_evidence(dataset)[0].registry_fact["fact_id"] == "f-00001"
+    assert "ARES: <https://ares.gov.cz/" in checklist
+    assert "ARES: <https://fiktivni-ventures" not in checklist
+
+
+def test_committed_checklist_ares_links_point_to_ares() -> None:
+    committed = (ROOT / DEFAULT_INVESTOR_CHECKLIST_PATH).read_text(encoding="utf-8")
+    links = re.findall(r"ARES: <([^>]+)>", committed)
+
+    assert len(links) == 16
+    assert all(link.startswith("https://ares.gov.cz/") for link in links)

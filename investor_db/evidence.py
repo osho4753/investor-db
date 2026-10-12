@@ -10,6 +10,7 @@ from investor_db.schema import (
     STATUS_VERIFIED,
 )
 
+REGISTRY_SOURCE_TYPE: Final = "rejstrik"
 ARES_API_URL: Final = "https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/{}"
 FUND_EVIDENCE_PRIORITY: Final = (
     *FUND_AMOUNT_FACT_FIELDS,
@@ -56,8 +57,10 @@ def latest_activity(facts: list[Row]) -> Row | None:
     return newest([fact for fact in facts if fact["field"] in FUND_ACTIVITY_FACT_FIELDS])
 
 
-def registry_evidence(investor: Row, facts: list[Row]) -> Row | None:
-    return next((fact for fact in facts if fact["field"] == "registry_id" and fact["value"] == investor["registry_id"]), None)
+def registry_evidence(investor: Row, facts: list[Row], sources_by_id: dict[str, Row]) -> Row | None:
+    candidates = [fact for fact in facts if fact["field"] == "registry_id" and fact["value"] == investor["registry_id"]]
+    registry = [fact for fact in candidates if sources_by_id[fact["source_id"]]["source_type"] == REGISTRY_SOURCE_TYPE]
+    return next(iter(registry or candidates), None)
 
 
 def verified_evidence(dataset: Dataset) -> list[InvestorEvidence]:
@@ -65,8 +68,10 @@ def verified_evidence(dataset: Dataset) -> list[InvestorEvidence]:
         (row for row in dataset.investors if row["verification_status"] == STATUS_VERIFIED),
         key=lambda row: row["name"].lower(),
     )
+    sources_by_id = {row["source_id"]: row for row in dataset.sources}
     result = []
     for investor in investors:
         facts = [fact for fact in dataset.facts if fact["investor_id"] == investor["investor_id"]]
-        result.append(InvestorEvidence(investor, registry_evidence(investor, facts), fund_evidence(facts), latest_activity(facts)))
+        registry = registry_evidence(investor, facts, sources_by_id)
+        result.append(InvestorEvidence(investor, registry, fund_evidence(facts), latest_activity(facts)))
     return result

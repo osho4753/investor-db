@@ -98,7 +98,7 @@ Nové kolo kontroly R1-v2 u všech ověřených VC investorů. U každého inves
 
 ## 8. Purple Ventures (`inv-0035`)
 
-- **Z1 – registr:** IČO 05775574, ARES: <https://purple-ventures.com/>
+- **Z1 – registr:** IČO 05775574, ARES: <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/05775574>
 - **Z3 – kapitál třetích osob:** Fond „Purple Ventures 2“ investora Purple Ventures byl uzavřen s velikostí 700 000 000 CZK; zdroj neupřesňuje, zda šlo o final close. Fakt `f-00275`, zdroj: <https://purple-ventures.com/> (web investora (primární), vydavatel: Purple Ventures).
 - **Nejnovější doložená investice (Z4):** Purple Ventures investoval do společnosti Kilde (oznámeno 20. 10. 2025). Fakt `f-00135`, zdroj: <https://www.fxstreet.cz/klicova-slova+kilde.html> (média (sekundární), vydavatel: FXstreet.cz).
 
@@ -146,7 +146,7 @@ Nové kolo kontroly R1-v2 u všech ověřených VC investorů. U každého inves
 
 ## 12. Startguide VC (`inv-0047`)
 
-- **Z1 – registr:** IČO 28418425, ARES: <https://www.startguide.cz/>
+- **Z1 – registr:** IČO 28418425, ARES: <https://ares.gov.cz/ekonomicke-subjekty-v-be/rest/ekonomicke-subjekty/28418425>
 - **Z3 – kapitál třetích osob:** Cílová velikost fondu „SG One“ investora Startguide VC je 6 000 000 EUR. Fakt `f-00284`, zdroj: <https://www.startguide.cz/sgone/> (web investora (primární), vydavatel: Start Guide).
 - **Nejnovější doložená investice (Z4):** Startguide VC investoval do společnosti Carebot (oznámeno 2. 4. 2024). Fakt `f-00173`, zdroj: <https://cc.cz/purple-presto-kaya-a-dalsi-investori-maji-apetit-startupove-fondy-nabiraji-dalsi-miliardy-korun/> (média (sekundární), vydavatel: CzechCrunch).
 

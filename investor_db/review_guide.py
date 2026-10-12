@@ -663,7 +663,7 @@ def evidence_line(label: str, fact: Row | None, investor: Row, sources: dict[str
 
 
 def registry_url(evidence: InvestorEvidence, sources: dict[str, Row]) -> str:
-    if evidence.registry_fact:
+    if evidence.registry_fact and ARES_HOST in sources[evidence.registry_fact["source_id"]]["url"]:
         return sources[evidence.registry_fact["source_id"]]["url"]
     return ares_url(evidence.investor["registry_id"])
 
