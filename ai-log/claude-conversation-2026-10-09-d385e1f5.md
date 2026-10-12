@@ -4347,3 +4347,798 @@ Commity: `4dbe659`, `005be6a`, `2ef5777`.
 
 ---
 
+## 👤 User
+
+This session is being continued from a previous conversation that ran out of context. The summary below covers the earlier portion of the conversation.
+
+Summary:
+1. Primary Request and Intent:
+
+   **Project.** Czech test project "Investor Intelligence Database":
+   - repository `git@github.com:osho4753/investor-db.git`, which is public;
+   - local copy `C:\Users\ramazan\investor-db`;
+   - the assignment is in `docs/00-zadani.md`.
+
+   **Standing constraints (verbatim where possible):**
+   - Communicate exclusively in Czech.
+   - „Do kódu nepiš komentáře“.
+   - Standard library only (pytest is the dev dependency). „Neinstaluj závislosti … bez … souhlasu“.
+   - „Nesbírej data, nevymýšlej investory, odkazy ani hodnoty.“
+   - „Každý fakt musí pocházet ze stránky, kterou jsi v této session skutečně otevřel.“
+   - Respect robots.txt, rate limiting and caching.
+   - „Domény neodhaduj.“
+   - „Stažené stránky neukládej do repozitáře.“
+   - Aggregators are only a guide.
+   - Conflicts must be visible: „nevybírej menšinovou verzi potichu“.
+   - Errors found by review are proposed, not fixed silently.
+   - Verdicts are changed only by the reviewer: „Sám verdikty neměň“.
+   - Push after each commit where tests and validate pass.
+   - No `--amend` and no history rewriting. The user explicitly forbade rewriting git history to remove a name: „Historii gitu nepřepisuj – jméno pochází z veřejného rejstříku ARES a přepis by porušil historii commitů.“
+   - Do not store personal data of natural persons. Probes report aggregate counts only.
+
+   **Closure.** „Uzávěrka projektu. Od teď žádná nová vylepšení – jen dokončení. Rozsah je zmrazený.“
+
+   **Last request:**
+   - Apply the dictated R1 note fixes to inv-0024 and inv-0023 (note field only) and record in docs/04 that the agent made them on explicit instruction.
+   - Build a presentation site:
+     - command `python -m investor_db site`, output to `site/`, from `data/*.csv` and `docs/`;
+     - design and structure from the prototype `C:\Users\ramazan\OneDrive\Рабочий стол\investor-intelligence.html`, but not its data;
+     - all numbers from the same functions as `metrics`;
+     - human texts in `site_texts/`;
+     - `site/` is committed;
+     - tests check that regeneration changes nothing and that file links exist;
+     - `vercel.json` without a build step and a README deploy note.
+   - Then commit, push, a short summary and a list of what the user must do.
+
+2. Key Technical Concepts:
+   - Python 3.11 stdlib CLI `python -m investor_db` with commands: `validate`, `metrics`, `review-guide`, `review-template --category {vc,vc_vyloucene,pe}`, `fact-review-template --round {vzorek,po_doplneni,po_oprave} [--from-fact|--facts]`, `raw-text`, `site`.
+   - CSV in Git as the single source of truth. Validator, metrics report and Wilson intervals.
+   - Review rounds and categories:
+     - `fact_reviews.review_round`;
+     - `reviews.category` (vc / vc_vyloucene / pe);
+     - `category_assessments.csv`: separate PE assessment so VC metrics stay unchanged;
+     - `vc_pilot_facts` and `vc_pilot_searches` isolate VC metrics.
+   - Authenticity vs. pilot-country scope: `CategoryScope(assessed, authentic, in_pilot_country)`. `OUT_OF_COUNTRY_REASONS = (EXCLUSION_FOREIGN,)`.
+   - PE vocabulary:
+     - sectors: sluzby_firmam, zdravotnictvi, vzdelavani, financni_sluzby, maloobchod, stavebnictvi, tmt, potravinarstvi;
+     - stages: buyout, growth_equity.
+   - Unified model time: phases search, triage, verification and completion. VC 6.9 min per verified record, PE 1.15 min per authentic investor.
+   - Number tags in docs/03: [M] measured, [Z] source, [P] assumption.
+   - Site generator:
+     - mini markdown (inline code, bold, links resolved to GitHub blob/tree URLs);
+     - tables parsed from docs/03 ("### Souhrnná tabulka …") and the README error table ("### Kde se agent (a zadání) mýlil");
+     - deterministic output (data date = max of the dates in the data, not today).
+
+3. Files and Code Sections:
+
+   **Schema (`investor_db/schema.py`)**
+   - Added:
+     - `FACT_ANNOUNCED_FUND_SIZE`, `FACT_FUND_INVESTED_PERIOD`, `AMOUNT_INVESTED_PERIOD`, `INVESTED_AMOUNT_TYPES`;
+     - `REVIEW_ROUND_CORRECTION = "po_oprave"`;
+     - `CATEGORY_ASSESSMENT_COLUMNS`, `CATEGORY_EXCLUSION_REASONS` (adds vc_ne_pe, realitni_fond);
+     - `CATEGORY_VC`, `CATEGORY_PE`, `ASSESSED_CATEGORIES`, `CATEGORY_VC_EXCLUDED = "vc_vyloucene"`, `REVIEW_CATEGORIES`, `EXCLUDED_SAMPLE_SIZE = 10`;
+     - `EFFORT_CATEGORY_VERIFICATION = "overeni_kategorie"`;
+     - `VC_INVESTMENT_STAGES`, `PE_INVESTMENT_STAGES`, `PE_INVESTMENT_SECTORS`.
+   - `REVIEW_COLUMNS` gained `category`.
+
+   **Validation (`investor_db/validation.py`)**
+   - `check_category_assessments` and `category_status_issues` (P1/P3/P4 criteria, reason fact).
+   - Review category vocabulary; `vc_vyloucene` only for excluded investors.
+   - `review_scope(row)` for duplicate checks.
+   - search_log `minutes` required only when `investor_id` is empty.
+
+   **Metrics (`investor_db/metrics.py`)**
+   - `category_investors`, `CategoryScope` / `category_scope`, `category_verdicts`.
+   - `ExclusionReview` / `exclusion_review`.
+   - `precision(dataset, reviewer, category)`.
+   - `requirement_completeness(dataset, investors=None)`, `investor_capital(dataset, investors=None)`.
+   - `primary_fact_share(dataset, facts=None)`, `vc_pilot_facts`, `category_facts`, `vc_pilot_searches`.
+   - `invested_period_fact_ids` added to `CapitalSummary`.
+
+   **Report (`investor_db/report.py`)**
+   - Sections `exclusion_review_section` and `category_section` / `category_lines`. Category results are reported as counts, with authenticity and pilot-country scope shown separately.
+   - `requirement_lines` and `capital_rows` helpers.
+
+   **Review tooling**
+   - `review_guide.py`: PE labels, `ROUND_HEADINGS` for `po_oprave`, `render_exclusion_review` (section "Kontrola vyloučených VC"), field guides for the new fact types.
+   - `review.py`: `sample_excluded_ids(investor_ids, size, seed=2026)`; `add_pending_reviews` is scope-aware via `SCOPE_COLUMNS = ("review_round", "category")`.
+
+   **CLI (`investor_db/__main__.py`)**
+   - `review_targets` per category.
+   - `--facts` option for round `po_oprave`.
+   - New `site` command:
+     ```python
+     site = commands.add_parser("site", help="vygeneruje statický web z dat a dokumentace")
+     site.add_argument("--output", type=Path, default=Path(SITE_DIR))
+     site.set_defaults(handler=run_site)
+     def run_site(args): if not report_issues(args.data_dir): ...return 1; write_site(args.data_dir.parent, args.output)
+     ```
+
+   **NEW `investor_db/markup.py`**
+   - `REPOSITORY_URL = "https://github.com/osho4753/investor-db"`.
+   - `repository_url(path)`: tree URL if the path ends with "/", otherwise blob.
+   - `resolve_link(target, base_dir)` uses posixpath normpath.
+   - Rendering: `inline(text, base_dir)` (code, bold, links, escaping), `render_text` (blocks: "### " → h4, "- " bullets, paragraphs).
+   - Parsing: `timeline_entries` ("### label | title" + text), `section_lines(markdown, heading)`, `first_table`.
+   - `render_table`, `repository_paths(document)` (regex for blob/tree links).
+
+   **NEW `investor_db/site.py`**
+   - `TEXTS_DIR="site_texts"`, `SITE_DIR="site"`.
+   - Label maps: `STATUS_PILLS`, `REASON_LABELS`, `FIELD_LABELS`, `FACT_VERDICT_LABELS`, `ROUND_LABELS`. `DOCUMENTS` links.
+   - Headings: `SUMMARY_HEADING = "### Souhrnná tabulka (základní scénář, v závorce nízký – vysoký)"`, `ERRORS_HEADING = "### Kde se agent (a zadání) mýlil"`.
+   - `SiteSources`, `load_sources(root)`.
+   - `index_page`: stats tiles, server-side funnel SVG, details blocks for Plán, Postup (timeline), AI, Výsledky (accuracy per round, requirement list, PE line, docs/03 summary table) and Co chybí.
+   - `data_page`: funnel, `reason_bars`, `time_panel`, `investor_list` (52 `<details class="inv">` rows with status pills, PE pill, capital text, facts with source links, accessed date and R1 verdict badges), `stories` from the README error table.
+   - `page()` template with Google Fonts, `style.css` and `app.js`.
+   - `build_site(root) -> dict[str, str]`, `write_site(root, output)`.
+   - `STYLE` and `SCRIPT` constants. `SCRIPT` handles filter chips and search.
+
+   **Other new files**
+   - `site_texts/`: uvod.md (headline + lede), plan.md, casova-osa.md, prace-s-ai.md, vysledky.md (includes the note that precision at review time was 15/15 and the site uses current statuses), chybi.md, data.md, chyby.md.
+   - `site/`: index.html, data.html, style.css, app.js (generated and committed).
+   - `tests/test_site.py`: committed site matches regeneration; repository links exist; site built from a fixture dataset; site command writes 4 files; labels cover vocabularies; link resolution; inline escaping; block and table parsing.
+   - `vercel.json`:
+     ```json
+     {"$schema":"https://openapi.vercel.sh/vercel.json","framework":null,"installCommand":"","buildCommand":"","outputDirectory":"site"}
+     ```
+
+   **Other tests**
+   - Added in test_categories.py, test_cli.py, test_review.py, test_funds.py. Total 376 tests pass.
+
+   **Data**
+   - `category_assessments.csv`: 5 PE assessments.
+   - `reviews.csv`:
+     - PE rows: 5× TP, times 5/10/5/10/15 min;
+     - `vc_vyloucene` rows: 9 TP and 1 nejiste (inv-0031), 36 min;
+     - notes on inv-0024 and inv-0023 fixed per dictation.
+   - `search_log` s-018 to s-035: minutes emptied, with the note „Čas nebyl měřen: původní hodnota X min byla odhad sběrače…“.
+   - Facts f-00299 to f-00343 (PE). The 5 PE records are remapped to the PE vocabulary.
+
+   **Docs**
+   - docs/01: 1.10 categories and GDPR, 1.11 PE mini-pilot (authenticity 5/5, in-country 2/5, vocabulary implemented), 1.12 feasibility study.
+   - docs/02: new types, `category_assessments`, PE vocabulary, search minutes rule.
+   - docs/03:
+     - 3.5: VC 6.9 min recalculated; tokens remain [P] and „Měření tokenů nebylo provedeno“;
+     - 3.7 sources E1–E10;
+     - 3.8 with [M]/[Z]/[P] tags, unified time table, family office Wilson 0–43.4 % justification and summary table.
+   - docs/04:
+     - po_doplneni accuracy and corrections, round po_oprave 7/7;
+     - 4.8 PE review results and the note-correction paragraph;
+     - 4.9 excluded review: 9/9, pessimistic 9/10, FP upper bound 29.9 %.
+
+   **README**
+   - Fully rewritten: key results, requirement table with splněno/částečně status, Práce s AI (rules, checks, 13 errors), decisions, Co chybí, reproducibility (clean clone at 190e7e6: 364 tests, validate OK, metrics identical), guide for reviewers, Prezentační web section with Vercel steps, structure.
+
+   **ai-log**
+   - `ai-log/README.md` is new: extractor without `--detailed`, single session d385e1f5 with 8 phases mapped to commits.
+   - The old export was moved to `ai-log/export-2026-10-11-faze-1-4.md`.
+
+   **Memory**
+   - `investor-db-stav-kontroly.md` and the MEMORY.md line are updated to the closed state with the site done.
+
+4. Errors and fixes:
+
+   **Code errors**
+   - f-string containing a backslash, which Python 3.11 rejects: fixed with a `current_marker()` helper.
+   - Duplicate-review validation blocked `po_oprave` rows: the check is now scope-aware (`review_scope`).
+   - `REVIEW_ROUND_CORRECTION` import missing in `__main__`: added.
+   - Windows cp1252 console UnicodeEncodeError: fixed with `PYTHONIOENCODING=utf-8`.
+   - Test IČO collided with the fixture (duplicate warning): used 27590003.
+   - README edit assertion failed on wrong indentation: fixed, and indentation corrected.
+
+   **My own rule violations** (both recorded in README "Práce s AI")
+   - Guessed domains (lumus.cz, keiretsuforum.cz), violating „domény neodhaduj“. I disclosed it and nothing from it was used.
+   - Recorded estimated search minutes as measurements. They were deleted with the user's approval.
+
+   **Data and reviewer issues**
+   - R1 notes reported by the user as fixed were not saved, twice. I flagged it without editing, then applied the user's dictated text.
+   - Reviewer R1 claimed versute.cz robots.txt disallows access. I verified that `Disallow:` is empty (allowed) and documented it as a collector finding. The note was later corrected by dictation.
+   - The UNH angel PDF could not be opened (certificate error, unreadable PDF, 404), so the figure was not used.
+   - The VC metrics had leaked PE facts and searches: isolated via `vc_pilot_facts` and `vc_pilot_searches`.
+
+5. Problem Solving:
+   - Kept VC metrics identical while adding PE, verified by diffing the metrics output.
+   - Reproducibility was verified on a fresh clone.
+   - The site output was verified well-formed with html.parser (52 investor rows), and all repository links exist.
+   - Precision is 15/15 at review time versus 16/16 current (status changes); this is explained in README and on the site.
+
+6. All user messages:
+   - Message 1:
+     - po_doplneni review done; compute accuracy, including strict;
+     - proposed fixes 1–7 (Tilia first close; i&i 50M not a target; Credo Stage 4 source AIN.UA and name; Purple ambiguous; Tachles period; Startguide planned volume; Wikipedia excluded for Stage 5);
+     - recompute the capital table, tests, validate, push, summary.
+   - Message 2:
+     - decisions: Credo final close confirmed; add round po_oprave with the 7 facts and regenerate the checklist;
+     - then A (docs/01 plan for all categories incl. GDPR), B (PE mini-pilot of 5 of 17, seeded; storage that doesn't break the VC pilot; stop after B), C (feasibility study without personal data), D (docs/03 estimates per category, every number sourced or marked as assumption);
+     - after each point: tests, validate, commit, push.
+   - Message 3:
+     - PE and po_oprave reviews done;
+     - separate authenticity from the Czech entity; counts not percentages; propose PE vocabulary;
+     - then C and D, as defined above.
+   - Message 4:
+     - PE rows saved; points 1–5: pravost is measured by R1; type tags in the summary table; unify model time; justify family office 15 %; approve and implement the PE vocabulary;
+     - 6: review of 10 excluded VC;
+     - 7: token measurement — send the procedure and prompt first.
+   - Message 5:
+     - approve deleting the estimated minutes and add them as an AI error example; PE notes fixed (they were not); recompute PE human time;
+     - token prompt adjustments: read only docs/01 and docs/02, forbid data/, docs/03, docs/04, review/, README and git history; count pages and searches; remove the worktree after; add the session to ai-log/README; compare with our data.
+   - Message 6 (closure, frozen scope):
+     - excluded review results; cancel token measurement and keep [P]; remove the worktree;
+     - README a–f per the assignment, including the error list and the note that prompts were prepared with a chat assistant;
+     - final check against the assignment; reproducibility via clone; ai-log/README description and mapping;
+     - commit, push, summary.
+   - Message 7 (latest):
+     - dictated R1 note fixes: inv-0024 replace the name with „společnice nesouvisející firmy“; inv-0023 replace the robots sentence with „robots.txt přístup povoluje; X-Robots-Tag noindex se týká jen indexace“;
+     - docs/04 note that the agent did this on explicit instruction; „Historii gitu nepřepisuj…“;
+     - then the presentation website per the prototype (requirements as in section 1);
+     - „Commit, push, krátké shrnutí a seznam toho, co mám udělat já.“
+
+7. Pending Tasks:
+   - Send the user the final short summary in Czech and the list of things they must do:
+     - deploy on Vercel (import the repo, no settings, deploy);
+     - insert the ai-log exports;
+     - visually check the site in a browser, since the agent could not render it;
+     - optionally edit `site_texts/`, then run `python -m investor_db site` and commit, because the test enforces an up-to-date `site/`.
+   - Mention that the name remains in git history per the user's decision.
+   - No other work: scope is frozen.
+
+8. Current Work:
+
+   **Done for the latest request:**
+   - R1 notes fixed and docs/04 updated: commit 4dbe659.
+   - Site generator, texts and generated `site/`: commit 005be6a ("feat: generátor prezentačního webu (python -m investor_db site), texty v site_texts a vygenerovaný site/").
+   - `vercel.json` and README deploy section: commit 2ef5777.
+   - All pushed; 376 tests pass and validate passes.
+   - Memory updated: "uzavřeno (2ef5777), web site/ hotový; zbývá Vercel a exporty ai-log".
+
+   **Not yet sent:** the final message to the user with the short summary and the "co mám udělat já" list.
+
+9. Optional Next Step:
+   Reply to the user, as the user asked („Commit, push, krátké shrnutí a seznam toho, co mám udělat já.“), with:
+   - a Czech summary: notes fixed (4dbe659); site generated from data with the index and data pages, 52 investors, 13 error stories and the docs/03 summary table; tests; vercel.json (005be6a, 2ef5777);
+   - the user's to-do list: deploy on Vercel, add ai-log exports, check the site visually, regenerate after text edits;
+   - a reminder that the name remains in git history by their decision.
+
+   No new improvements, since the scope is frozen.
+
+If you need specific details from before compaction (like exact code snippets, error messages, or content you generated), read the full transcript at: C:\Users\ramazan\.claude\projects\C--Users-ramazan-OneDrive--------------projects-investor-db\d385e1f5-0229-46e8-8649-3f0ea24e7385.jsonl
+Continue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with "I'll continue" or similar. Pick up the last task as if the break never happened.
+
+The messages after this summary are the most recent messages from before compaction, kept verbatim. The summary was written without seeing them, so something it says has not happened yet may already have happened in them.
+
+---
+
+## 👤 User
+
+
+
+<pasted_content id="2b08">
+Poslední oprava, nic jiného neměň:
+1. ai-log/README.md: odstraň odkaz na neexistující export-2026-10-11-faze-1-4.md a větu „exporty vloží autor“. Uveď skutečný soubor claude-conversation-2026-10-09-d385e1f5.md (úplný export celé session nástrojem claude-conversation-extractor bez --detailed, 43 zpráv uživatele od prvního zadání po web).
+2. README: v tabulce splnění změň řádek ai-log na „splněno“ a na úplný začátek README přidej odkaz na web: https://investor-db-woad.vercel.app/
+3. Přegeneruj web (python -m investor_db site), spusť pytest a validate, commit a push.
+</pasted_content id="2b08">
+
+
+---
+
+## 🤖 Claude
+
+Web se nezměnil (README ovlivňuje jen tabulku chyb). Commit a push:
+
+---
+
+## 🤖 Claude
+
+Všechny tři úpravy jsou hotové a pushnuté v commitu `244345a`. Testy (376) i validace prošly. Nic jiného jsem neměnil.
+
+1. **`ai-log/README.md`:** odkaz na neexistující `export-2026-10-11-faze-1-4.md` i věta o tom, že exporty vloží autor, jsou pryč. Tabulka souborů teď uvádí jen `claude-conversation-2026-10-09-d385e1f5.md`. Je u něj popsaný jako úplný export celé session nástrojem claude-conversation-extractor bez `--detailed`, 43 zpráv uživatele od prvního zadání po web. Počet 43 jsem v souboru spočítal.
+2. **`README.md`:** hned pod nadpisem je odkaz na https://investor-db-woad.vercel.app/. Řádek `ai-log` v tabulce splnění je „splněno“.
+3. **Web:** přegeneroval jsem ho, ale výsledek se nezměnil, takže v commitu není. Generátor z README bere jen tabulku chyb, a ta zůstala stejná.
+
+---
+
+## 👤 User
+
+V Umami se událost lead_submit neobjevuje, i když formulář funguje – nejspíš se ztratí při přesměrování na /prehled. Zajisti spolehlivé zaznamenání: odešli lead_submit až na stránce /prehled po úspěšném uložení (jednou, s variantou a UTM), případně přes sendBeacon. V README (kap. 6) uveď jako poslední krok funnelu buď lead_submit, nebo zobrazení /prehled, podle toho, co je spolehlivější. Ověř v Playwright, že událost odchází. Commit, push.
+
+---
+
+## 🤖 Claude
+
+Kód je upravený pro obě cesty. Teď přidávám unit test a ověřím v Playwright, že Umami požadavek `lead_submit` skutečně odchází.
+
+---
+
+## 🤖 Claude
+
+Obě cesty pošlou do Umami právě jeden `lead_submit`, opakované načtení `/prehled` ho znovu neodešle. Zastavuji server a doplňuji README.
+
+---
+
+## 🤖 Claude
+
+`lead_submit` teď do Umami odchází v obou cestách odeslání formuláře. Playwright to potvrdil, vše je pushnuté v commitu `317644a`.
+
+**Příčina byla trochu jiná, než jsi myslel.** Formulář má dvě cesty:
+- **Se spuštěným JS** (běžný případ): na `/prehled` se vůbec nepřechází, přehled se ukáže na stejné stránce. `lead_submit` se tu posílal i dřív a v mém testu došel.
+- **Bez JS nebo před hydratací** (hlavně pomalý mobil): prohlížeč odešle formulář sám a server přesměruje na `/prehled?…&odeslano=1`. Tady se `lead_submit` neposílal vůbec, `/prehled` měl navíc natvrdo variantu „a“ a žádné UTM. To je nejspíš ten výpadek, který vidíš.
+
+**Co jsem změnil:**
+- **Přesměrování bez JS** teď v URL nese variantu, místo formuláře a UTM. UTM se berou z adresy předchozí stránky (refereru).
+- **Na `/prehled`** se `lead_submit` odešle jednou, až po úspěšném uložení. Parametr `odeslano` se pak z URL odstraní, aby obnovení stránky událost nezopakovalo.
+- **Na stránce s JS** se událost dál posílá hned po úspěšné odpovědi serveru.
+- **UTM a varianta jsou teď u všech událostí**, nejen u `landing`. Nový parametr `flow` (`inline` / `redirect`) rozliší, kterou cestou odeslání proběhlo.
+- **`sendBeacon` jsem nepoužil.** Ani v jedné cestě událost nevzniká těsně před odchodem ze stránky, takže by nic nepřidal.
+
+**README, kap. 6:** jako poslední krok funnelu je uvedený `lead_submit`, ne zobrazení `/prehled`. Zobrazení `/prehled` by zachytilo jen menšinovou cestu bez JS a navíc i otevření odkazu z e-mailu. Kapitola to vysvětluje a popisuje obě cesty.
+
+**Ověření:**
+- Nový test `npm run e2e:lead` (`scripts/e2e-lead-event.mjs`) běží proti produkčnímu buildu. Zachytává požadavky do Umami (`/api/send`) a odpovídá na ně sám, takže v ostrém Umami žádná testovací data nevznikla.
+- **Cesta s JS:** odešel právě jeden `lead_submit`, s variantou „b“, všemi UTM a `flow: inline`.
+- **Cesta bez JS:** přesměrování nese správné parametry a na `/prehled` odešel právě jeden `lead_submit` s `flow: redirect`. Po obnovení stránky už žádný další nepřišel.
+- Cestu bez JS jsem simuloval tak, že formulář odešel s vypnutým JS a stránku `/prehled` jsem pak otevřel se zapnutým JS.
+- Server při testu běžel bez klíčů k Brevu, takže se žádný kontakt neuložil a žádný e-mail neodešel.
+- Unit testy (11), kontrola typů i lint prošly.
+
+Pokud by se `lead_submit` v Umami neobjevoval ani po nasazení, příčina už nebude v kódu. Nejčastěji to bývá blokátor reklam v prohlížeči, kterým testuješ.
+
+---
+
+## 👤 User
+
+Předchozí pokyn týkající se umami se tohoto projektu vůbec netýkal – byla to moje chyba, omylem jsem si spletl terminály a zadal prompt  na nesprávné místo. Pokud jsi na jeho základě provedl nějaké úpravy nebo změny, vrať je zpět.
+
+---
+
+## 🤖 Claude
+
+Nic jsem zatím nevracel. V tomto projektu (investor-db) jsem podle toho pokynu nic neměnil: poslední commit je stále `244345a` a pracovní strom je čistý.
+
+Úpravy jsem udělal v repozitáři `C:\Users\ramazan\etf-page`, tedy v projektu, kterému byl pokyn určený. Byl to commit `317644a` a pushnul jsem ho na `origin/main`. Šlo o odeslání `lead_submit` na `/prehled` v cestě bez JS, unit testy, `npm run e2e:lead` a popis v README v kap. 6.
+
+Vrátit ho teď ale nejde bez rizika. Od té doby na něm v etf-page leží 18 dalších commitů, nejspíš z tvé druhé session, a na tuhle změnu přímo navazují:
+- README v kap. 6 popisuje `flow: inline/redirect` a funnel končící `lead_submit`;
+- README v kap. 12 ji uvádí mezi chybami nalezenými při testování;
+- v README je screenshot funnelu z Umami.
+
+Kdybych commit vrátil, kód přestane odpovídat README v etf-page. Měření `lead_submit` po přesměrování bez JS by se znovu rozbilo.
+
+Pokud ho přesto chceš vrátit, napiš a udělám to novým commitem, který změny zruší, bez přepisu historie. Opravím i navazující místa v README a pushnu.
+
+---
+
+## 👤 User
+
+Nech to tak, v etf-page nic nevracej.ted tadz opravy k investor-db 
+
+<pasted_content id="2b08">
+Opravy po externím review. Nic dalšího neměň.
+
+A) Měření tokenů (docs/03, 3.5): proveď připravené měření – v nové samostatné session znovu ověř 3 investory (vyber 1 snadného, 1 středního, 1 složitého podle effort_log) přesně podle metodiky. Sečti usage (input, output, cache read/write) z JSONL transkriptu té session, ulož výpočet a skript do repa. Přepočítej náklady API v docs/03 z naměřených hodnot místo [P] a uveď cenu za ověřeného investora. Odhad v penězích doplň pro VŠECHNY kategorie z globálního odhadu (VC, PE, family office, angel, velcí soukromí), s jasně označenými předpoklady pro kategorie bez pilotu.
+
+B) Recall: najdi 1–2 nezávislé veřejné seznamy českých VC, které NEBYLY použité při hledání (zkontroluj search_log.csv a candidate_sources.csv), např. portfolio fondů Národního rozvojového fondu / EIF v ČR nebo redakční přehled českých VC fondů. Ze seznamu vyber subjekty, které podle našich kritérií mají být VC v ČR, a spočítej, kolik z nich máme (ověřené + kandidáti + vyloučené s důvodem). Výsledek „X z Y nalezeno“ a seznam chybějících zapiš do docs/04 a README. Capture–recapture v README označ jako doplňkový a málo informativní odhad (nalezených je už víc než jeho dolní mez).
+
+C) README: hned pod odkaz na web přidej „Shrnutí na jednu obrazovku“ (max. 10 řádků: co je výsledek, 3 hlavní čísla, odkaz na tabulku 16 investorů a na návod pro hodnotitele). Na prezentační web přidej tabulku ověřených investorů (název, IČO, typ, poslední doložená investice, odkaz na zdroj) – generovanou z dat, ne ručně.
+
+D) Připrav kontrolní list pro nové kolo R1-v2 u 16 ověřených investorů: review/kontrolni-list-r1-v2.md. U každého: odkaz na ARES/justice podle IČO, odkaz na doklad Z3 (kapitál třetích osob) a na nejnovější doloženou investici z našich zdrojů, a kolonky, které vyplní člověk: verdikt TP/FP/nejisté, co přesně viděl, čas v minutách (skutečný, ne zaokrouhlený). Povolené zdroje jen podle metodiky – žádný Crunchbase, LinkedIn ani agregátory. Do verdiktů nic nevyplňuj.
+
+Commit po bodech, push. Vypiš hashe, naměřené tokeny a cenu, výsledek recall.
+</pasted_content id="2b08">
+
+
+---
+
+## 🤖 Claude
+
+Procházím data a vybírám tři investory podle náročnosti v `effort_log`.
+
+---
+
+## 🤖 Claude
+
+Měřicí session běží na pozadí. Mezitím se pustím do bodů C a D, které na ní nezávisí.
+
+---
+
+## 🤖 Claude
+
+Přihlášení funguje. Spouštím měření.
+
+---
+
+## 🤖 Claude
+
+Měření běží. Mezitím připravuji kontrolní list R1-v2 (bod D).
+
+---
+
+## 🤖 Claude
+
+Výběr dokladů funguje pro všech 16. Teď generátor kontrolního listu R1-v2 a CLI příkaz.
+
+---
+
+## 🤖 Claude
+
+Kontrolní list R1-v2 je vygenerovaný (16 investorů, kolonky prázdné). Dopíšu testy a commitnu bod D. Mezitím pořád běží měřicí session.
+
+---
+
+## 🤖 Claude
+
+Měřicí session doběhla za 2 min 43 s. Model sám nahlásil „asi 9 minut“, to se změřeným časem nesouhlasí. Teď píšu skript, který sečte tokeny z jejího transkriptu.
+
+---
+
+## 🤖 Claude
+
+Skript dává stejnou cenu jako CLI: 1,0940 USD. Teď přidám test se syntetickým JSONL a porovnám výsledek měřicí session s našimi daty.
+
+---
+
+## 🤖 Claude
+
+Ukládám záznam měření do `ai-log/mereni-tokenu-2026-10-13.md`. Bude obsahovat prompt, výstup skriptu, odpověď session a porovnání s našimi daty.
+
+---
+
+## 🤖 Claude
+
+Pracovní kopie je odstraněná. Teď přepíšu náklady v docs/03 podle naměřených hodnot.
+
+---
+
+## 🤖 Claude
+
+Upravuji docs/03 (3.5 a 3.8), README, ai-log/README a text webu.
+
+---
+
+## 🤖 Claude
+
+Bod A je pushnutý (`41d95ab`). Pokračuji bodem B (recall) a nejdřív zjistím, které seznamy jsme už při hledání použili.
+
+---
+
+## 🤖 Claude
+
+Hledám nezávislé seznamy. Přehled CzechCrunch za rok 2025 má jména investorů jen v grafu a za placenou zdí, zkouším proto jiné redakční přehledy.
+
+---
+
+## 🤖 Claude
+
+Mám první nezávislý seznam: redakční přehled Vestbee s 19 fondy. Hledám druhý, The Recursive má seznam „20+ early-stage Czech VC funds“.
+
+---
+
+## 🤖 Claude
+
+Výsledek recall je 14 z 18 subjektů (77,8 %), chybí 4. Zapisuji ho do docs/04 jako oddíl 4.10 a do README.
+
+---
+
+## 🤖 Claude
+
+Bod B je pushnutý (`3424039`). Teď bod C: shrnutí v README a na webu tabulka ověřených investorů generovaná z dat.
+
+---
+
+## 🤖 Claude
+
+Všechny čtyři body jsou hotové a pushnuté, každý ve vlastním commitu. Po posledním commitu prošlo 390 testů i validace.
+
+## Hashe
+| Bod | Commit |
+|---|---|
+| D – kontrolní list R1-v2 | `8d916d7` |
+| A – měření tokenů a náklady API | `41d95ab` |
+| B – recall | `3424039` |
+| C – shrnutí v README a tabulka na webu | `892b9ce` |
+
+## A) Naměřené tokeny a cena
+Samostatná session běžela na Opus 5.5 v pracovní kopii, ze které jsem odstranil data a výsledky. Mohla jen číst a vyhledávat na webu, zápis neměla povolený. Investory jsem vybral podle `effort_log`: Soulmates (snadný), Purple (střední) a Lighthouse (složitý). Session trvala 2 min 43 s.
+
+| | Tokenů | Cena |
+|---|---|---|
+| Opus 5.5 (většina tokenů je čtení z cache) | 804 634 | 0,985 USD |
+| Haiku 5.5 (používají ho interně WebFetch a WebSearch) a 7 vyhledávání | 286 436 | 0,109 USD |
+| **Celkem za 3 investory** | **1 091 070** | **1,094 USD** |
+| **Na investora** | **363 690** | **0,365 USD** |
+
+- **Ceník** jsem otevřel dnes na platform.claude.com. Cena spočítaná skriptem se shoduje s cenou, kterou hlásí samo CLI.
+- **Na záznam v databázi** vychází 0,68 USD (rozpětí 0,36–1,37), protože se ověřují i subjekty, které do databáze nakonec nepatří.
+- **V docs/03 jsou náklady API pro všech pět kategorií.** U VC a PE stojí na měření. U family office, angelů a velkých soukromých investorů jsou předpokladem [P]. Celkem pro svět vychází 97 333 USD (51 911–194 667) a 94 % z toho tvoří angelé a velcí soukromí investoři.
+- **Skript** je `python -m investor_db tokens`. Záznam měření s promptem, odpovědí session a porovnáním s daty je v `ai-log/mereni-tokenu-2026-10-13.md`. Pracovní kopii jsem po měření smazal.
+- **Shoda s našimi daty:** status, IČO, fáze a ticket se shodují u všech tří investorů. Liší se hlavně typ částky kapitálu.
+- **Omezení:**
+  - Session sama odhadla, že pracovala asi 9 minut, změřeno bylo 2 min 43 s.
+  - `docs/02` zmiňuje web lhv.vc, takže u Lighthouse měla session nápovědu k doméně. V záznamu je to uvedené.
+  - První pokus selhal na neplatném `ANTHROPIC_API_KEY` v prostředí. Session jsem proto spustil přes tvé přihlášení do Claude.
+
+## B) Recall
+Použil jsem dva seznamy, které hledání nepoužilo: Vestbee (2021, aktualizováno 2023, 19 fondů) a AIN.UA (2022, 17 fondů). Všech 17 fondů z AIN.UA je i ve Vestbee. Pale Fire Capital nepočítám, protože podle otevřených článků investuje peníze partnerů.
+
+**Nalezeno 14 z 18 (77,8 %):** 8 ověřených, 3 kandidáti a 3 vyloučení s důvodem.
+
+Chybí:
+- **Longevitytech.fund** – pravděpodobně VC v ČR, byl by nejméně kandidát;
+- **Y Soft Ventures** – kandidát, chybí doklad podílu firmy Y Soft na kapitálu fondu (pravidlo CVC) a aktivity za 36 měsíců;
+- **Koopeo Ventures** – kandidát, nebo vyloučení `bez_fondu`;
+- **Air Ventures** – nejde rozhodnout, jejich web už neexistuje.
+
+AIN.UA částečně přebírá data z Dealroomu a Crunchbase, proto slouží jen jako vodítko. Seznam fondů Národní rozvojové banky ani EIF v ČR jsem veřejně nenašel. Chybějící subjekty jsem do dat nezapisoval. Výsledek je v docs/04 (4.10) a README. Capture–recapture je v README označený jako doplňkový a málo informativní odhad.
+
+## C) README a web
+- **README:** hned pod odkazem na web je „Shrnutí na jednu obrazovku“ se třemi hlavními čísly (16 ověřených, precision 15/15, fakta 32/34). Obsahuje i odkaz na tabulku investorů a na návod pro hodnotitele.
+- **Web:** stránka Data má tabulku 16 ověřených investorů (název, IČO, typ, poslední doložená investice, zdroj), vygenerovanou z dat. U tří investorů bez doložené investice je uveden nejnovější doložený fond.
+
+## D) Kontrolní list R1-v2
+`review/kontrolni-list-r1-v2.md` generuje příkaz `python -m investor_db investor-review-guide`.
+- U každého ze 16 investorů je odkaz na ARES podle IČO, doklad Z3 a nejnovější doloženou investici z našich zdrojů. Kolonky pro verdikt, popis toho, co hodnotitel viděl, a čas v minutách jsou prázdné.
+- Návod zakazuje Crunchbase, LinkedIn i agregátory. Test hlídá, že na ně list neodkazuje.
+- Odkaz na webové rozhraní ARES jsem nepoužil, protože jsem jeho tvar nemohl ověřit. List proto odkazuje na rozhraní ARES, které vrací JSON, ve stejném tvaru jako naše zdroje.
+
+---
+
+## 👤 User
+
+
+
+<pasted_content id="2b08">
+Výsledky kola R1-v2 (CSV níže: investor_id, nazev, ico, verdikt, minuty, co_jsem_videl). Ulož je do review/r1-v2-vysledky.csv a zapiš do reviews.csv jako samostatné kolo, původní R1 nepřepisuj.
+
+1) Metriky: precision R1-v2 uváděj dvakrát, obojí s Wilsonovým 95% intervalem:
+- přísně, kde nejisté = nepotvrzeno (11/16);
+- jen rozhodnuté případy (11/11).
+To je teď hlavní metrika v README („Shrnutí“), docs/04 a na webu.
+Původní 15/15 nech v historii s poznámkou: poznámky se opíraly o Crunchbase, LinkedIn a agregátory v rozporu s metodikou, časy byly zaokrouhlené a Springtide, Patero a Gain byly nejdřív TP a podle pravidel pak FP/nejisté.
+
+2) Vady dat, které R1-v2 našlo – oprav, nebo změň status. U každého případu max. jeden pokus najít primární zdroj, jinak status „kandidat“ s důvodem:
+- Reflex: zdroj Z4 přepojit z blogu J&T na CzechCrunch.
+- Tilia: Z4 (Flox, 2/2026) má zdroj z agregátoru – najdi primární, jinak kandidát.
+- IP Lab a StartupYard: Z4 je stejný fakt jako Z3. Podle docs/01 Z4 formálně splňuje nový fond nebo vehikl za 36 měsíců (IP Lab: závazek EIF 9/2026, StartupYard: Batch 15 11/2024). Zapiš to výslovně a zkus najít datovanou investici.
+- i&i Biotech: IČO vede na Biotech Investments s.r.o. Vazbu na značku ověř přes společníky v obchodním rejstříku, jinak kandidát.
+- Startguide: Z3 je jen cílová velikost s 30% naplněním. Podle pravidel stačí, ale uveď to.
+Po změnách přepočítej trychtýř všude (README, docs, web).
+
+3) Do „Co v řešení chybí“ a docs/01 doplň zjištění z R1-v2. Pravidla zpětně neměň, jen popiš:
+- operacionalizace Z3 nevyžaduje doklad kapitálu třetích osob – u 5 z 11 TP nejsou investoři fondu veřejně jmenovaní;
+- Z4 uznává nový fond místo investice;
+- hodnotitel byl přísnější než pravidla;
+- kontroloval jeden hodnotitel.
+
+4) docs/03 a README u měření tokenů: výslovně uveď, že jde spíš o dolní mez. Session jen četla a vyhledávala, nic nezapisovala, neověřovala proti surovému textu, trvala 2 min 43 s a u Lighthouse měla nápovědu domény. Cenu na investora uváděj jako „od 0,365 USD“.
+
+5) Oprav generátor kontrolního listu: u Purple Ventures a Startguide VC vede odkaz „ARES“ na web investora.
+
+Commit po bodech, push, vypiš hashe, nová čísla precision a nový trychtýř.
+
+investor_id,nazev,ico,verdikt,minuty,co_jsem_videl
+inv-0013,Credo Ventures,28538137,TP,4.4,"ARES: Credo Ventures a.s., sídlo Praha 2, vznik 2009, bez zániku. Z3: Credo Stage 5, 88 mil. USD, final close 3/2026 (TNW) – peníze třetích stran: ano, cca 2/3 od institucionálních investorů, bez veřejných peněz. Z4: Wabi, 11/2025, web investora."
+inv-0008,Depo Ventures,04753101,TP,3,"ARES: DEPO VENTURES, s.r.o., sídlo Praha 7, vznik 2016, bez zániku. Z3: Grouport Ventures, 35 mil. Kč (CzechCrunch 1/2022, fond z cca 2016) – peníze třetích stran: ano, manažeři a zakladatelé firem jako andělští investoři; do Depo Angels Fund II vkládá i Impulse Ventures. Z4: Flowpay, 4/2024, CzechCrunch."
+inv-0009,i&i Biotech Investments,10885978,nejiste,7.8,"ARES: IČO vede na Biotech Investments s.r.o., sídlo Praha 8, vznik 2021, bez zániku – název neodpovídá i&i, vazbu na i&i Bio jsem v rejstříku neověřil (Justice: společníci). Z3: i&i Biotech Fund I, ~47 mil. EUR (ÚOCHB 11/2022) – peníze třetích stran: ano, EIF + 8 soukromých investorů (mj. O. Bartoš, J. Řasa). Z4: Captain T Cell, 11/2025, inibio.eu. Nejisté kvůli Z1."
+inv-0052,IP Lab Ventures,19110715,nejiste,5.6,"ARES: IP Lab Services s.r.o., sídlo Praha 1, vznik 2023, bez zániku. Z3: IP Lab Ventures Fund, závazek EIF 656 mil. Kč z NPO, cíl 1,2 mld. Kč (CzechCrunch 9/2026) – peníze třetích stran: ano, EIF. Z4: chybí – uložený fakt je tentýž závazek EIF, ne investice do firmy; článek zmiňuje 7 podpořených projektů od 2023 bez jmen a dat. Nejisté, dokud nenajdu datovanou investici fondu."
+inv-0006,KAYA VC,22585737,TP,2,"ARES: KAYA Advisory s.r.o., sídlo Praha 8, vznik 2025, bez zániku – jiná entita než správce fondu IV z 2021, ale značka sedí. Z3: KAYA Fund IV, 72 mil. EUR final close 3/2021 (GPCA) – peníze třetích stran: nevím, GPCA investory nejmenuje. Z4: Riptides, 4/2025, Vestbee."
+inv-0037,Lighthouse Ventures,07500912,TP,1.2,"ARES: Lighthouse Ventures GP s.r.o., sídlo Praha 6, vznik 2018, bez zániku. Z3: Lighthouse Seed Fund, 23 mil. EUR (CzechCrunch 6/2019) – peníze třetích stran: ano, EIF 15 mil. EUR a soukromí investoři 4 mil. EUR. Z4: Ranketta, 11/2025, Tech.eu."
+inv-0028,Presto Ventures,11678704,TP,3.3,"ARES: Presto Ventures II a.s., osoba rizikového kapitálu, sídlo Praha 1, vznik 2021, bez zániku. Z3: druhý fond, 30 mil. EUR (UADN 6/2022) – peníze třetích stran: nevím, článek investory nejmenuje. Z4: Vidar Systems, 11/2024, web investora."
+inv-0035,Purple Ventures,05775574,TP,2,"ARES: Purple Ventures s.r.o., sídlo Brno, vznik 2017, bez zániku. Z3: Purple Ventures 2, přes 700 mil. Kč (web investora) – peníze třetích stran: nevím, web investory nejmenuje. Z4: Kilde, 10/2025, FXstreet; web navíc uvádí investice PV2 v 2025–2026 (např. Fether Labs 2026)."
+inv-0038,Reflex Capital,24269158,TP,1.8,"ARES: Reflex Capital SE, sídlo Praha 2, vznik 2012, bez zániku. Z3: třetí fond, 22 mil. EUR (CzechCrunch 12/2023) – peníze třetích stran: ano, ale nejmenovaní (Fryc uvádí, že část investorů odmítli). Z4: grid.online, 2/2025 – uložený zdroj je blog J&T Ventures, ne web Reflexu; účast Reflexu potvrzuje zpráva CzechCrunche, zdroj v DB přepojit."
+inv-0029,Rockaway Ventures,06387136,TP,2.2,"ARES: Rockaway Ventures a.s., sídlo Praha 6, vznik 2017, bez zániku. Z3: Fund II, necelých 55 mil. EUR (CzechCrunch 5/2025) – peníze třetích stran: ano, cca 3/4 od soukromých převážně českých investorů, cca 1/4 Rockaway. Z4: Filuta AI, 6/2025, web investora."
+inv-0044,Soulmates Ventures,09789561,TP,1.4,"ARES: Soulmates Ventures, osoba rizikového kapitálu, s.r.o., sídlo Praha 8, vznik 2021, bez zániku. Z3: fond 50 mil. EUR (Vestbee 3/2025) – peníze třetích stran: nevím, Vestbee investory nejmenuje. Z4: Twin Science, 8/2024, web investora."
+inv-0047,Startguide VC,28418425,nejiste,5.6,"ARES: Start Guide – osoba rizikového kapitálu, s.r.o., sídlo Praha 1, vznik 2008, bez zániku. Z3: SG One – web uvádí jen cíl 6 mil. EUR a naplnění 30 %, uzavření ani konečnou velikost jsem nenašel – peníze třetích stran: nevím. Z4: Carebot, 4/2024, CzechCrunch. Nejisté, Z3 je jen cílová velikost."
+inv-0049,StartupYard,06002820,nejiste,7,"ARES: StartupYard Services s.r.o., sídlo Praha 1, vznik 2017, bez zániku. Z3: vehikl StartupYard Batch 15 s.r.o. (ARES, 11/2024) – peníze třetích stran: ano, Credo Ventures, Rockaway Capital Partners, business angels. Z4: chybí – uložený je tentýž fakt jako u Z3; datovanou investici z 2024+ jsem nenašel. Nejisté."
+inv-0039,Tachles,14376032,TP,2,"ARES: Tachles VC Management s.r.o., sídlo Praha 10, vznik 2022, bez zániku. Z3: Tachles VC, first close 500 mil. Kč (CzechCrunch 6/2024) – peníze třetích stran: nevím, investoři nejmenovaní. Z4: 7 startupů za cca 30 mil. Kč v roce 2024 (CzechCrunch 2/2025) – souhrnně, bez jmen firem."
+inv-0003,Tensor Ventures,06257241,TP,3.5,"ARES: Tensor Ventures a.s., sídlo Praha 8, vznik 2017, bez zániku. Z3: druhý fond, closing 1 mld. Kč (Forbes 9/2025) – peníze třetích stran: ano, česká banka, další institucionální a soukromí investoři; EIF z NPO zmiňuje CzechCrunch. Z4: DYNANIC, 11/2024, Brno Tech Region."
+inv-0027,Tilia Impact Ventures,17621615,nejiste,6.2,"ARES: Tilia Impact Partners s.r.o., sídlo Praha 5, vznik 2022, bez zániku. Z3: Impact Seed Fund, potvrzeno 26 z cílových 32 mil. EUR (CzechCrunch 9/2023) – peníze třetích stran: ano, EIF jako hlavní investor, Česká spořitelna, L. Winkler, J. Barta a další. Z4: Flox Intelligence, 2/2026 – uložený zdroj je agregátor, primární zdroj (web Tilie / tisková zpráva) jsem nenašel. Nejisté kvůli zdroji Z4."
+</pasted_content id="2b08">
+
+
+---
+
+## 🤖 Claude
+
+Začínám bodem 5, je nejmenší. Pak uložím výsledky R1-v2 a doplním metriky. Nejdřív si projdu, jak kód pracuje s `reviews.csv` a s precision.
+
+---
+
+## 🤖 Claude
+
+Bod 5 je opravený: u Purple Ventures a Startguide VC teď odkaz ARES vede na rozhraní ARES, test to hlídá u všech 16. Commituji ho.
+
+---
+
+## 🤖 Claude
+
+Upravuji schéma, validaci a metriky pro nové kolo.
+
+---
+
+## 🤖 Claude
+
+Teď zapíšu data: soubor `review/r1-v2-vysledky.csv` a 16 řádků kola `r1_v2` do `reviews.csv`.
+
+---
+
+## 🤖 Claude
+
+Původní řádky R1 zůstaly obsahově beze změny, přibyl jen sloupec `review_round`. Teď upravím testovací data, report a web.
+
+---
+
+## 🤖 Claude
+
+Validace i testy procházejí, chybí jen přegenerovat web. Doplňuji do reportu R1-v2 jako hlavní metriku a původní R1 jako historii.
+
+---
+
+## 🤖 Claude
+
+Kód kola R1-v2 je hotový a testy procházejí. Teď přepíšu dokumentaci: precision z R1-v2 jako hlavní metrika a 15/15 jako historie s poznámkou.
+
+---
+
+## 🤖 Claude
+
+Body 0 a 1 jsou pushnuté (`0526161`). Teď bod 2, opravy dat. Začínám u Reflexu: hledám zprávu CzechCrunche o investici do grid.online.
+
+---
+
+## 🤖 Claude
+
+Data jsou opravená. Teď přepočítám čísla odvozená z počtu ověřených: čas modelu na záznam, podíl získatelných, cenu na záznam a hodiny.
+
+---
+
+## 🤖 Claude
+
+Bod 2 je pushnutý (`fcc5d94`). Teď bod 3: zjištění z R1-v2 do „Co v řešení chybí“ a do docs/01, pravidla se nemění.
+
+---
+
+## 🤖 Claude
+
+Bod 3 je pushnutý (`72fd56e`). Zbývá bod 4: v docs/03 a README výslovně uvést, že měření tokenů je spíš dolní mez, a cenu psát jako „od 0,365 USD“.
+
+---
+
+## 🤖 Claude
+
+Všech pět bodů je hotových a pushnutých, každý ve vlastním commitu. Po posledním commitu prošlo 393 testů i validace.
+
+## Hashe
+| Bod | Commit |
+|---|---|
+| 5 – odkaz ARES v kontrolním listu | `055da3b` |
+| 0 + 1 – kolo R1-v2 a precision | `0526161` |
+| 2 – vady dat a trychtýř | `fcc5d94` |
+| 3 – zjištění z R1-v2 v „Co chybí“ a docs/01 | `72fd56e` |
+| 4 – tokeny jako spíš dolní mez | `4f4597f` |
+
+## Nová precision (kolo R1-v2, ze stavu v době kontroly)
+- **Přísně, nejisté = nepotvrzeno:** 11/16 = 68,8 % (95% Wilsonův interval 44,4–85,8 %).
+- **Jen rozhodnuté případy:** 11/11 = 100 % (95% Wilsonův interval 74,1–100 %).
+- Výsledek: 11 TP, 0 FP, 5 nejistých. Kontrola trvala 59 min, tedy 3,7 min na investora.
+
+Je to teď hlavní metrika v README („Shrnutí“), v docs/03, v docs/04 (nové oddíly 4.11 a 4.12) a na webu. Původní 15/15 zůstává jako historie s poznámkou o Crunchbase a LinkedIn, zaokrouhlených časech a Springtide, Patero a Gain. Výsledky jsou v `review/r1-v2-vysledky.csv` a v `reviews.csv`, kde nový sloupec `review_round` odlišuje kola: původní řádky mají `r1` a jinak se nezměnily, nové mají `r1_v2`.
+
+**Jména jsem nahradil:** v poznámkách R1-v2 byla jména fyzických osob (u i&i, Tilie a Reflexu). Podle pravidla projektu jsem je v obou souborech nahradil popisem role. Pokud je chceš doslovně, napiš, ale do veřejné historie Gitu by se tím zapsala natrvalo.
+
+## Nový trychtýř
+**52 nalezených → 14 ověřených, 6 kandidátů, 32 vyloučených** (předtím 16 / 4 / 32).
+
+| Investor | Co se stalo | Status |
+|---|---|---|
+| Reflex | Z4 přepojen na CzechCrunch z 12. 2. 2025, ověřeno proti surovému textu | ověřený |
+| Tilia | Primární zdroj investice do Flox jsem jedním hledáním nenašel, jen databáze investic | **kandidát** |
+| i&i Biotech | Společníky Biotech Investments jsou podle rejstříku (ARES VR) jen holdingové s.r.o. bez názvu i&i, vazbu na značku rejstřík nepotvrzuje | **kandidát** |
+| IP Lab, StartupYard | Do dat výslovně zapsáno, že Z4 plní nový fond nebo vehikl; datovanou investici jsem jedním hledáním nenašel | ověřený |
+| Startguide | Do dat zapsáno, že Z3 stojí jen na cílové velikosti s naplněním 30 % | ověřený |
+
+Přepočítal jsem i hodnoty, které závisí na počtu ověřených:
+- čas modelu na ověřený záznam je 7,9 min (dříve 6,9);
+- z veřejných zdrojů je získatelných 70 % (dříve 80 %);
+- API stojí 0,78 USD na záznam v databázi (dříve 0,68);
+- pole zadání jsou nyní sektor 13/14, ticket 12/14, kapitál 11/14 a zdroj 14/14;
+- doložená investice za 36 měsíců je u 11/14.
+
+Tabulky v docs/04 (4.6 a 4.7) zachycují stav ke dni své kontroly, proto jsem je nepřepisoval.
+
+## Ostatní body
+- **Bod 3:** čtyři zjištění z R1-v2 jsou v „Co v řešení chybí“ (README i web) a v docs/01 jako nový pododdíl 1.3. Pravidla se nezměnila.
+- **Bod 4:** tokeny jsou v docs/03 i README označené jako spíš dolní mez s důvody, které jsi vyjmenoval. Cena je uvedená jako „od 0,365 USD“.
+- **Bod 5:** u Purple a Startguide vedl odkaz ARES na web investora, protože generátor vzal první fakt s IČO a tím byl web. Teď bere fakt ze zdroje typu rejstřík a test hlídá, že všech 16 odkazů vede na ARES.
+- **Kontrolní list R1-v2:** obsahuje dál všech 16 zkontrolovaných investorů, i když i&i a Tilia jsou už kandidáti.
+
+**Návrh, zatím neprovedený:** docs/03 počítá čas člověka 15,5 min na investora z původního kola, kde byly časy zaokrouhlené. R1-v2 naměřilo 3,7 min. Mám docs/03 přepočítat podle R1-v2?
+
+---
+
+## 👤 User
+
+
+
+<pasted_content id="2b08">
+Dvě poslední věci, nic dalšího:
+1) Produkce investor-db-woad.vercel.app pořád ukazuje starý stav (16 ověřených, 16/16, 15/15), i když site/ v repu je aktuální. Nasaď produkci (vercel --prod nebo podle návodu v README) a ověř přímo na URL, že index i data.html ukazují 14/6/32 a 11/16 a 11/11. Pokud nasazení nejde z tvého prostředí, napiš mi přesný příkaz.
+2) docs/03: čas člověka přepočítej podle R1-v2 (3,7 min na investora, změřeno). Výslovně uveď, že jde o kontrolu připravených dokladů, ne o samostatné dohledání. Původních 15,5 min ponech jen jako historii (zaokrouhlené časy). Přepočítej závislé náklady a sjednoť README a web.
+Commit, push, vypiš hash a čísla z produkce.
+</pasted_content id="2b08">
+
+
+---
+
+## 🤖 Claude
+
+Nejdřív zkontroluji, co produkce teď skutečně vrací a zda je v prostředí Vercel CLI.
+
+---
+
+## 🤖 Claude
+
+Pushnuto (`ca39874`). Počkám, až Vercel nasadí novou verzi, a pak porovnám produkci s lokálním `site/`.
+
+---
+
+## 🤖 Claude
+
+Čekám, až se nasazení na Vercelu projeví na produkci.
+
+---
+
+## 🤖 Claude
+
+Čekám na výsledek kontroly nasazení.
+
+---
+
+## 👤 User
+
+<task-notification>
+<task-id>bcksomf2f</task-id>
+<tool-use-id>toolu_01Ki2SyQfaoD6UNSDwzYHUUu</tool-use-id>
+<output-file>C:\Users\ramazan\AppData\Local\Temp\claude\C--Users-ramazan-investor-db\d385e1f5-0229-46e8-8649-3f0ea24e7385\tasks\bcksomf2f.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll production until data.html matches local build" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+## 🤖 Claude
+
+Obě věci jsou hotové. Produkce teď přesně odpovídá `site/` v repozitáři, ručně nasazovat ani spouštět `vercel --prod` nebylo potřeba.
+
+**Commit:** `ca39874` (pushnutý; 393 testů i validace prošly).
+
+## 1) Produkce
+Produkce se nasazuje sama po každém pushi do `main`. Už před mými změnami ukazovala `52 → 14` a `11/16`. Starý stav, který jsi viděl, byl nejspíš z mezipaměti prohlížeče, takže stačí stránku tvrdě obnovit (Ctrl+F5).
+
+Po pushi `ca39874` jsem stáhl produkci a porovnal ji s lokálním `site/`. `index.html`, `data.html`, `style.css` i `app.js` jsou shodné bajt po bajtu.
+
+Čísla přímo z https://investor-db-woad.vercel.app/:
+- **Úvodní stránka:**
+  - trychtýř `52 → 14`, „kandidáti: 6, vyloučeno s doloženým důvodem: 32“;
+  - precision (kolo R1-v2) `11/16`: přísně 11/16 = 68,8 % (95% Wilsonův interval 44,4–85,8 %), jen rozhodnuté 11/11 = 100 % (74,1–100 %);
+  - v souhrnné tabulce je čas člověka „3,7 min [M, R1-v2]“.
+- **data.html:**
+  - filtr „Vše · 52 / ověřený · 14 / kandidát · 6 / vyloučený · 32“;
+  - tabulka „Ověření investoři (14)“;
+  - „kontrola investora VC (R1-v2, připravené doklady): 3,7 min“.
+
+## 2) Čas člověka v docs/03
+- **Nová hodnota:** 3,7 min na investora (59 min / 16) z kola R1-v2. Výslovně je uvedeno, že jde o kontrolu připravených dokladů podle kontrolního listu, ne o samostatné dohledání investora.
+- **Původních 15,5 min** zůstává jen jako historie, protože časy byly zaokrouhlené a kontrola nešla podle metodiky.
+
+| Náklady na ruční kontrolu | Dříve | Nově |
+|---|---|---|
+| Na region a hodnotitele | 422 min (7,0 h) | 25 × 3,7 + 36 × 0,96 = 127 min (2,1 h) |
+| 8–15 regionů | 56–106 h | 17–32 h |
+| Při sazbě 25–60 EUR/h (předpoklad) | 1 407–6 331 EUR za kolo | 424–1 906 EUR za kolo |
+
+README i web teď uvádějí stejných 3,7 min. Na webu jsem odstranil řádek s časem z původního kola.
+
+Čas u PE (9 min) jsem podle zadání neměnil. Pochází ale také z původního kola, kde byly časy zaokrouhlené.
+
+---
+
