@@ -66,7 +66,7 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“: kolo R1-
 | Vstup | Hodnota | Zdroj |
 |---|---|---|
 | Čas modelu na ověřeného investora (hledání, triáž, ověření, doplnění; sjednocená definice v 3.8) | (5,55 + 0,66 + 80,1 + 23,9) min / 14 = **7,9 min** | `effort_log.csv`, `search_log.csv` |
-| Tokeny a cena API na ověřeného investora (opakované ověření, n = 3) | **363 690 tokenů, 0,365 USD** | [ai-log/mereni-tokenu-2026-10-13.md](../ai-log/mereni-tokenu-2026-10-13.md) |
+| Tokeny a cena API na ověřeného investora (opakované ověření, n = 3) | **363 690 tokenů, od 0,365 USD** (spíš dolní mez) | [ai-log/mereni-tokenu-2026-10-13.md](../ai-log/mereni-tokenu-2026-10-13.md) |
 | Čas člověka na kontrolu investora | **15,5 min** | `reviews.csv` (první kontrola) |
 | Čas člověka na kontrolu faktu | **0,96 min** | `fact_reviews.csv` |
 | Vzorek na region | 25 investorů a 36 faktů (±15 p. b.) | Cochran, viz [04-rucni-kontrola.md](04-rucni-kontrola.md) |
@@ -92,7 +92,7 @@ Precision ve smyslu „ověřený záznam je skutečně aktivní VC“: kolo R1-
 | Opus 5.5 (session): vstup 22, výstup 10 242, čtení cache 714 750, zápis cache 1h 79 620 | 804 634 | 0,985 USD |
 | Haiku 5.5 (interně ve WebFetch a WebSearch) a 7 vyhledávání | 286 436 | 0,109 USD |
 | **Celkem za 3 investory** | **1 091 070** | **1,094 USD** |
-| **Na ověřeného investora** | **363 690** | **0,365 USD** |
+| **Na ověřeného investora** | **363 690** | **od 0,365 USD** |
 
 Ceník: [platform.claude.com/docs/en/about-claude/pricing](https://platform.claude.com/docs/en/about-claude/pricing), otevřeno 13. 10. 2026. Opus 5.5 stojí 4 USD za milion vstupních tokenů, 20 USD za výstup, 0,20 USD za čtení cache a 8 USD za zápis do hodinové cache; vyhledávání 0,01 USD. Session běžela 2 min 43 s. Dřívější předpoklad byl 100 000–400 000 tokenů a 0,30–6 USD na investora. Počet tokenů vyšel u horní hranice, cena u spodní, protože 66 % tokenů tvoří levné čtení z cache.
 
@@ -108,7 +108,7 @@ Ceník: [platform.claude.com/docs/en/about-claude/pricing](https://platform.clau
 | Základní | 7 251 | 2 644 / 5 666 / 11 332 USD |
 | Vysoký | 9 682 | 3 531 / 7 566 / 15 132 USD |
 
-Omezení: n = 3, jeden běh a jedna země. Session neověřovala proti surovému textu stránek, takže úroveň ověření je nižší než v pilotu.
+**Měření je spíš dolní mez.** Session jen četla a vyhledávala, nic nezapisovala (fakta, zdroje, status), neověřovala proti surovému textu stránek, trvala jen 2 min 43 s a u Lighthouse měla v docs/02 nápovědu domény (lhv.vc). Skutečný sběr s ověřením a zápisem dat bude dražší. Navíc jde o n = 3, jeden běh a jednu zemi.
 
 **Člověk.** Ruční kontrola je výběrová, její rozsah proto závisí na počtu regionů, ne na počtu investorů:
 - 25 × 15,5 + 36 × 0,96 = **422 min (7,0 h) na region a hodnotitele**;

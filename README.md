@@ -45,7 +45,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   - českou právnickou osobu mají 2/5;
   - sektor a ticket má 5/5, získaný kapitál jen 1/5.
 - **Globální odhad VC:** 5 235 / 7 251 / 9 682 firem ve scénářích nízký / základní / vysoký.
-- **Čas a cena:** model 7,9 min na ověřený VC záznam, API 0,365 USD na investora (měřeno, n = 3) a 0,78 USD na záznam v databázi. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
+- **Čas a cena:** model 7,9 min na ověřený VC záznam, API od 0,365 USD na investora (měřeno, n = 3, spíš dolní mez: session jen četla a vyhledávala, nic nezapisovala, neověřovala proti surovému textu, trvala 2 min 43 s a u Lighthouse měla nápovědu domény) a 0,78 USD na záznam v databázi. Člověk 15,5 min na kontrolu investora (u PE 9 min) a 0,8–1,0 min na fakt.
 
 ## Splnění zadání
 
@@ -60,7 +60,7 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
 | Ověření na vzorku (VC v jedné zemi) | splněno | [data/](data/) | 52 subjektů v ČR |
 | Zdroj a datum dokládající, že subjekt investuje | splněno | `facts.csv` (Z4), `investors.csv` (`evidence_urls`) | Doložená investice za 36 měsíců u 11/14, u ostatních nový fond nebo vehikl. |
 | Přesnost změřená na ručně ověřeném vzorku | splněno | [docs/04](docs/04-rucni-kontrola.md) | Jen jeden hodnotitel (R1), shoda hodnotitelů se nepočítá. |
-| Odhad nákladů na rozšíření na celý svět | splněno | [docs/03](docs/03-globalni-odhad.md) 3.5, 3.8 | Čas modelu a člověka je změřený. Tokeny a cena API jsou změřené na 3 investorech (0,365 USD na investora), přepočet na ostatní kategorie je předpoklad. |
+| Odhad nákladů na rozšíření na celý svět | splněno | [docs/03](docs/03-globalni-odhad.md) 3.5, 3.8 | Čas modelu a člověka je změřený. Tokeny a cena API jsou změřené na 3 investorech (od 0,365 USD na investora, spíš dolní mez), přepočet na ostatní kategorie je předpoklad. |
 | Jen veřejně dostupná data | splněno | [docs/02](docs/02-metodika.md) 2.2, 2.8 | Jedno porušení `robots.txt` bylo zjištěno a opraveno (níže). |
 | Veřejný repozitář: plán, data se zdrojem u každého údaje, výsledek měření | splněno | tento repozitář | Validátor vynucuje fakt se zdrojem u každé vyplněné hodnoty. |
 | Kód s průběžnou historií commitů | splněno | `investor_db/`, `tests/`, `git log` | 76+ commitů od 9. 10. 2026 |
@@ -140,7 +140,7 @@ Další incidenty (soubor zamčený Excelem, nesoulad popisu commitu, data v nes
 
 ## Co v řešení chybí
 
-- **Spotřeba tokenů je změřená jen na 3 investorech** (opakované ověření, jeden běh). Cena API pro family office, angely a velké soukromé investory je předpoklad odvozený z času modelu.
+- **Spotřeba tokenů je změřená jen na 3 investorech** (opakované ověření, jeden běh) a je spíš dolní mez: session jen četla a vyhledávala, nic nezapisovala, neověřovala proti surovému textu, trvala 2 min 43 s a u Lighthouse měla nápovědu domény. Cena API pro family office, angely a velké soukromé investory je předpoklad odvozený z času modelu.
 - **Family office, angel investoři a velcí soukromí investoři** mají jen pravidla a studii proveditelnosti se sondou v počtech, žádná data. Odhady jejich počtu jsou z velké části předpoklady.
 - **PE jen jako mini-pilot (n = 5).** Výsledky jsou orientační a uvádějí se v počtech.
 - **6 kandidátů** (Inven, J&T, Nation1, Gain Ventures, i&i Biotech, Tilia) zůstává nerozhodnutých. Chybí doklad podílu korporace (CVC), identifikace české entity nebo primární zdroj investice.
