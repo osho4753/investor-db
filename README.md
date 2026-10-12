@@ -133,7 +133,25 @@ Další incidenty (soubor zamčený Excelem, nesoulad popisu commitu, data v nes
 
 ## Reprodukovatelnost
 
-Ověřeno 12. 10. 2026 na čistém klonu z GitHubu (podrobnosti níže v této sekci po dokončení kontroly).
+Ověřeno 12. 10. 2026 na čistém klonu z GitHubu (commit `190e7e6`) v dočasné složce:
+
+| Krok | Výsledek |
+|---|---|
+| `python -m pytest` | 364 testů prošlo |
+| `python -m investor_db validate` | „Validace prošla bez chyb.“ |
+| `python -m investor_db metrics` | výstup **shodný** s výstupem v pracovním repozitáři (`diff` bez rozdílů) |
+
+Čísla z reportu odpovídají README:
+
+| Ukazatel | Výsledek |
+|---|---|
+| Nalezeno subjektů | 52 |
+| Přesnost faktů po kolech | 32/34, 42/44, 7/7 |
+| Pole zadání | sektor 15/16, ticket 14/16, kapitál 13/16, zdroj 16/16 |
+| Kontrola vyloučených | 9 TP a 1 nejisté |
+| PE | pravost 5/5, v zemi 2/5, R1 2/2 a 3/3 TP |
+
+Report počítá precision ze současných statusů (16/16). Hodnota 15/15 ze stavu v době kontroly je doložena v [docs/04](docs/04-rucni-kontrola.md), 4.6, a v historii Gitu (commit `18877a1`). Instalace `pip install -e ".[dev]"` se v klonu nespouštěla, protože pytest byl v prostředí už nainstalovaný.
 
 ## Návod pro hodnotitele
 
