@@ -556,3 +556,44 @@ Odhad false negatives ve všech 32 vyloučených = podíl chybných vyloučení 
 
 **Shrnutí kontrol false negatives.** Nenáhodná kontrola R1 v 4.6 našla dva false negatives (Lighthouse, Tachles). Oba byli kandidáti, ne vyloučení, a byly opraveny. Náhodný vzorek vyloučených žádný false negative nenašel.
 
+## 4.10 Recall proti nezávislým seznamům (13. 10. 2026)
+
+Kolik VC subjektů z veřejných seznamů, které pilot při hledání nepoužil, máme v databázi. Použité zdroje hledání jsou v `search_log.csv` (s-001 až s-017) a `candidate_sources.csv`. Žádný z obou seznamů mezi nimi není.
+
+**Seznamy:**
+
+| Seznam | Typ | Datum | Subjektů |
+|---|---|---|---|
+| L1 – Vestbee: [Top VC Funds In Czech Republic To Finance Your Startup](https://www.vestbee.com/insights/articles/top-vc-funds-in-czech-republic-to-finance-your-startup) | redakční přehled | 14. 10. 2021, aktualizováno 2023 | 19 |
+| L2 – AIN.UA: [Top 17 most active Czech VC funds in H1 2022](https://en.ain.ua/2022/09/27/top-17-most-active-czech-vc-funds-in-h1-2022) | redakční žebříček | 27. 9. 2022 | 17 |
+
+- Všech 17 subjektů z L2 je i v L1, sjednocení má 19 subjektů.
+- L2 podle vlastního popisu vychází z dotazníku, otevřených zdrojů a dat Dealroom a Crunchbase. Slouží proto jen jako vodítko, stejně jako agregátory v metodice.
+- Portfolio fondů Národní rozvojové banky ani seznam fondů EIF v ČR jako seznam veřejně nebyl k dispozici. Web NRB přehled portfolia nemá (s-015) a stránka EIF k fondu fondů CZFoF vrátila 404. Přehled CzechCrunch „Startupové Česko 2025“ má nejaktivnější fondy jen v grafu a v placené databázi.
+
+**Které subjekty se počítají.** Počítají se subjekty, které seznamy uvádějí jako VC v ČR a které podle otevřených zdrojů nejsou zjevně mimo kritéria. Ze sjednocení 19 subjektů se proto nepočítá Pale Fire Capital. Podle otevřených článků investuje peníze partnerů ([Seznam Zprávy, 7. 4. 2026](https://www.seznamzpravy.cz/clanek/ekonomika-firmy-elitni-cesky-fond-prijima-krskova-odchovance-na-nove-nakupy-da-10-miliard-303124)) a jeho PE rameno cílí na zavedené firmy, ne na startupy. Neplní tedy Z3 a definici VC. Zbývá **18 subjektů**.
+
+**Výsledek: nalezeno 14 z 18 (77,8 %, 95% Wilsonův interval 54,8–91,0 %).**
+
+| Status v databázi | Počet | Subjekty |
+|---|---|---|
+| ověřený | 8 | Credo Ventures, DEPO Ventures, KAYA, Lighthouse Ventures, Presto Ventures, Reflex Capital, Rockaway Capital (u nás Rockaway Ventures), Tensor Ventures |
+| kandidát | 3 | Inven Capital, J&T Ventures, Nation 1 VC |
+| vyloučený s důvodem (nalezen, podle Z1–Z4 do VC nepatří) | 3 | ZAKA (`family_office`), Impulse Ventures (`bez_fondu`), Springtide Ventures (`cvc`) |
+| **chybí** | **4** | viz níže |
+
+**Chybějící subjekty** (zjištěno jen z otevřených stránek, do dat se nezapisovaly):
+
+| Subjekt | Co víme | Jak by dopadl podle Z1–Z4 |
+|---|---|---|
+| Longevitytech.fund | Podle [CzechCrunch z 19. 2. 2022](https://cc.cz/jak-zvratit-starnuti-testuje-i-klinika-v-praze-zalozil-ji-cesky-fond-pro-dlouhovekost-ktery-dava-na-boj-s-vekem-miliony/) „český fond pro dlouhověkost“, uzavřený fond v ČR se zhruba stovkou akcionářů, 16 mil. USD, asi 40 investic. | pravděpodobně VC v ČR; Z1 (IČO) a Z4 (investice od 2023) nejsou doloženy → nejméně kandidát |
+| Y Soft Ventures | Investiční divize brněnské firmy Y Soft. Fond Y Soft Ventures II spolufinancují externí investoři ([CzechCrunch, 16. 7. 2019](https://cc.cz/brnensti-y-soft-ventures-spousti-novy-investicni-fond-do-startupu-nenovision-posilaji-20-milionu-korun/)). | kandidát: podíl Y Soft na kapitálu (pravidlo CVC) a aktivita za 36 měsíců nejsou doloženy |
+| Koopeo Ventures | Web uvádí KOOPEO Ventures SE, IČ 05269113, Brno, a 8 firem v portfoliu bez dat ([koopeoventures.com](http://www.koopeoventures.com/)). Zdroj kapitálu neuveden. | Z1 splněno; Z3 a Z4 nedoloženy → kandidát, nebo vyloučení `bez_fondu` |
+| Air Ventures | Profil Vestbee uvádí web airventures.eu, doména 13. 10. 2026 neexistuje (DNS). Další údaje jen z agregátorů. | nelze rozhodnout; možná `neaktivni` |
+
+**Co z toho plyne:**
+
+- Recall pilotu vůči redakčním seznamům je kolem 78 %. Ze 4 chybějících je jeden pravděpodobný VC v ČR (Longevitytech.fund), dva by byli kandidáti a jeden je nejasný. Žádný chybějící subjekt není zjevně ověřitelný bez dalšího hledání.
+- Hledání pilotu stálo hlavně na CVCA a médiích z let 2024–2026. Seznamy z let 2021–2022 obsahují fondy, které v CVCA nejsou a v nových článcích se neobjevují.
+- Seznamy jsou staré a mají jen 19 subjektů, interval je proto široký. Nejde o náhodný vzorek všech VC v ČR, ale o viditelné fondy.
+

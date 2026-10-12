@@ -11,6 +11,8 @@ Reprodukovatelný proces, který z bezplatných veřejných zdrojů najde, zařa
   - 4 kandidáti, kterým chybí doklad některého kritéria;
   - 32 vyloučených s konkrétním důvodem, z toho 17 PE.
 - **Precision:** ruční kontrola R1 dala 15/15 ověřených (95% interval 79,6–100 %) ze stavu dat v době kontroly. Report teď ukazuje 16/16, protože se statusy později změnily: Lighthouse a Tachles jsou nově ověření, J&T přešel mezi kandidáty.
+- **Recall:** ze dvou nezávislých seznamů českých VC (Vestbee 2021/2023, AIN.UA 2022), které hledání nepoužilo, máme **14 z 18** subjektů, které seznamy uvádějí jako VC v ČR (bez Pale Fire Capital, který investuje vlastní peníze partnerů): 8 ověřených, 3 kandidáti, 3 vyloučení s důvodem). Chybí Longevitytech.fund, Y Soft Ventures, Koopeo Ventures a Air Ventures ([docs/04](docs/04-rucni-kontrola.md) 4.10).
+- **Capture–recapture (doplňkový, málo informativní odhad):** Chapmanovy odhady 7–25 ověřitelných VC v ČR jsou jen dolní mez, protože zdroje hledání nejsou nezávislé. Ověřených je už 16, tedy víc než dolní hodnoty odhadu. Lepší představu o úplnosti dává recall proti nezávislým seznamům.
 - **Kontrola vyloučených:** náhodný vzorek 10 z 32 dal 9 správných vyloučení a 1 nejistý případ. False negative se ve vzorku nenašel.
 - **Přesnost faktů po kolech:**
 
